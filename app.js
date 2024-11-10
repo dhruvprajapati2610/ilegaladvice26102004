@@ -1638,74 +1638,99 @@ app.post('/login',(req,res,next)=>{
 // res.render('home',{message: 'User already exists, please use different email id.', success: false});
 
 
-app.post('/lawyersprofile',async(req,res)=>{
-  if(emailSendInProgress){
-    return res.json({ success: false, message: 'Email is already being sent. Please wait.' });
+const sendEmailWithRetry = async (mailOptions, transporter, retries = 3) => {
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      await transporter.sendMail(mailOptions);
+      return { success: true };
+    } catch (error) {
+      console.error(`Attempt ${attempt + 1} failed:`, error);
+      if (attempt === retries - 1) return { success: false, error: 'Email sending failed after retries' };
+    }
   }
-  
+};
+
+app.post('/lawyersprofile', async (req, res) => {
+  let responseMessage = { success: false, message: 'An error occurred. Please try again later.' };
+
+  if (emailSendInProgress) {
+    responseMessage.message = 'Email is already being sent. Please wait.';
+    return res.json(responseMessage);
+  }
+
   const lawyerId = req.query.lawyerId;
-  const email = req.body.email;
-  const c_no = req.body.phone;
-  const name = req.body.name;
-  const query = 'SELECT * FROM lawyers WHERE id=$1';
-  try{
-    const {rows} = await pool.query(query, [lawyerId]);
-    const row = rows[0];
-    console.log(row);
+  const { email, phone: c_no, name } = req.body;
+  const query = 'SELECT * FROM lawyers WHERE id = $1';
+
+  emailSendInProgress = true;
+
+  try {
+    const { rows } = await pool.query(query, [lawyerId]);
+    const lawyer = rows[0];
+
+    if (!lawyer) {
+      responseMessage.message = 'Lawyer not found.';
+      return res.status(404).json(responseMessage);
+    }
+
     const transporter = nodemailer.createTransport({
-      service: 'gmail', 
+      service: 'gmail',
       port: 465,
       auth: {
-        user: 'ilegaladvice26@gmail.com', 
-        pass: 'dnfz hpgh rsfm pelx' 
+        user: 'ilegaladvice26@gmail.com',
+        pass: 'dnfz hpgh rsfm pelx'
       },
       pool: true
-     })
-     const mailOptions1 = {
-      from: 'ilegaladvice26@gmail.com',
-      to: email, 
-      subject: 'Lawyer Details',
-      text: `Greetings from iLegalAdvice, Details of your requested lawyer are:
-      Name: ${row.name}
-      Contact No: ${row.c_no}
-      Email id: ${row.email}
-      Office address: ${row.address}`
-     };
+    });
 
-     const mailOptions2 = {
+    const clientMailOptions = {
       from: 'ilegaladvice26@gmail.com',
-      to: `${row.email}`,
-      subject: 'Client details',
-      text: `Greetings from iLegalAdvice, following user has been trying to contact you:
+      to: email,
+      subject: 'Lawyer Details',
+      text: `Greetings from iLegalAdvice. Details of your requested lawyer:
+      Name: ${lawyer.name}
+      Contact No: ${lawyer.c_no}
+      Email id: ${lawyer.email}
+      Office address: ${lawyer.address}`
+    };
+
+    const lawyerMailOptions = {
+      from: 'ilegaladvice26@gmail.com',
+      to: lawyer.email,
+      subject: 'Client Details',
+      text: `Greetings from iLegalAdvice. The following user has been trying to contact you:
       Name: ${name}
       Contact No: ${c_no}
       Email id: ${email}`
-     };
-     emailSendInProgress = true;
-     try{
-      await Promise.all([
-        transporter.sendMail(mailOptions1),
-        transporter.sendMail(mailOptions2)
-      ])
-      const insertQuery = `
-      insert into lawyer_requests(lawyer_id, user_name, user_email, user_phone) values ($1,$2,$3,$4)`;
-      await pool.query(insertQuery, [lawyerId,name,email,c_no]);
-      emailSendInProgress = false;
-       res.json({success: true, message: 'Email sent sucessfully!'});
-     }     
-   
-      catch(error) {
-         console.error('Error sending email:',error);
-         emailSendInProgress = false;
-         res.json({success: false, message: 'Error sending email. Please try again later.'})
-      }  
-    
-  } catch(error){
-    console.error('Error executing query:', error);
+    };
+
+    const [clientResult, lawyerResult] = await Promise.all([
+      sendEmailWithRetry(clientMailOptions, transporter),
+      sendEmailWithRetry(lawyerMailOptions, transporter)
+    ]);
+
+    if (!clientResult.success || !lawyerResult.success) {
+      throw new Error(clientResult.error || lawyerResult.error);
+    }
+
+    const insertQuery = `
+      INSERT INTO lawyer_requests (lawyer_id, user_name, user_email, user_phone)
+      VALUES ($1, $2, $3, $4)
+    `;
+    await pool.query(insertQuery, [lawyerId, name, email, c_no]);
+
+    responseMessage = { success: true, message: 'Email sent successfully!' };
+
+  } catch (error) {
+    console.error('Error:', error);
+    responseMessage.message = 'Error sending email. Please try again later.';
+
+  } finally {
     emailSendInProgress = false;
-    res.status(500).json({success: false, message: 'Internal Server Error'});
+    res.json(responseMessage);
   }
-})
+});
+
 
 
  app.post('/forgetpassword',async(req,res)=>{
