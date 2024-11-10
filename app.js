@@ -1757,10 +1757,10 @@ app.post('/lawyersprofile',async(req,res)=>{
     })
    }
    emailSendInProgress = true;
-   res.json({
-    success: true,
-    message: 'Sending reset link... please check your email.'
-  });
+   let responseMessage = {
+    success: false,
+    message: 'An error occurred while sending the reset link. Please try again later.'
+  }
    
    try{
     const result1 = await pool.query('SELECT FROM lawyers where email = $1',[email]);
@@ -1771,18 +1771,26 @@ app.post('/lawyersprofile',async(req,res)=>{
       const query = 'UPDATE lawyers SET token = $2, expires_at = NOW() + INTERVAL \'1 hour\' WHERE email = $1'
       await pool.query( query,[email,token]);
       await sendPasswordResetEmail(email, token);
-      
-      return res.json({success: true, message: "Password reset link sent to your email, please check your email."})
+        responseMessage = {
+        success: true,
+        message: 'Password reset link sent to your email, please check your email.',
+      };
    } 
     else if (result2.rows.length>0){
       const token = crypto.randomBytes(20).toString('hex');
       const query = 'UPDATE clientsignup SET token = $2, expires_at = NOW() + INTERVAL \'1 hour\' WHERE email = $1'
       await  pool.query(query,[email,token])
       await sendPasswordResetEmail(email, token)
-      return res.json({success: true, message: "Password reset link sent to your email, please check your email."})
+        responseMessage = {
+        success: true,
+        message: 'Password reset link sent to your email, please check your email.',
+      };
       }
     else{
-     return res.json({success: false, message: "Account not found, please verify your email."})
+        responseMessage = {
+        success: false,
+        message: 'Account not found, please verify your email.',
+      };
     }
    }
    
@@ -1790,6 +1798,7 @@ app.post('/lawyersprofile',async(req,res)=>{
     console.error('Error sending email:', email);
    } finally{
     emailSendInProgress = false;
+    res.json(responseMessage); 
    }
  });
    
