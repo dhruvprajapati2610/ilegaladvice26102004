@@ -1332,171 +1332,128 @@ app.get('/articlewriting',(req,res)=>{
   res.render('articlewriting');
 })
 
-
-
-app.post('/signup',upload.single('image'),async function (req,res){
-  if(emailSendInProgress){
-    return res.render('home3',{message: 'Kindly check your email to verify your account', success: false});
+app.post('/signup', upload.single('image'), async (req, res) => {
+  if (emailSendInProgress) {
+    return res.render('home3', { message: 'Kindly check your email to verify your account', success: false });
   }
+
   emailSendInProgress = true;
+  let responseMessage = { message: 'An error occurred. Please try again.', success: false };
   const formType = req.query.formType;
-   if(formType === 'form1'){
-      var passw = req.body.passw;
-      var cpassw = req.body.cpassw;
-      if (passw !== cpassw){
-        emailSendInProgress = false;
-        res.render('home',{message: 'Password and confirm password does not match, please try again.', success: false});
-      }
-      else{
-      const hash = await bcrypt.hash(req.body.passw,saltRounds)
-      const name = req.body.name;
-      const email = req.body.email;
-      const c_no = req.body.phone;
+  const saltRounds = 10; 
+
+  try {
+  
+    if (formType === 'form1') {
+      const { passw, cpassw, name, email, phone: c_no } = req.body;
       
-      try{
-      const result = await pool.query('SELECT email FROM clientsignup where email = $1',[email]); 
-      const result1 = await pool.query('select email from lawyers where email=$1',[email]);
-      if(result.rowCount>0){
-        emailSendInProgress = false;
-        res.render('home3',{message: 'User already exists, please use different email id.', success: false});
-      }
-      else if(result1.rowCount>0){
-        emailSendInProgress = false;
-        res.render('home3',{message: 'User already exists, please use different email id.', success: false});
-      }
-      else {           
-        const token = crypto.randomBytes(32).toString('hex');
-        const verificationLink = `https://www.ilegaladvice.com/verify-email?token=${token}`;
+      if (passw !== cpassw) {
+        responseMessage = { message: 'Password and confirm password do not match, please try again.', success: false };
+      } else {
+        const hash = await bcrypt.hash(passw, saltRounds);
+        const result = await pool.query('SELECT email FROM clientsignup WHERE email = $1', [email]);
+        const result1 = await pool.query('SELECT email FROM lawyers WHERE email = $1', [email]);
 
+        if (result.rowCount > 0 || result1.rowCount > 0) {
+          responseMessage = { message: 'User already exists, please use a different email id.', success: false };
+        } else {
+          const token = crypto.randomBytes(32).toString('hex');
+          const verificationLink = `https://www.ilegaladvice.com/verify-email?token=${token}`;
 
-         const mailOptions = {
+          const mailOptions = {
             from: 'ilegaladvice26@gmail.com',
-            to: email, 
-            subject: 'Password Reset',
-            text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`
-           };
-          
-           const transporter = nodemailer.createTransport({
-            service: 'gmail', 
+            to: email,
+            subject: 'Email Verification',
+            text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
+          };
+
+          const transporter = nodemailer.createTransport({
+            service: 'gmail',
             port: 465,
             auth: {
-              user: 'ilegaladvice26@gmail.com', 
-              pass: 'dnfz hpgh rsfm pelx' 
+              user: 'ilegaladvice26@gmail.com',
+              pass: 'dnfz hpgh rsfm pelx',
             },
-            pool: true
-           })
-           
-          transporter.sendMail(mailOptions,async(error,info)=>{
-            if(error) {
-              emailSendInProgress = false;
-              console.error('Error sending verification email:', error);
-              return res.render('home3', { message: 'Invalid email address. Please enter a correct email.', success: false });
-            }  
-            const sql = "INSERT INTO clientsignup (name,email,passw,cpassw,c_no,verification_token, is_verified) VALUES($1,$2,$3,$4,$5,$6,$7)";
-            await pool.query(sql,[name,email,hash,hash,c_no, token, false]);
-            emailSendInProgress = false;
-            res.render('home3',{message: 'User registered! Please verify your email to complete registration.',success: true});
-       }); 
-      }  
-      }  catch (error){
-        emailSendInProgress = false;
-        console.log(error);
-        res.status(500).send('Internal server error');
-       }
-   }
- }
+            pool: true,
+          });
 
-else if(formType==='form2') { 
-  if (!req.file) {
-    return res.json({ success: false, message: 'Invalid file type, only images are allowed!' });
-  }
-  bcrypt.hash(req.body.l_password,saltRounds,async function(err,hash){
-    
-    const name = req.body.l_name;
-    const email = req.body.l_email;
-    const passw = hash;
-    const cpassw = hash;
-    const c_no = req.body.phone;
-    const area_of_prac = req.body.areaofpractice;
-    const state = req.body.state;
-    const city = req.body.city;
-    const yrs_exp = req.body.experience;
-    // const lic_no = req.body.license;
-    const bio = req.body.bio;
-    const imageBuffer = req.file.path; 
-    const gender = req.body.gender;
-    const language = req.body.language;
-    const courts = req.body.courts;
-    const address = req.body.address;
-    const lic_no = req.body.lic_no;
-    try{
-    const result = await pool.query('SELECT email from lawyers WHERE email=$1',[email]);
-    const result1 = await pool.query('select email from clientsignup where email=$1',[email]);
-    if(result.rowCount>0 || result1.rowCount>0){
-      emailSendInProgress = false;
-      res.render('home3',{message: 'User already exists, please use different email id.', success: false});
-      } 
-      let location;
-      try{
-        location = await geocodeAddress(address);
-      } catch(error){
-        console.error('Geocoding failed:',error);
+          await transporter.sendMail(mailOptions);
+          const sql = "INSERT INTO clientsignup (name, email, passw, cpassw, c_no, verification_token, is_verified) VALUES($1, $2, $3, $4, $5, $6, $7)";
+          await pool.query(sql, [name, email, hash, hash, c_no, token, false]);
+
+          responseMessage = { message: 'User registered! Please verify your email to complete registration.', success: true };
+        }
       }
+    }
 
-      const latitude  = location ? location.lat : null;
-      const longitude = location ? location.lng : null;
+    else if (formType === 'form2') {
+      if (!req.file) {
+        responseMessage = { message: 'Invalid file type, only images are allowed!', success: false };
+      } else {
+        const { l_password, l_c_password, l_name: name, l_email: email, phone: c_no, areaofpractice: area_of_prac, state, city, experience: yrs_exp, bio, gender, language, courts, address, lic_no } = req.body;
+
        
-      const token = crypto.randomBytes(32).toString('hex');
-      const verificationLink = `https://www.ilegaladvice.com/verify-email?token=${token}`;
+        if (l_password !== l_c_password) {
+          responseMessage = { message: 'Password and confirm password do not match, please try again.', success: false };
+        } else {
+          const passw = await bcrypt.hash(l_password, saltRounds);
+          const imageBuffer = req.file.path;
 
-      const mailOptions = {
-        from: 'ilegaladvice26@gmail.com',
-        to: email,
-        subject: 'Email Verification',
-        text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
+          const result = await pool.query('SELECT email FROM lawyers WHERE email = $1', [email]);
+          const result1 = await pool.query('SELECT email FROM clientsignup WHERE email = $1', [email]);
+
+          if (result.rowCount > 0 || result1.rowCount > 0) {
+            responseMessage = { message: 'User already exists, please use a different email id.', success: false };
+          } else {
+            let location;
+            try {
+              location = await geocodeAddress(address);
+            } catch (error) {
+              console.error('Geocoding failed:', error);
+            }
+
+            const latitude = location ? location.lat : null;
+            const longitude = location ? location.lng : null;
+
+            const token = crypto.randomBytes(32).toString('hex');
+            const verificationLink = `https://www.ilegaladvice.com/verify-email?token=${token}`;
+
+            const mailOptions = {
+              from: 'ilegaladvice26@gmail.com',
+              to: email,
+              subject: 'Email Verification',
+              text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
+            };
+
+            const transporter = nodemailer.createTransport({
+              service: 'gmail',
+              port: 465,
+              auth: {
+                user: 'ilegaladvice26@gmail.com',
+                pass: 'dnfz hpgh rsfm pelx',
+              },
+              pool: true,
+            });
+
+            await transporter.sendMail(mailOptions);
+            const sql1 = 'INSERT INTO lawyers (name, email, passw, cpassw, c_no, area_of_prac, states, city, yrs_exp, bio, image, gender, language, courts, verification_token, is_verified, latitude, longitude, address, lic_no) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)';
+            await pool.query(sql1, [name, email, passw, passw, c_no, area_of_prac, state, city, yrs_exp, bio, imageBuffer, gender, language, courts, token, false, latitude, longitude, address, lic_no]);
+
+            responseMessage = { message: 'User registered! Please verify your email to complete registration.', success: true };
+          }
+        }
       }
-
-      const transporter = nodemailer.createTransport({
-        service: 'gmail', 
-        port: 465,
-        auth: {
-          user: 'ilegaladvice26@gmail.com', 
-          pass: 'dnfz hpgh rsfm pelx' 
-        },
-        pool: true
-       })
-
-      transporter.sendMail(mailOptions, async(error,info)=>{
-        if (error) {
-          console.error('Error sending verification email:', error);
-          emailSendInProgress = false;
-          return res.render('home3', { message: 'Invalid email address. Please enter a correct email.', success: false });
-        }  
-      const sql1= 'INSERT INTO lawyers (name,email,passw,cpassw,c_no,area_of_prac,states,city,yrs_exp,bio,image,gender,language,courts,verification_token, is_verified,latitude,longitude,address,lic_no) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)';
-      await pool.query(sql1,[name,email,passw,cpassw,c_no,area_of_prac,state,city,yrs_exp,bio,imageBuffer,gender,language,courts,token,false,latitude,longitude,address,lic_no]);
-          emailSendInProgress = false;
-          res.render('home3',{message: 'User registered! Please verify your email to complete registration.',success: true}); 
-    
-      })
-     } catch (error) {
-        console.log(error);
-        res.status(500).send('Internal server error');
-      }
-    })
+    } else {
+      responseMessage = { message: 'Invalid form type', success: false };
+    }
+  } catch (error) {
+    console.error('Internal error:', error);
+    responseMessage = { message: 'Internal server error. Please try again later.', success: false };
+  } finally {
+    emailSendInProgress = false;
+    res.render('home3', responseMessage); 
   }
-
-
-
-else{
-  console.log('error');
-}
 });
- 
-// app.post('/login',passport.authenticate('client-login',{
-//   successRedirect: '/lawyerspage',
-//   failureRedirect: '/signup',
-  
-// }));
 
 app.post('/upload',upload.single('upload'),(req,res)=>{
   res.json({
