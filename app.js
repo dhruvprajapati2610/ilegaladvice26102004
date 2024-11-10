@@ -59,6 +59,9 @@ const pool= new Pool({
   database: "ilegaladvice",
   password: "Pranav@2003",
   port: 5432,
+  max: 30,                   
+  idleTimeoutMillis: 60000,   
+  connectionTimeoutMillis: 3000
 });
 
 app.use(session({
