@@ -684,7 +684,7 @@ const mediaQuery=matchMedia('(min-width:1118px)'),
  const slider=document.querySelector(".slider");
 
 slideSignupBtn.onclick =()=>{
-     loginForm.style.marginLeft="-58%";
+     loginForm.style.marginLeft="-55%";
       loginText.style.marginLeft="-50%";
 };
 slideLoginBtn.onclick =()=>{
@@ -705,7 +705,7 @@ slideLoginBtn.onclick =()=>{
       
 };
 slideSignupBtn.onclick=()=>{
-     loginForm.style.marginLeft="-58%";
+     loginForm.style.marginLeft="-55%";
      loginText.style.marginLeft="-50%";
      slider.style.left="50%";
      slideSignupBtn.style.color="#fff";
@@ -713,7 +713,7 @@ slideSignupBtn.onclick=()=>{
      slideLoginBtn.style.cursor="pointer";
      slideSignupBtn.style.cursor="default";
      if (window.innerWidth <= 640) {
-        loginForm.style.marginLeft = "-55%";
+        loginForm.style.marginLeft = "-54%";
         
     } 
 }
@@ -725,6 +725,10 @@ slideLawyerBtn.onclick=()=>{
       slideLawyerBtn.style.userSelect="none";
       slideClientBtn.style.color="hsl(220,12%,45%)";
       slideClientBtn.style.cursor="pointer";
+      if (window.innerWidth <= 640) {
+        clientSignupForm.style.marginLeft="-71%"; 
+        
+    }
 };
 slideClientBtn.onclick=()=>{
       clientSignupForm.style.marginLeft="0%";
@@ -737,7 +741,7 @@ slideClientBtn.onclick=()=>{
      
 };
 signupLink.onclick=()=>{
-     loginForm.style.marginLeft="-58%";
+     loginForm.style.marginLeft="-55%";
      loginText.style.marginLeft="-50%";
      slider.style.left="50%";
      slideSignupBtn.style.color="#fff";
@@ -745,10 +749,12 @@ signupLink.onclick=()=>{
      slideLoginBtn.style.cursor="pointer";
      slideSignupBtn.style.cursor="default";
      if (window.innerWidth <= 640) {
-        loginForm.style.marginLeft = "-55%";
+        loginForm.style.marginLeft = "-54%";
         
     } 
 }
+
+
 
 
 
