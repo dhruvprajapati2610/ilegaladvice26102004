@@ -265,6 +265,171 @@
                   <div class="sticker-no"><img src="icon_home07.f62f012b.svg" alt=""><p>Upload, sign and comment on legal documents from anywhere</p></div>
                  </div>
             </div>
+              <div class="top-rated-lawyers">
+              <div class="top-lawyer-heading">
+                  <h2>Top Rated Lawyers In INDIA</h2>
+              </div>
+              <div class="card__container swiper lawyers-swiper">
+                 
+                 <div class="card__content lawyer_content">
+                  <div class="swiper-wrapper">
+                  <% lawyers.forEach(lawyer=>{ %>
+                     <div class="profile-box swiper-slide" id="profile-box">
+                         <div class="img-info">
+                          <div class="img-box">
+                             <div class="img-contain">
+                               <img src="<%= lawyer.image %>" alt="">
+                              </div>
+                          </div>
+                          <div class="info-box">
+                               <div class="name"><%= lawyer.name %></div>
+                               <div class="ratings">
+                                <div class="rating-star">
+                                  <% for (let i=1; i<=5; i++) { %>
+                                    <% if(i<= Math.floor(lawyer.average_rating)) { %>
+                                     <span class="fa fa-star rating-checked-reveiew"></span>
+                                    <% } else if(i===Math.ceil(lawyer.average_rating) && !Number.isInteger(lawyer.average_rating)) { %>
+                                     <span class="fa fa-star-half-alt rating-checked"></span>
+                                   <% } else {  %>
+                                     <span class="fa fa-star"></span>
+                                   <% } %>
+                                  <% } %>
+                                </div>
+                                 <span>
+                                  <%=roundToOneDecimalPlace(lawyer.average_rating)%> | <%=lawyer.client_count%>+ user rating
+                                 </span>
+
+                               </div>
+                               <div class="location">
+                                <i class="fa-solid fa-location-dot fa-solid-logo"></i>&nbsp;&nbsp;<%=lawyer.city%>, <%=lawyer.state%>
+                               </div>
+                               <div class="experience">
+                                <i class="fa-solid fa-suitcase fa-solid-logo"></i>&nbsp;&nbsp;<%= lawyer.yrs_exp %> years experience
+                               </div>
+                          </div>
+                          </div>
+                          <div class="full-profile">
+                            
+                              <a href="/lawyersprofile?lawyerId=<%= lawyer.id %>" class="lawyer-profile-redirect">
+                            <button type="submit"  class="full-profile-btn">View Full Profile</button>
+                            </a>
+
+                          </div>
+
+                         
+                          
+                         
+
+                     </div>
+                     <%  }) %>
+                    </div>
+                 </div>    
+               
+                 <div class="swiper-button-next lawyers-swiper-next">
+                  <i class="ri-arrow-right-s-line"></i>
+               </div>
+               
+               <div class="swiper-button-prev lawyers-swiper-prev">
+                  <i class="ri-arrow-left-s-line"></i>
+               </div>
+
+               <div class="swiper-pagination lawyers-swiper-pagination"></div>
+                 
+                </div> 
+            </div>
+            <div class="ipc-section">
+               <div class="ipc-heading">
+                 <h2>IPC Sections in India</h2>
+               </div>
+               <div class="card__container swiper ipc-swiper">
+                  
+                  <div class="card__content ipc_content">
+                     <div class="swiper-wrapper">
+                     <div class="ipc-box swiper-slide" id="ipc-box1">
+                         <div class="ipc-name">
+                            IPC Section 354
+                         </div>
+                         <div class="ipc-info">
+                            <div class="ipc-law">Law - Criminal</div>
+                            <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined.!</div>
+                         </div>
+                         <div class="full-profile-ipc">
+                          <button class="full-profile-ipc-btn">View Details</button>
+                        </div>
+                     </div>
+                     <div class="ipc-box swiper-slide" id="ipc-box2">
+                      <div class="ipc-name">
+                        IPC Section 354
+                     </div>
+                     <div class="ipc-info">
+                        <div class="ipc-law">Law - Criminal</div>
+                        <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined. </div>
+                     </div>
+                     <div class="full-profile-ipc">
+                      <button class="full-profile-ipc-btn">View Details</button>
+                    </div>
+                     </div>
+                     <div class="ipc-box swiper-slide" id="ipc-box3">
+                      <div class="ipc-name">
+                        IPC Section 354
+                     </div>
+                     <div class="ipc-info">
+                        <div class="ipc-law">Law - Criminal</div>
+                        <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined.</div>
+                     </div>
+                     <div class="full-profile-ipc">
+                      <button class="full-profile-ipc-btn">View Details</button>
+                    </div>
+                     </div>
+                      <div class="ipc-box swiper-slide" id="ipc-box4">
+                        <div class="ipc-name">
+                          IPC Section 356
+                       </div>
+                       <div class="ipc-info">
+                          <div class="ipc-law">Law - Criminal</div>
+                          <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined.</div>
+                       </div>
+                       <div class="full-profile-ipc">
+                        <button class="full-profile-ipc-btn">View Details</button>
+                      </div>
+                       </div>
+                       <div class="ipc-box swiper-slide" id="ipc-box5">
+                        <div class="ipc-name">
+                          IPC Section 356
+                       </div>
+                       <div class="ipc-info">
+                          <div class="ipc-law">Law - Criminal</div>
+                          <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined.</div>
+                       </div>
+                       <div class="full-profile-ipc">
+                        <button class="full-profile-ipc-btn">View Details</button>
+                      </div>
+                       </div>
+                       <div class="ipc-box swiper-slide" id="ipc-box6">
+                        <div class="ipc-name">
+                          IPC Section 356
+                       </div>
+                       <div class="ipc-info">
+                          <div class="ipc-law">Law - Criminal</div>
+                          <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined.</div>
+                       </div>
+                       <div class="full-profile-ipc">
+                        <button class="full-profile-ipc-btn">View Details</button>
+                      </div>
+                       </div>
+                   </div>  
+                  </div>
+                  <div class="swiper-button-next ipc-swiper-next">
+                    <i class="ri-arrow-right-s-line"></i>
+                 </div>
+
+                 <div class="swiper-button-prev ipc-swiper-prev">
+                  <i class="ri-arrow-left-s-line"></i>
+               </div>
+
+               <div class="swiper-pagination ipc-swiper-pagination"></div>
+               </div>
+            </div>
          
             
             
