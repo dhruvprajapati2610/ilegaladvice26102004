@@ -1104,6 +1104,7 @@ color:#232121;
       }
  
    
+  
       @media screen and (max-width:1375px) {
         .section-1{
          flex-direction: column;
@@ -1724,6 +1725,62 @@ color:#232121;
             top: 97%!important;
         }
       }
+     @media screen and (max-width:640px) {
+        .nav{
+            height: 65px;
+        }
+        .logo{
+            height: 65px;
+        }
+        .sticker-heading h2 {
+            font-size: 30px;
+            line-height: 35px;
+        }
+        .btn {
+            font-size: 1.3rem;
+        }
+        .sticker-no p {
+            font-size: 16px;
+        }
+        .selected-value {
+            font-size: 17px;
+        }
+        .top-lawyer-heading {
+            font-size: 1rem;
+        }
+        .full-profile-btn {
+            font-size: 15px;
+        }
+        .img-info {
+            display: flex;
+            column-gap: 2.3rem;
+        }
+        .info-box {
+            row-gap: 0px;
+        }
+        .info-box .name {
+            font-size: 16px !important;
+        }
+        .ratings, .location, .experience {
+            font-size: 14px;
+        }
+        .full-profile,.full-profile-ipc {
+            height: 29px;
+        }
+        .find-lawyer-heading h2 {
+            font-size: 30px;
+            line-height: 31px;
+        }
+        .ipc-heading {
+            font-size: 1rem;
+        }
+        .full-profile-ipc-btn {
+            font-size: 15px;
+        }
+        #ipc-btn-1,#ipc-btn-2,.pre,.next {
+            padding: 6px 10px!important;
+        }
+    }
     .dropdown-list{
         padding-left: 0!important;
     }
