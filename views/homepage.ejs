@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"  />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css">
+    <link rel="stylesheet" href="swiper-bundle.min.css">
 
         <link rel="stylesheet" href="homepage.css">
         
@@ -264,158 +265,13 @@
                   <div class="sticker-no"><img src="icon_home07.f62f012b.svg" alt=""><p>Upload, sign and comment on legal documents from anywhere</p></div>
                  </div>
             </div>
-            <div class="top-rated-lawyers">
-              <div class="top-lawyer-heading">
-                  <h2>Top Rated Lawyers In INDIA</h2>
-              </div>
-              <div class="top-lawyer-main">
-                 <div class="left-arrow">
-                  <div class="btn-box pre" id="btnbox-2"><i class="fa-solid fa-angles-right"></i></div>
-                 </div>
-                 <div class="profile-container">
-                  <% lawyers.forEach(lawyer=>{ %>
-                     <div class="profile-box" id="profile-box">
-                         <div class="img-info">
-                          <div class="img-box">
-                             <div class="img-contain">
-                               <img src="<%= lawyer.image %>" alt="">
-                              </div>
-                          </div>
-                          <div class="info-box">
-                               <div class="name"><%= lawyer.name %></div>
-                               <div class="ratings">
-                                <div class="rating-star">
-                                  <% for (let i=1; i<=5; i++) { %>
-                                    <% if(i<= Math.floor(lawyer.average_rating)) { %>
-                                     <span class="fa fa-star rating-checked-reveiew"></span>
-                                    <% } else if(i===Math.ceil(lawyer.average_rating) && !Number.isInteger(lawyer.average_rating)) { %>
-                                     <span class="fa fa-star-half-alt rating-checked"></span>
-                                   <% } else {  %>
-                                     <span class="fa fa-star"></span>
-                                   <% } %>
-                                  <% } %>
-                                </div>
-                                 <span>
-                                  <%=roundToOneDecimalPlace(lawyer.average_rating)%> | <%=lawyer.client_count%>+ user rating
-                                 </span>
-
-                               </div>
-                               <div class="location">
-                                <i class="fa-solid fa-location-dot fa-solid-logo"></i>&nbsp;&nbsp;<%=lawyer.city%>, <%=lawyer.state%>
-                               </div>
-                               <div class="experience">
-                                <i class="fa-solid fa-suitcase fa-solid-logo"></i>&nbsp;&nbsp;<%= lawyer.yrs_exp %> years experience
-                               </div>
-                          </div>
-                          
-                          </div>
-                          <div class="full-profile">
-                            <a href="/lawyersprofile?lawyerId=<%= lawyer.id %>" class="lawyer-profile-redirect">
-                              <button type="submit"  class="full-profile-btn">View Full Profile</button>
-                            </a>
-                        </div>
-                     </div>
-                     <%  }) %>
-                 </div>    
-               
-                 <div class="right-arrow">
-                  <div class="btn-box next" id="btnbox-6"><span><i class="fa-solid fa-angles-right"></i></span></div>
-                 </div>
-                </div> 
-            </div>
-            <div class="ipc-section">
-               <div class="ipc-heading">
-                 <h2>IPC Sections in India</h2>
-               </div>
-               <div class="ipc-main">
-                  <div class="left-arrow">
-                   <div class="ipc-btn-box" id="ipc-btn-1"><i class="fa-solid fa-angles-right"></i></div>
-                  </div>
-                  <div class="ipc-container">
-                  
-                     <div class="ipc-box" id="ipc-box1">
-                         <div class="ipc-name">
-                            IPC Section 354
-                         </div>
-                         <div class="ipc-info">
-                            <div class="ipc-law">Law - Criminal</div>
-                            <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined.!</div>
-                         </div>
-                         <div class="full-profile-ipc">
-                          <button class="full-profile-ipc-btn">View Details</button>
-                        </div>
-                     </div>
-                     <div class="ipc-box" id="ipc-box2">
-                      <div class="ipc-name">
-                        IPC Section 354
-                     </div>
-                     <div class="ipc-info">
-                        <div class="ipc-law">Law - Criminal</div>
-                        <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined. </div>
-                     </div>
-                     <div class="full-profile-ipc">
-                      <button class="full-profile-ipc-btn">View Details</button>
-                    </div>
-                     </div>
-                     <div class="ipc-box" id="ipc-box3">
-                      <div class="ipc-name">
-                        IPC Section 354
-                     </div>
-                     <div class="ipc-info">
-                        <div class="ipc-law">Law - Criminal</div>
-                        <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined.</div>
-                     </div>
-                     <div class="full-profile-ipc">
-                      <button class="full-profile-ipc-btn">View Details</button>
-                    </div>
-                     </div>
-                      <div class="ipc-box" id="ipc-box4">
-                        <div class="ipc-name">
-                          IPC Section 356
-                       </div>
-                       <div class="ipc-info">
-                          <div class="ipc-law">Law - Criminal</div>
-                          <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined.</div>
-                       </div>
-                       <div class="full-profile-ipc">
-                        <button class="full-profile-ipc-btn">View Details</button>
-                      </div>
-                       </div>
-                       <div class="ipc-box" id="ipc-box5">
-                        <div class="ipc-name">
-                          IPC Section 356
-                       </div>
-                       <div class="ipc-info">
-                          <div class="ipc-law">Law - Criminal</div>
-                          <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined.</div>
-                       </div>
-                       <div class="full-profile-ipc">
-                        <button class="full-profile-ipc-btn">View Details</button>
-                      </div>
-                       </div>
-                       <div class="ipc-box" id="ipc-box6">
-                        <div class="ipc-name">
-                          IPC Section 356
-                       </div>
-                       <div class="ipc-info">
-                          <div class="ipc-law">Law - Criminal</div>
-                          <div class="ipc-deatil">IPC 354 states that anyone who assaults or uses criminal force against a woman with the intention of outraging her modesty, can be punished and may also be fined.</div>
-                       </div>
-                       <div class="full-profile-ipc">
-                        <button class="full-profile-ipc-btn">View Details</button>
-                      </div>
-                       </div>
-                     
-                  </div>
-                  <div class="right-arrow">
-                    <div class="ipc-btn-box" id="ipc-btn-2"><i class="fa-solid fa-angles-right"></i></div>
-                  </div>
-               </div>
-            </div>
+         
+            
             
         </div>
         <%- include('partials/footer') %>
     </div>
+ <script src="swiper-bundle.min.js"></script>
      <script>
          const showmenu=(toggleId, navId) =>{
     const toggle = document.getElementById(toggleId),
@@ -511,88 +367,58 @@ const mediaQuery=matchMedia('(min-width:1118px)'),
    });
  });
 
- const profileContainer=document.querySelector(".profile-container");
- const back=document.getElementById("btnbox-2");
- const next=document.getElementById("btnbox-6");
- const ipcContainer=document.querySelector(".ipc-container");
- const ipcBack=document.getElementById("ipc-btn-1"); 
- const ipcNext=document.getElementById("ipc-btn-2"); 
- const profile4=document.getElementById("profile-box");
- const ipc4=document.getElementById("ipc-box4");
 
- function getScrollAmount() {
-    return ipcContainer.clientWidth; // Scroll by the width of the visible area
-}
-function getScrollAmountlawyer() {
-    return profileContainer.clientWidth; // Scroll by the width of the visible area
-}
 
-back.addEventListener("click", ()=>{
-           profileContainer.scrollLeft -= getScrollAmountlawyer() + 46;
-           profile4.classList.remove("slide-left");
-       
-})
-next.addEventListener("click", ()=>{
-           profileContainer.scrollLeft += getScrollAmountlawyer() + 46;
-           profile4.classList.add("slide-left");
-           
-})
-ipcBack.addEventListener("click", ()=>{
-           ipcContainer.scrollLeft -= getScrollAmount() + 46;
-           ipc4.classList.remove("slide-left");
-       
-})
-ipcNext.addEventListener("click", ()=>{
-           ipcContainer.scrollLeft += getScrollAmount() +46;
-           ipc4.classList.add("slide-left");
-           
-})
 
-if (window.innerWidth < 1080){
-  ipcBack.addEventListener("click", ()=>{
-           ipcContainer.scrollLeft -= getScrollAmount() +40;
-           ipc4.classList.remove("slide-left");
-       
-})
-ipcNext.addEventListener("click", ()=>{
-           ipcContainer.scrollLeft += getScrollAmount() +40;
-           ipc4.classList.add("slide-left");
-           
-})
-back.addEventListener("click", ()=>{
-           profileContainer.scrollLeft -= getScrollAmountlawyer() + 40;
-           profile4.classList.remove("slide-left");
-       
-})
-next.addEventListener("click", ()=>{
-           profileContainer.scrollLeft += getScrollAmountlawyer() + 40;
-           profile4.classList.add("slide-left");
-           
-})
-}
-if (window.innerWidth < 780){
-  ipcBack.addEventListener("click", ()=>{
-           ipcContainer.scrollLeft -= getScrollAmount();
-           ipc4.classList.remove("slide-left");
-       
-})
-ipcNext.addEventListener("click", ()=>{
-           ipcContainer.scrollLeft += getScrollAmount();
-           ipc4.classList.add("slide-left");
-           
-})
-back.addEventListener("click", ()=>{
-           profileContainer.scrollLeft -= getScrollAmountlawyer() - 1 ;
-           profile4.classList.remove("slide-left");
-       
-})
-next.addEventListener("click", ()=>{
-           profileContainer.scrollLeft += getScrollAmountlawyer() - 1;
-           profile4.classList.add("slide-left");
-           
-})
+let swiperLawyers = new Swiper(".lawyer_content", {
+  loop: true,
+  spaceBetween: 32,
+  grabCursor: true,
 
-}
+  pagination: {
+    el: ".lawyers-swiper-pagination",
+    clickable: true,
+    dynamicBullets: true,
+  },
+
+  navigation: {
+    nextEl: ".lawyers-swiper-next",
+    prevEl: ".lawyers-swiper-prev",
+  },
+
+  breakpoints:{
+    780: {
+      slidesPerView: 2,
+    },
+    1078: {
+      slidesPerView: 3,
+    },
+  },
+});
+
+
+let swiperIPC = new Swiper(".ipc_content", {
+    loop: true,
+    spaceBetween: 32,
+    grabCursor: true,
+    pagination: {
+        el: ".ipc-swiper-pagination",
+        clickable: true,
+        dynamicBullets: true,
+    },
+    navigation: {
+        nextEl: ".ipc-swiper-next",
+        prevEl: ".ipc-swiper-prev",
+    },
+    breakpoints: {
+        780: {
+            slidesPerView: 2,
+        },
+        1078: {
+            slidesPerView: 3,
+        },
+    },
+});  
 
 
      </script>
