@@ -1403,8 +1403,18 @@ color:#232121;
         font-size: 1.3rem;
     }
     .sc-2{
-        width: 55%;
+        width: 54%;
     }
+    #login-form {
+        width: 53%;
+    }
+    .client-signup {
+        width: 67.8%;
+    }
+    .lawyer-signup {
+        width: 54%;
+    }
+
 }
 .dropdown-list{
     padding-left: 0!important;
