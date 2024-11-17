@@ -13,6 +13,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Slab&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="ipc.css">
         <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=66793db46b65c10019188ef5&product=inline-share-buttons&source=platform" async="async"></script>
+  <style>
+          
+          #translate_widget_container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: Arial, sans-serif;
+            padding: 10px;
+          }
+      
+        
+          .translate-icon {
+            width: 24px;
+            height: 24px;
+          }
+        </style>
 </head>
 <body>
   <%-include('partials/header')%>
@@ -20,6 +36,16 @@
      <% ipc.forEach(ipc=> { %>
     <div class="main-body">
         <div class="sub-body">
+ <div id="translate_widget_container">
+   
+    <img 
+      src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" 
+      alt="Google Translate Icon" 
+      class="translate-icon"
+    />
+
+    <div id="google_translate_element"></div>
+  </div>
            <div class="ipc-heading">
             <h1>IPC <%=ipc.ipc_section%> - <%=ipc.offence%></h1>
            </div>
