@@ -251,6 +251,41 @@ app.get('/crpclist',(req,res)=>{
   res.render('crpclist.ejs');
 })
 
+app.get('/bns',(req,res)=>{
+  res.render('bnschapters.ejs');
+})
+
+app.get('/bns_sections', async (req, res) => {
+  const chapter = parseInt(req.query.chapter); 
+  if (isNaN(chapter)) {
+      return res.status(400).send('Invalid chapter number');
+  }
+  const query = 'SELECT * FROM bns_sections WHERE chapter_number = $1';
+  try {
+      const { rows } = await pool.query(query, [chapter]); 
+      res.render('BNSsectionlist.ejs', { data: rows });
+  } catch (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send('Server error');
+  }
+});
+
+app.get('/bns_section', async (req, res) => {
+  const section_number = req.query.section_number;
+  const query = 'SELECT * FROM bns_sections WHERE section_number = $1';
+  
+  try {
+    const { rows } = await pool.query(query, [section_number]);  
+    if (rows.length === 0) {
+      return res.status(404).send('Section not found');
+    }
+    res.render('BNSsection.ejs', { data: rows[0] });  
+  } catch (err) {
+    console.error('Error executing query:', err);
+    res.status(500).send('Server error');
+  }
+});
+
 app.get('/crpc',async(req,res)=>{
   const chapter = req.query.chapter;
   try{
