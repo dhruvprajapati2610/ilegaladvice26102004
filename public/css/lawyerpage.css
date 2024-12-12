@@ -140,6 +140,7 @@ a {
 
 /* Mobile devices */
 @media screen and (max-width:1118px) {
+    
     .nav-menu {
         background-color: var(--body-color);
         position: absolute;
@@ -1928,7 +1929,7 @@ background-color: rgba(0, 0, 0, 0.1);
             font-size: 1rem!important;
         }
         .body{
-            top: 20%!important;
+            top: 25%!important;
         }
         .lawyer-detail {
             row-gap: 6.5rem !important;
