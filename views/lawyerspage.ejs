@@ -608,7 +608,7 @@
      
             <% lawyers.forEach(lawyer => { %>
               
-             <div class="lawyer-box" data-name="<%=lawyer.name%>" data-area="<%=lawyer.area_of_prac%>">
+             <div class="lawyer-box" data-lawyer-id="<%=lawyer.id%>" data-name="<%=lawyer.name%>" data-area="<%=lawyer.area_of_prac%>">
                  <div class="lawyer-img">
                   
                      <div class="image-container">
@@ -660,19 +660,13 @@
                           </div>
                         </div>
                        </div>
-                       
-                      
                       <div class="skill">
                         <div class="lawyer-skill">
                              <h4>Practice area & Skills</h4>
                              <p><%=lawyer.area_of_prac%></p>
-                             
                         </div>
                         <div class="lawyer-contact">
-                        
-                         
-                          <button  class="contact-btn" data-lawyer-id="<%=lawyer.id%>" value="contact">Contact</button> 
-                      
+                            <button  class="contact-btn" data-lawyer-id="<%=lawyer.id%>" value="contact">Contact</button> 
                         </div>     
                       </div>
                      
@@ -884,9 +878,45 @@ const mediaQuery=matchMedia('(min-width:1118px)'),
  const selectButtons = document.querySelectorAll(".select-button");
  const selectedValues = document.querySelectorAll(".selected-value");
  const optionsLists = document.querySelectorAll(".select-dropdown");
-
+ const isPhoneView = window.matchMedia("(max-width: 640px)").matches;
+ //console.log(isPhoneView);
  document.addEventListener('DOMContentLoaded', () => {
- const viewLawyerButtons = document.querySelectorAll('.contact-btn');
+
+if(isPhoneView){
+  console.log(isPhoneView)
+  // console.log("hello")
+  const viewLawyerButtons = document.querySelectorAll('.lawyer-box');
+  //console.log(viewLawyerButtons);
+ viewLawyerButtons.forEach(function(button){
+  
+  button.addEventListener('click',async(event)=>{
+    console.log(event)
+    const lawyerId = button.dataset.lawyerId;
+    try{
+      const response = await fetch(`/lawyersprofile?lawyerId=${lawyerId}`,{
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        // body: JSON.stringify({ lawyerId })
+      })
+      if(response.ok){
+        window.location.href = `/lawyersprofile?lawyerId=${lawyerId}`;
+      } else {
+        const errorData = await response.json();
+        console.error('Error fetching lawyer profile:', errorData);
+      }
+    } catch(error){
+      console.error('error:',error);
+    }
+  })
+ })
+
+}
+else{
+   console.log(isPhoneView)
+   console.log("hello2")
+   const viewLawyerButtons = document.querySelectorAll('.contact-btn');
  viewLawyerButtons.forEach(button=>{
   button.addEventListener('click',async(event)=>{
     const lawyerId = event.target.dataset.lawyerId;
@@ -909,6 +939,8 @@ const mediaQuery=matchMedia('(min-width:1118px)'),
     }
   })
  })
+}
+ 
 });
 
  customSelects.forEach((customSelect, index) => {
