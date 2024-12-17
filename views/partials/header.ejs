@@ -1,7 +1,10 @@
 <header class="header">
     <nav class="nav container">
          <div class="nav-data">
-             <img class="logo" src="/images/logo.png" height="80px" alt="" srcset="" style="padding-left: 35px;">
+            <img class="logo" src="/images/logo.png" height="80px" alt="" 
+            style="padding-left: 35px; cursor: pointer;" 
+            onclick="window.location.href='/'">
+       
 
               <div class="nav-toggle" id="nav-toggle">
                  <i class="ri-menu-line nav-toggle-menu"></i>
@@ -248,4 +251,10 @@
          </div>
     </nav>
 </header>
+
+<script>
+    document.getElementsByClassName('logo').addEventListener('click', function() {
+        window.location.href = '/';
+    });
+</script>
 
