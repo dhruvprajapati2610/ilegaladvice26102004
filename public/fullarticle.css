@@ -793,6 +793,7 @@ hr{
     width: 100%;
     word-wrap: break-word;
     word-break: break-word;
+    text-transform: capitalize;
 }
 .lawyer-exp{
     width: 100%;

@@ -499,7 +499,8 @@ word-break: break-word;
 }
 .lawyer-loc{
     text-overflow: ellipsis;
-    overflow: hidden;  
+    overflow: hidden;
+    text-transform: capitalize;  
 }
 .lawyer-language{
     text-overflow: ellipsis;
@@ -892,10 +893,12 @@ width: 200px;
         width: 200px;
         text-overflow: ellipsis;
         overflow: hidden;
+        text-transform: capitalize;
     }
     .lawyer-loc span{
         text-overflow: ellipsis;
         overflow: hidden;
+        text-transform: capitalize;
     }
     .lawyer-exp{
         width: 200px;
@@ -1617,6 +1620,7 @@ color:#232121;
     }
     .lawyer-loc{
         width: 100%!important;
+        text-transform: capitalize;
     }
    .lawyer-sub-details{
     font-size: 0.9rem;

@@ -758,12 +758,14 @@ a {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    text-transform: capitalize;
 }
 .lawyer-loc span{
     width: 100%!important;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    text-transform: capitalize;
 }
 .lawyer-exp{
     width: 175px;
@@ -1951,6 +1953,8 @@ background-color: rgba(0, 0, 0, 0.1);
         }
         .lawyer-loc{
             font-size: 14px;
+            text-transform: capitalize;
+
         }
         .image-container img {
             width: 110px;
