@@ -292,8 +292,8 @@ a{
         transition: top 0.4s, opacity 0.3s ;
     }
     .dropdown-content{
-        grid-template-columns: repeat(5,max-content);
-        column-gap: 6rem;
+           grid-template-columns: repeat(6, max-content);
+        column-gap: 3rem;
         max-width: 1120px;
         margin-inline: auto;
     }
