@@ -11,11 +11,8 @@ const uuid = require('uuid');
 const nodemailer = require('nodemailer');
 const randomstring = require('randomstring');
 const flash = require('connect-flash');
-
-
+const cloudinary = require('cloudinary').v2;
 const app= express();
-
-
 const fs = require('fs');
 const port= process.env.PORT||3000; 
 const path = require('path');
@@ -46,11 +43,13 @@ app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 // app.use('/lawyersprofile/:id',express.static(path.join(__dirname,'public')));
 // app.use('/lawyersprofile/:id',express.static(path.join(__dirname,'uploads')));
 app.use('/articles/:id',express.static(path.join(__dirname,'public')))
+app.use('/community/user-profile',express.static(path.join(__dirname,'public')))
 app.use('/lawyerspage',express.static(path.join(__dirname,'uploads')));
 app.use(bodyParser.urlencoded({extended: true}));
 // app.use(express.static("public"));
 app.use(express.static("uploads"));
 const secretKey = crypto.randomBytes(32).toString('hex');
+const upload = multer({ dest: 'uploads/' });
 
 
 const pool= new Pool({ 
@@ -59,10 +58,11 @@ const pool= new Pool({
   database: "ilegaladvice",
   password: "Pranav@2003",
   port: 5432,
-  max: 30,                   
+  max: 30,                 
   idleTimeoutMillis: 60000,   
   connectionTimeoutMillis: 3000
 });
+
 
 app.use(session({
   store: new PgSession({
@@ -108,8 +108,8 @@ const ensureAuthenticated = (req,res,next) => {
   }
   res.redirect('/signup');
 }
-// Set the maximum number of listeners for Express app and router instances
-// app.setMaxListeners(15); 
+
+app.setMaxListeners(15); 
 const verifyAuthenticated = (req,res,next)=>{
   if(req.isAuthenticated()){
     return next();
@@ -120,14 +120,14 @@ const verifyAuthenticated = (req,res,next)=>{
 }
 
 
-const storage = multer.diskStorage({ 
-  destination: function(req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req,file,cb) {
-    cb(null, file.originalname);
-  }
-});
+// const storage = multer.diskStorage({ 
+//   destination: function(req, file, cb) {
+//     cb(null, 'uploads/');
+//   },
+//   filename: function (req,file,cb) {
+//     cb(null, file.originalname);
+//   }
+// });
 
 const fileFilter = (req, file, cb) => {
   const filetypes = /jpeg|jpg|png|gif/;
@@ -142,10 +142,12 @@ const fileFilter = (req, file, cb) => {
 };
 
 
-const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter,
-});
+// const upload = multer({
+//   storage: storage,
+//   fileFilter: fileFilter,
+// });
+
+
 
 pool.connect((err) => {
   if (err) {
@@ -170,10 +172,16 @@ function isuAuthenticated(req,res, next) {
   }
 } 
 
-const API_KEY = 'n~6WhjJBL0xogd0yAuFM20TuA';
+const API_KEY = process.env.API_KEY;
 const clientId = '8437309c-46c6-4516-aa33-69f508d96e49';
 const clientSecret = 'MzWOBwS5b5UPacsspQxkWxsNQAmG2EgP';
 const searchText = 'lawyers';
+
+cloudinary.config({ 
+  cloud_name: 'dabla3fwm', 
+  api_key: '228566377711835', 
+  api_secret: 'k89mMnD6IQi6a-s11wVNePGEH78' 
+});
 
 let emailSendInProgress = false;
 
@@ -251,41 +259,6 @@ app.get('/crpclist',(req,res)=>{
   res.render('crpclist.ejs');
 })
 
-app.get('/bns',(req,res)=>{
-  res.render('bnschapters.ejs');
-})
-
-app.get('/bns_sections', async (req, res) => {
-  const chapter = parseInt(req.query.chapter); 
-  if (isNaN(chapter)) {
-      return res.status(400).send('Invalid chapter number');
-  }
-  const query = 'SELECT * FROM bns_sections WHERE chapter_number = $1';
-  try {
-      const { rows } = await pool.query(query, [chapter]); 
-      res.render('BNSsectionlist.ejs', { data: rows });
-  } catch (err) {
-      console.error('Error executing query:', err);
-      res.status(500).send('Server error');
-  }
-});
-
-app.get('/bns_section', async (req, res) => {
-  const section_number = req.query.section_number;
-  const query = 'SELECT * FROM bns_sections WHERE section_number = $1';
-  
-  try {
-    const { rows } = await pool.query(query, [section_number]);  
-    if (rows.length === 0) {
-      return res.status(404).send('Section not found');
-    }
-    res.render('BNSsection.ejs', { data: rows[0] });  
-  } catch (err) {
-    console.error('Error executing query:', err);
-    res.status(500).send('Server error');
-  }
-});
-
 app.get('/crpc',async(req,res)=>{
   const chapter = req.query.chapter;
   try{
@@ -299,6 +272,9 @@ app.get('/crpc',async(req,res)=>{
   }
 })
 
+app.get('/bns',(req,res)=>{
+  res.render('bnschapters.ejs');
+})
 
 
 app.get('/',async(req,res)=>{
@@ -336,26 +312,43 @@ app.get('/signup',async(req,res)=>{
   res.render('home3.ejs',{message: '',success: false});
 });
 
-app.get('/api',(req,res)=>{
-  res.render('api.ejs');
-})
+// app.get('/api',(req,res)=>{
+//   res.render('api.ejs');
+// })
 
-app.post('/api/location', async(req, res) => {
-  const { latitude, longitude } = req.body;
- try{
-  console.log(`Received Latitude: ${latitude}, Longitude: ${longitude}`);
-  const searchResults = await searchPlaces(latitude, longitude);
-  res.json({ message: 'Location received successfully' });
- } catch(error){
-  res.status(500).json({message: 'Error processing location', error: error.message});
- }
-});
+// app.post('/api/location', async(req, res) => {
+//   const { latitude, longitude } = req.body;
+//  try{
+//   console.log(`Received Latitude: ${latitude}, Longitude: ${longitude}`);
+//   const searchResults = await searchPlaces(latitude, longitude);
+//   res.json({ message: 'Location received successfully' });
+//  } catch(error){
+//   res.status(500).json({message: 'Error processing location', error: error.message});
+//  }
+// });
 
 
 
 app.get('/forgetpassword',(req,res)=>{
   res.render('login.ejs');
 });
+      
+app.get('/upload',(req,res)=>{
+  res.render('image_upload.ejs');
+})
+
+app.post('/upload', upload.single('image'), async (req, res) => {
+  try {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+          public_id: `uploaded_${Date.now()}`, // Optional: Add a unique name
+      });
+
+      res.json({ message: 'Image uploaded successfully!', url: result.secure_url });
+  } catch (error) {
+      res.status(500).json({ error: 'Image upload failed', details: error.message });
+  }
+});
+
 
 app.get('/reset-password',async(req,res)=>{
   const token = req.query.token;
@@ -376,10 +369,10 @@ app.get('/reset-password',async(req,res)=>{
   } catch(error) {
     console.error('Error:', error);
     res.status(500).send('Internal server error');
-  }
+}
 })
 
-// app.get('/react',(req,res)=>{
+// app.get('/re6act',(req,res)=>{
 //   res.render('react');
 // })
 
@@ -428,6 +421,39 @@ app.get('/ipc',async(req,res)=>{
   }
 
 })
+
+app.get('/bns_sections', async (req, res) => {
+  const chapter = parseInt(req.query.chapter); 
+  if (isNaN(chapter)) {
+      return res.status(400).send('Invalid chapter number');
+  }
+  const query = 'SELECT * FROM bns_sections WHERE chapter_number = $1';
+  try {
+      const { rows } = await pool.query(query, [chapter]); 
+      res.render('BNSsectionlist.ejs', { data: rows });
+  } catch (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send('Server error');
+  }
+});
+
+app.get('/bns_section', async (req, res) => {
+  const section_number = req.query.section_number;
+  const query = 'SELECT * FROM bns_sections WHERE section_number = $1';
+  
+  try {
+    const { rows } = await pool.query(query, [section_number]);  
+    if (rows.length === 0) {
+      return res.status(404).send('Section not found');
+    }
+    res.render('BNSsection.ejs', { data: rows[0] });  
+  } catch (err) {
+    console.error('Error executing query:', err);
+    res.status(500).send('Server error');
+  }
+});
+
+
 
 app.get('/search-ipc',async(req,res)=>{
   try{
@@ -896,6 +922,7 @@ else{
   }
 })
 
+
 app.get('/filter-lawyers', async (req, res) => {
   const userLat = 19.029364866883935;
   const userLon = 73.06286644778044;
@@ -1223,7 +1250,7 @@ app.get('/search-homepage-lawyers', async (req, res) => {
   const queryParams = [];
   let whereClause = [];
 
-  // 1. Apply stricter match for "law" (area of practice)
+  
   if (law) {
     const lawWords = law.split(/[-\s]+/);
     lawWords.forEach((word) => {
@@ -1299,7 +1326,7 @@ app.get('/search-homepage-lawyers', async (req, res) => {
 
     const noResults = lawyers.length === 0;
 
-    // 4. Render the results and pagination
+   
     res.render('lawyerspage', {
       roundToOneDecimalPlace,
       lawyers,
@@ -1388,6 +1415,1517 @@ app.get('/articlewriting',(req,res)=>{
   res.render('articlewriting');
 })
 
+// app.get('/community', isuAuthenticated, async (req, res) => {
+//   const client = await pool.connect();
+  
+//   try {
+//     const userId = req.user.id;
+//     const currentUser = req.user || null;
+//     if (req.user.role === 'lawyer') {
+//       await client.query('BEGIN');
+
+//       // Fetch community posts with like count
+//       const postsResult = await client.query(`
+//      SELECT 
+//     cp.id AS post_id,
+//     cp.image_path,
+//     cp.content,
+//     cp.lawyer_name,
+//     cp.lawyer_id,
+//     cp.created_at,
+//     COALESCE(like_counts.like_count, 0) AS like_count,
+//     EXISTS (
+//         SELECT 1 
+//         FROM community_likes cl
+//         WHERE cl.user_id = $1 AND cl.post_id = cp.id
+//     ) AS user_liked
+// FROM 
+//     community_posts cp
+// LEFT JOIN (
+//     SELECT post_id, COUNT(*) AS like_count
+//     FROM community_likes
+//     GROUP BY post_id
+// ) AS like_counts 
+//     ON cp.id = like_counts.post_id
+// LEFT JOIN lawyers l
+//     ON cp.lawyer_id = l.id
+// ORDER BY 
+//     cp.created_at DESC;
+
+//       `, [userId]);
+//       const posts = postsResult.rows;
+//       const likeCount = posts[0].like_count;
+//       // Fetch comments for all posts
+//       const commentsResult = await client.query(`
+//         SELECT 
+//           c.*,
+//           l.name AS username,
+//           l.id AS user_id,
+//           l.email AS user_email
+//         FROM 
+//           community_comments c
+//         LEFT JOIN lawyers l ON c.user_id = l.id
+//         WHERE c.post_id IN (
+//           SELECT id FROM community_posts
+//         )
+//         ORDER BY c.created_at DESC;
+//       `);
+//       const comments = commentsResult.rows;
+
+//       // Fetch replies for all comments
+//       const repliesResult = await client.query(`
+//         SELECT 
+//           r.*,
+//           l.name AS username,
+//           l.id AS user_id,
+//           l.email AS user_email
+//         FROM 
+//           community_replies r
+//         LEFT JOIN lawyers l ON r.user_id = l.id
+//         WHERE r.comment_id IN (
+//           SELECT id FROM community_comments WHERE post_id IN (SELECT id FROM community_posts)
+//         )
+//         ORDER BY r.created_at DESC;
+//       `);
+//       const replies = repliesResult.rows;
+
+//       await client.query('COMMIT');
+
+//       res.render('community.ejs', {
+//         posts,
+//         userId,
+//         comments,
+//         replies,
+//         currentUser,
+//         likeCount
+//       });
+//     } else {
+//       res.status(403).send('Access denied. This page is only accessible to lawyers.');
+//     }
+//   } catch (error) {
+//     await client.query('ROLLBACK');
+//     console.error('Error accessing community route:', error);
+//     res.status(500).send('An error occurred. Please try again later.');
+//   } finally {
+//     client.release();
+//   }
+// });
+
+
+app.get('/community', isuAuthenticated, async (req, res) => {
+  const client = await pool.connect();
+  try {
+    const userId = req.user.id;
+    const currentUser = req.user || null;
+
+    if (req.user.role === 'lawyer') {
+   
+      const offset = 0 ;
+      const limit = 10;
+      await client.query('BEGIN');
+
+
+      const postsResult = await client.query(`
+     WITH followed_posts AS (
+    SELECT 
+        cp.id AS post_id,
+        cp.image_path,
+        cp.content,
+        cp.lawyer_name,
+        cp.lawyer_id,
+        cp.created_at,
+        COALESCE(like_counts.like_count, 0) AS like_count,
+        EXISTS (
+            SELECT 1 
+            FROM community_likes cl
+            WHERE cl.user_id = $1 AND cl.post_id = cp.id
+        ) AS user_liked,
+        COALESCE(impression_counts.impression_count, 0) AS impression_count,
+        EXISTS (
+            SELECT 1
+            FROM follow
+            WHERE follower_id = $1 AND followed_id = cp.lawyer_id
+        ) AS user_follows_post_owner
+    FROM 
+        community_posts cp
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS like_count
+        FROM community_likes
+        GROUP BY post_id
+    ) AS like_counts 
+        ON cp.id = like_counts.post_id
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS impression_count
+        FROM impressions
+        GROUP BY post_id
+    ) AS impression_counts
+        ON cp.id = impression_counts.post_id
+    INNER JOIN follow f
+        ON f.followed_id = cp.lawyer_id
+    WHERE f.follower_id = $1
+      AND cp.lawyer_id != $1 -- Exclude current user's posts
+    ORDER BY cp.created_at DESC
+    LIMIT 3
+),
+mutual_posts AS (
+    SELECT 
+        cp.id AS post_id,
+        cp.image_path,
+        cp.content,
+        cp.lawyer_name,
+        cp.lawyer_id,
+        cp.created_at,
+        COALESCE(like_counts.like_count, 0) AS like_count,
+        EXISTS (
+            SELECT 1 
+            FROM community_likes cl
+            WHERE cl.user_id = $1 AND cl.post_id = cp.id
+        ) AS user_liked,
+        COALESCE(impression_counts.impression_count, 0) AS impression_count,
+        EXISTS (
+            SELECT 1
+            FROM follow
+            WHERE follower_id = $1 AND followed_id = cp.lawyer_id
+        ) AS user_follows_post_owner
+    FROM 
+        community_posts cp
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS like_count
+        FROM community_likes
+        GROUP BY post_id
+    ) AS like_counts 
+        ON cp.id = like_counts.post_id
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS impression_count
+        FROM impressions
+        GROUP BY post_id
+    ) AS impression_counts
+        ON cp.id = impression_counts.post_id
+    INNER JOIN follow f1
+        ON f1.followed_id = cp.lawyer_id
+    INNER JOIN follow f2
+        ON f1.follower_id = f2.follower_id
+    WHERE 
+        f2.followed_id = $1
+        AND cp.lawyer_id != $1 -- Exclude current user's posts
+        AND cp.lawyer_id NOT IN (
+            SELECT followed_id
+            FROM follow
+            WHERE follower_id = $1 -- Exclude lawyers the current user follows
+        )
+    ORDER BY cp.created_at DESC
+    LIMIT 3
+),
+impression_posts AS (
+    -- Posts with the highest impressions
+    SELECT 
+        cp.id AS post_id,
+        cp.image_path,
+        cp.content,
+        cp.lawyer_name,
+        cp.lawyer_id,
+        cp.created_at,
+        COALESCE(like_counts.like_count, 0) AS like_count,
+        EXISTS (
+            SELECT 1 
+            FROM community_likes cl
+            WHERE cl.user_id = $1 AND cl.post_id = cp.id
+        ) AS user_liked,
+        COALESCE(impression_counts.impression_count, 0) AS impression_count,
+        EXISTS (
+            SELECT 1
+            FROM follow
+            WHERE follower_id = $1 AND followed_id = cp.lawyer_id
+        ) AS user_follows_post_owner
+    FROM 
+        community_posts cp
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS like_count
+        FROM community_likes
+        GROUP BY post_id
+    ) AS like_counts 
+        ON cp.id = like_counts.post_id
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS impression_count
+        FROM impressions
+        GROUP BY post_id
+    ) AS impression_counts
+        ON cp.id = impression_counts.post_id
+    WHERE cp.lawyer_id != $1 -- Exclude current user's posts
+    ORDER BY impression_counts.impression_count DESC NULLS LAST
+    LIMIT 4
+)
+
+SELECT 
+    post_id,
+    image_path,
+    content,
+    lawyer_name,
+    lawyer_id,
+    created_at,
+    like_count,
+    user_liked,
+    impression_count,
+    user_follows_post_owner
+FROM (
+    SELECT * FROM followed_posts
+    UNION ALL
+    SELECT * FROM mutual_posts
+    UNION ALL
+    SELECT * FROM impression_posts
+) AS combined_posts
+ORDER BY created_at DESC
+LIMIT 10;
+
+      `, [userId]);
+      
+
+      const posts = postsResult.rows;
+
+   
+      const postIds = posts.map(post => post.post_id); 
+      const commentsResult = await client.query(`
+        SELECT 
+          c.*,
+          l.name AS username,
+          l.id AS user_id,
+          l.email AS user_email
+        FROM 
+          community_comments c
+        LEFT JOIN lawyers l 
+          ON c.user_id = l.id
+        WHERE 
+          c.post_id = ANY($1::int[])
+        ORDER BY 
+          c.created_at DESC;
+      `, [postIds]);
+
+      const comments = commentsResult.rows;
+
+  
+      const commentIds = comments.map(comment => comment.id); 
+      const repliesResult = await client.query(`
+        SELECT 
+          r.*,
+          l.name AS username,
+          l.id AS user_id,
+          l.email AS user_email
+        FROM 
+          community_replies r
+        LEFT JOIN lawyers l 
+          ON r.user_id = l.id
+        WHERE 
+          r.comment_id = ANY($1::int[])
+        ORDER BY 
+          r.created_at DESC;
+      `, [commentIds]);
+
+      const replies = repliesResult.rows;
+
+      const followDataMutuals = await pool.query(`
+   WITH mutuals AS (
+    SELECT 
+        l.id AS lawyer_id,
+        l.name AS lawyer_name,
+        COUNT(*) AS mutual_count,
+        STRING_AGG(DISTINCT mutual_follower.name, ', ') AS mutual_follower_names -- Aggregate mutual followers' names
+    FROM lawyers l
+    JOIN follow f1 ON l.id = f1.followed_id -- Lawyer followed
+    JOIN follow f2 ON f1.follower_id = f2.follower_id -- User's followers
+    JOIN lawyers mutual_follower ON f2.follower_id = mutual_follower.id -- Find mutual followers' names
+    WHERE f2.followed_id = $1 -- Current user (lawyer)
+      AND l.id != $1 -- Exclude current user
+    GROUP BY l.id, l.name
+    HAVING COUNT(*) >= 1
+),
+popular_suggestions AS (
+    SELECT 
+        l.id AS lawyer_id,
+        l.name AS lawyer_name,
+        COUNT(f1.follower_id) AS followers_following_count
+    FROM lawyers l
+    JOIN follow f1 ON f1.followed_id = l.id -- Followers of this lawyer
+    JOIN follow f2 ON f2.follower_id = f1.follower_id -- User's followers
+    WHERE f2.followed_id = $1 -- Current user (lawyer)
+      AND l.id != $1 -- Exclude current user
+      AND l.id NOT IN (
+          SELECT followed_id FROM follow WHERE follower_id = $1
+      ) -- Exclude already followed lawyers
+    GROUP BY l.id, l.name
+),
+suggestions AS (
+    SELECT 
+        l.lawyer_id,
+        l.lawyer_name,
+        COALESCE(m.mutual_count, 0) AS mutual_count,
+        COALESCE(p.followers_following_count, 0) AS followers_following_count,
+        COALESCE(m.mutual_follower_names, '') AS mutual_follower_names -- Include mutual followers' names
+    FROM (
+        SELECT DISTINCT lawyer_id, lawyer_name FROM mutuals
+        UNION
+        SELECT DISTINCT lawyer_id, lawyer_name FROM popular_suggestions
+    ) l
+    LEFT JOIN mutuals m ON l.lawyer_id = m.lawyer_id
+    LEFT JOIN popular_suggestions p ON l.lawyer_id = p.lawyer_id
+)
+SELECT 
+    lawyer_id,
+    lawyer_name,
+    mutual_count,
+    followers_following_count,
+    mutual_follower_names
+FROM suggestions
+WHERE 
+    (mutual_count > 0 OR followers_following_count > 0) -- Ensure relevance
+    AND lawyer_id NOT IN (SELECT followed_id FROM follow WHERE follower_id = $1) -- Exclude already followed lawyers
+    AND lawyer_id NOT IN (
+        SELECT followed_id 
+        FROM follow 
+        WHERE follower_id = $1
+        AND followed_at > (SELECT MAX(followed_at) FROM follow WHERE follower_id = $1)
+    ) 
+ORDER BY 
+    mutual_count DESC, 
+    followers_following_count DESC
+LIMIT 6;
+`,[userId]);
+
+const mutuals = followDataMutuals.rows;
+
+//Notification Count
+const notificationCountQuery = await pool.query(`SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`, [userId]);
+const notificationCount = notificationCountQuery.rows[0].count;
+console.log(notificationCount);
+
+      await client.query('COMMIT');
+
+      res.render('community.ejs', {
+        posts,
+        userId,
+        comments,
+        replies,
+        currentUser,
+        notificationCount,
+        mutuals,
+        currentRoute: '/community',
+        likeCount: posts.length > 0 ? posts[0].like_count : 0 // Handle empty posts case
+      });
+    } else {
+      res.status(403).send('Access denied. This page is only accessible to lawyers.');
+    }
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error accessing community route:', error);
+    res.status(500).send('An error occurred. Please try again later.');
+  } finally {
+    client.release();
+  }
+});
+
+// const NotificationCount = async(userId) => {
+//   const sql = 'select COUNT(*) from notifications where user_id = $1 and is_read = false';
+//   const notifcationCount = await pool.query(sql, [userId]);
+//   return notifcationCount.rows[0]
+// }
+
+app.get('/community/search', async (req, res) => {
+  try {
+      const { search } = req.query;
+      const userId = req.user.id;
+
+      // Query the lawyers table
+     
+        
+    const results = await pool.query(`
+ SELECT l.*, 
+         l2.name AS mutual_follower_name,
+         CASE 
+           WHEN f2.follower_id IS NOT NULL THEN TRUE 
+           ELSE FALSE 
+         END AS is_mutual_follower
+  FROM lawyers l
+  LEFT JOIN follow f1 
+    ON f1.followed_id = l.id AND f1.follower_id = $2 -- Current user follows the lawyer
+  LEFT JOIN follow f2 
+    ON f2.followed_id = $2 AND f2.follower_id = l.id -- Lawyer follows back the user
+  LEFT JOIN lawyers l2
+    ON l2.id = f2.follower_id AND l2.id != l.id AND l2.id != $2 -- Mutual followers (excluding current user and search lawyer)
+  WHERE l.name ILIKE $1
+    AND l.id != $2 -- Exclude the current user
+  ORDER BY is_mutual_follower DESC, l.name ASC
+  `,
+  [`%${search}%`, userId]
+);
+
+console.log(results.rows);
+
+      
+
+
+     
+
+
+      res.json(results.rows); 
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.post('/followingSearch',async(req,res)=>{
+  const search = req.body.followingSearch 
+  console.log("search query is", search);
+  const currentUserId = req.body.id;
+  console.log(currentUserId);
+  const followingQuery = `
+            SELECT * 
+            FROM lawyers 
+            WHERE name ILIKE $1
+              AND id IN (
+                  SELECT followed_id 
+                  FROM follow
+                  WHERE follower_id = $2
+              )
+        `;
+        const followingResults = await pool.query(followingQuery, [search, currentUserId]);
+        console.log(followingResults.rows);
+     res.json({following:followingResults.rows});
+});
+
+app.post('/followersSearch',async(req,res)=>{
+  const search = req.body.followersSearch;
+  console.log("search query is", search);
+  const currentUserId = req.body.id;
+  const followersQuery = `
+            SELECT * 
+            FROM lawyers 
+            WHERE name ILIKE $1
+              AND id IN (
+                  SELECT follower_id 
+                  FROM follow
+                  WHERE followed_id = $2
+              )
+        `;
+        const followersResults = await pool.query(followersQuery, [search, currentUserId]);
+     res.json({followers:followersResults.rows});
+})
+
+app.get('/community/posts',isuAuthenticated, async (req, res) => {
+  const client = await pool.connect();
+
+  try {
+    const userId = req.user.id;
+    const { offset, limit } = req.query;
+    console.log(offset);
+    const offset1 = (offset / 10) * 3;
+    const offset2 = (offset / 10) * 4;
+
+
+    await client.query('BEGIN');
+
+    const postsResult = await client.query(`WITH followed_posts AS (
+    SELECT 
+        cp.id AS post_id,
+        cp.image_path,
+        cp.content,
+        cp.lawyer_name,
+        cp.lawyer_id,
+        cp.created_at,
+        COALESCE(like_counts.like_count, 0) AS like_count,
+        EXISTS (
+            SELECT 1 
+            FROM community_likes cl
+            WHERE cl.user_id = $1 AND cl.post_id = cp.id
+        ) AS user_liked,
+        COALESCE(impression_counts.impression_count, 0) AS impression_count
+    FROM 
+        community_posts cp
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS like_count
+        FROM community_likes
+        GROUP BY post_id
+    ) AS like_counts 
+        ON cp.id = like_counts.post_id
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS impression_count
+        FROM impressions
+        GROUP BY post_id
+    ) AS impression_counts
+        ON cp.id = impression_counts.post_id
+    INNER JOIN follow f
+        ON f.followed_id = cp.lawyer_id
+    WHERE f.follower_id = $1
+      AND cp.lawyer_id != $1 -- Exclude current user's posts
+),
+mutual_posts AS (
+    SELECT 
+        cp.id AS post_id,
+        cp.image_path,
+        cp.content,
+        cp.lawyer_name,
+        cp.lawyer_id,
+        cp.created_at,
+        COALESCE(like_counts.like_count, 0) AS like_count,
+        EXISTS (
+            SELECT 1 
+            FROM community_likes cl
+            WHERE cl.user_id = $1 AND cl.post_id = cp.id
+        ) AS user_liked,
+        COALESCE(impression_counts.impression_count, 0) AS impression_count
+    FROM 
+        community_posts cp
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS like_count
+        FROM community_likes
+        GROUP BY post_id
+    ) AS like_counts 
+        ON cp.id = like_counts.post_id
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS impression_count
+        FROM impressions
+        GROUP BY post_id
+    ) AS impression_counts
+        ON cp.id = impression_counts.post_id
+    INNER JOIN follow f1
+        ON f1.followed_id = cp.lawyer_id
+    INNER JOIN follow f2
+        ON f1.follower_id = f2.follower_id
+    WHERE 
+        f2.followed_id = $1
+        AND cp.lawyer_id != $1 -- Exclude current user's posts
+        AND cp.lawyer_id NOT IN (
+            SELECT followed_id
+            FROM follow
+            WHERE follower_id = $1 -- Exclude lawyers the current user follows
+        )
+),
+impression_posts AS (
+    SELECT 
+        cp.id AS post_id,
+        cp.image_path,
+        cp.content,
+        cp.lawyer_name,
+        cp.lawyer_id,
+        cp.created_at,
+        COALESCE(like_counts.like_count, 0) AS like_count,
+        EXISTS (
+            SELECT 1 
+            FROM community_likes cl
+            WHERE cl.user_id = $1 AND cl.post_id = cp.id
+        ) AS user_liked,
+        COALESCE(impression_counts.impression_count, 0) AS impression_count
+    FROM 
+        community_posts cp
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS like_count
+        FROM community_likes
+        GROUP BY post_id
+    ) AS like_counts 
+        ON cp.id = like_counts.post_id
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS impression_count
+        FROM impressions
+        GROUP BY post_id
+    ) AS impression_counts
+        ON cp.id = impression_counts.post_id
+    WHERE cp.lawyer_id != $1 -- Exclude current user's posts
+    ORDER BY impression_counts.impression_count DESC NULLS LAST
+)
+
+SELECT 
+    post_id,
+    image_path,
+    content,
+    lawyer_name,
+    lawyer_id,
+    created_at,
+    like_count,
+    user_liked,
+    impression_count
+FROM (
+    SELECT * FROM followed_posts
+    UNION -- This removes duplicates from the combined result set
+    SELECT * FROM mutual_posts
+    UNION
+    SELECT * FROM impression_posts
+) AS combined_posts
+ORDER BY created_at DESC
+LIMIT $2 OFFSET $3
+  `, [userId,limit, offset]);
+
+    const posts = postsResult.rows;
+
+    const postIds = posts.map(post => post.post_id);
+
+    const commentsResult = await client.query(`
+      SELECT 
+        c.*,
+        l.name AS username,
+        l.id AS user_id,
+        l.email AS user_email
+      FROM 
+        community_comments c
+      LEFT JOIN lawyers l 
+        ON c.user_id = l.id
+      WHERE 
+        c.post_id = ANY($1::int[])
+      ORDER BY 
+        c.created_at DESC;
+    `, [postIds]);
+
+    const comments = commentsResult.rows;
+
+    const commentIds = comments.map(comment => comment.id);
+
+    const repliesResult = await client.query(`
+      SELECT 
+        r.*,
+        l.name AS username,
+        l.id AS user_id,
+        l.email AS user_email
+      FROM 
+        community_replies r
+      LEFT JOIN lawyers l 
+        ON r.user_id = l.id
+      WHERE 
+        r.comment_id = ANY($1::int[])
+      ORDER BY 
+        r.created_at DESC;
+    `, [commentIds]);
+
+    const replies = repliesResult.rows;
+
+    await client.query('COMMIT');
+
+    res.json({ posts, comments, replies, userId });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error loading more posts:', error);
+    res.status(500).send('An error occurred. Please try again later.');
+  } finally {
+    client.release();
+  }
+});
+
+app.get("/community/post/:id", isuAuthenticated, async (req, res) => {
+  const client = await pool.connect();
+  const postId = req.params.id;
+  const userId = req.user.id;
+
+  try {
+    const result = await client.query(
+      "SELECT * FROM community_posts WHERE id = $1",
+      [postId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).send("Post not found");
+    }
+    const post = result.rows[0];
+ 
+    //Storing LAWYERID
+    const lawyerId = post.lawyer_id;
+  
+    const commentResult = await client.query(
+      `
+      SELECT 
+        c.*, 
+        l.name AS lawyer_name 
+      FROM 
+        community_comments c
+      JOIN 
+        lawyers l 
+      ON 
+        c.user_id = l.id
+      WHERE 
+        c.post_id = $1
+      `,
+      [postId]
+    );
+    const commentCountResult = await client.query(
+      "SELECT COUNT(*) FROM community_comments WHERE post_id = $1",
+      [postId]
+    );
+    const commentCount = commentCountResult.rows[0].count;
+
+    const comments = commentResult.rows;
+    for (let comment of comments) {
+      const replyResult = await client.query(
+      `  SELECT
+          r.*, 
+          l.name AS lawyer_name 
+        FROM 
+          community_replies r
+        JOIN 
+          lawyers l 
+        ON 
+          r.user_id = l.id
+        WHERE 
+          r.comment_id = $1`,
+        [comment.id]
+      );
+      comment.replies = replyResult.rows;
+      console.log(comments)
+    }
+    //Liked or not checking
+    const likeResult = await client.query(
+      "SELECT * FROM community_likes WHERE post_id = $1 AND user_id = $2",
+      [postId, userId]
+    );
+    const like = likeResult.rows.length > 0;
+
+    //Counting the number of likes
+    const likeCountResult = await client.query(
+      "SELECT COUNT(*) FROM community_likes WHERE post_id = $1",
+      [postId]
+    );
+    const likeCount = likeCountResult.rows[0].count;
+
+    //Following or not
+    const followResult = await client.query(
+      "SELECT * FROM follow WHERE follower_id = $1 AND followed_id = $2",
+      [userId, lawyerId]
+    );
+    const follow = followResult.rows.length > 0;
+
+    //NOTIFICATION COUNT
+    const notificationCountQuery = await pool.query(`SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`, [userId]);
+   const notificationCount = notificationCountQuery.rows[0].count;
+
+    res.render("community-post.ejs", {
+      userId,
+      lawyerId,
+      post,
+      comments,
+      commentCount,
+      like,
+      likeCount,
+      currentRoute: '/community',
+      notificationCount,
+      follow,
+    });
+  } catch (error) {
+    console.error("Error loading post", error);
+    res.status(500).send("An error occurred while loading the post");
+  } finally {
+    client.release();
+  }
+});
+
+
+app.get('/community/user-profile', async (req, res) => {
+  const lawyerId = req.query.id; 
+  const userId = req.user.id;
+  try{
+    const followersResult = await pool.query(`
+      SELECT 
+          l.id AS follower_id,
+          l.name AS follower_name
+      FROM 
+          follow f
+      JOIN 
+          lawyers l ON f.follower_id = l.id
+      WHERE 
+          f.followed_id = $1;
+    `, [lawyerId]);
+
+    const followers = followersResult.rows;
+  
+    const followingResult = await pool.query(`
+      SELECT 
+          l.id AS following_id,
+          l.name AS following_name
+      FROM 
+          follow f
+      JOIN 
+          lawyers l ON f.followed_id = l.id
+      WHERE 
+          f.follower_id = $1;
+    `, [lawyerId]);
+
+    const following = followingResult.rows;
+
+  const postsSql = `
+  WITH post_details AS (
+      SELECT 
+          cp.id AS post_id,
+          cp.image_path,
+          cp.content,
+          cp.lawyer_name,
+          cp.created_at,
+          COALESCE(like_counts.like_count, 0) AS like_count,
+          EXISTS (
+              SELECT 1 
+              FROM community_likes cl
+              WHERE cl.user_id = $1 AND cl.post_id = cp.id
+          ) AS user_liked
+      FROM 
+          community_posts cp
+      LEFT JOIN (
+          SELECT post_id, COUNT(*) AS like_count
+          FROM community_likes
+          GROUP BY post_id
+      ) AS like_counts 
+      ON cp.id = like_counts.post_id
+      WHERE cp.lawyer_id = $1
+  )
+  SELECT 
+      post_details.*,
+      (SELECT COUNT(*) FROM community_posts WHERE lawyer_id = $1) AS total_post_count
+  FROM post_details
+  ORDER BY post_details.created_at DESC;
+`;
+const postsResult = await pool.query(postsSql, [lawyerId]);
+const posts = postsResult.rows;
+      const commentsSql = `
+          SELECT 
+              c.*,
+              l.name AS username,
+              l.id AS user_id,
+              l.email AS user_email
+          FROM 
+              community_comments c
+          LEFT JOIN lawyers l ON c.user_id = l.id
+          WHERE c.post_id IN (
+              SELECT id FROM community_posts WHERE lawyer_id = $1
+          )
+          ORDER BY c.created_at DESC;
+      `;
+      const commentsResult = await pool.query(commentsSql, [lawyerId]);
+      const comments = commentsResult.rows;
+      const repliesSql = `
+          SELECT 
+              r.*,
+              l.name AS username,
+              l.id AS user_id,
+              l.email AS user_email
+          FROM 
+              community_replies r
+          LEFT JOIN lawyers l ON r.user_id = l.id
+          WHERE r.comment_id IN (
+              SELECT id FROM community_comments WHERE post_id IN (
+                  SELECT id FROM community_posts WHERE lawyer_id = $1
+              )
+          )
+          ORDER BY r.created_at DESC;
+      `;
+      const repliesResult = await pool.query(repliesSql, [lawyerId]);
+      const replies = repliesResult.rows;
+ 
+    const detailsql = `select * from lawyers where id = $1`;
+    const lawyerdetails = await pool.query(detailsql,[lawyerId]);
+    const lawyers = lawyerdetails.rows[0];
+    
+    const followData = await pool.query(`
+      SELECT 
+        COUNT(CASE WHEN follower_id = $2 THEN 1 END) AS following_count,
+        COUNT(CASE WHEN followed_id = $2 THEN 1 END) AS followers_count,
+        EXISTS (
+          SELECT 1 
+          FROM follow 
+          WHERE follower_id = $1 AND followed_id = $2
+        ) AS follow
+      FROM follow;
+    `, [userId, lawyerId]);
+    
+    const { followers_count, following_count, follow } = followData.rows[0];
+
+    const followDataMutuals = await pool.query(`
+    WITH mutuals AS (
+    SELECT 
+        l.id AS mutual_lawyer_id,
+        l.name AS mutual_lawyer_name
+    FROM lawyers l
+    JOIN (
+        SELECT f1.followed_id AS mutual_lawyer_id
+        FROM follow f1
+        JOIN follow f2 
+          ON f1.followed_id = f2.follower_id
+        WHERE f1.follower_id = $1
+          AND f2.followed_id = $2
+    ) m ON l.id = m.mutual_lawyer_id
+),
+stats AS (
+    SELECT 
+        COUNT(CASE WHEN follower_id = $2 THEN 1 END) AS following_count,
+        COUNT(CASE WHEN followed_id = $2 THEN 1 END) AS followers_count,
+        EXISTS (
+            SELECT 1 
+            FROM follow 
+            WHERE follower_id = $1 AND followed_id = $2
+        ) AS follow
+    FROM follow
+)
+SELECT 
+    mutuals.mutual_lawyer_id,
+    mutuals.mutual_lawyer_name,
+    stats.follow,
+    stats.followers_count,
+    stats.following_count,
+    (SELECT COUNT(*) FROM mutuals) AS mutual_count
+FROM mutuals
+CROSS JOIN stats;
+
+    `, [userId, lawyerId]);
+    
+    var mutuals = followDataMutuals.rows;
+
+    var mutualCount = mutuals.length > 0 ? mutuals[0].mutual_count : 0;
+    const adjustedMutualCount = mutualCount > 2 ? mutualCount - 2 : mutualCount;
+
+    const notificationCountQuery = await pool.query(`SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`, [userId]);
+    const notificationCount = notificationCountQuery.rows[0].count;
+    
+
+      res.render(
+          'community_user_profile.ejs',{
+           posts,
+           comments,
+           replies,
+           lawyers,
+           lawyerId,
+           userId,
+           follow,
+           following_count,
+           followers_count,
+           followers,
+           following,
+           mutuals,
+           mutualCount,
+           adjustedMutualCount,
+           notificationCount,
+           currentRoute: '/community/user-profile',
+           totalPostCount: posts.length > 0 ? posts[0].total_post_count : 0
+          }
+      );
+  } catch (error) {
+      console.error('Error fetching user profile:', error);
+      res.status(500).json({ success: false, message: 'Failed to fetch user profile' });
+  }
+});
+
+// app.get('/notifications', async (req, res) => {
+//   const userId = req.user.id;
+
+//   console.log(userId);
+//   const notifications = await pool.query(
+//     'SELECT * FROM notifications WHERE user_id = $1 ORDER BY created_at DESC',
+//     [userId]
+//   );
+//   const allnotifications = notifications.rows;
+//   const allLawyerIds = 
+  
+//   res.render('community_notifications.ejs', { allnotifications });
+// });
+
+app.get('/notifications', async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+  
+
+    // Fetch notifications for the user
+    const notifications = await pool.query(
+      'SELECT * FROM notifications WHERE user_id = $1 ORDER BY created_at DESC',
+      [userId]
+    );
+    const allnotifications = notifications.rows;
+
+    //mark the notifications as read
+    await pool.query(
+      'UPDATE notifications SET is_read = true WHERE user_id = $1',
+      [userId]
+    );
+
+    // Extract all ref_id values from notifications
+    const refIds = allnotifications.map(notification => notification.ref_id);
+    // If there are ref_ids, retrieve lawyer names for them
+    let lawyerNames = {};
+    if (refIds.length > 0) {
+      const lawyerQuery = `
+        SELECT id, name 
+        FROM lawyers 
+        WHERE id = ANY($1);
+      `;
+      
+      const lawyerResults = await pool.query(lawyerQuery, [refIds]);
+      // Create a mapping of ref_id to lawyer name
+      lawyerNames = lawyerResults.rows.reduce((acc, row) => {
+        acc[row.id] = row.name;
+        return acc;
+      }, {});
+    }
+
+    // Combine notifications with the corresponding lawyer names
+    const notificationsWithLawyerNames = allnotifications.map(notification => {
+      return {
+        ...notification,
+        lawyer_name: lawyerNames[notification.ref_id] || 'Unknown'
+      };
+    });
+
+    
+    
+    const notificationCount = 0;
+   
+    // Render the page with the notifications including lawyer names
+    console.log(notificationsWithLawyerNames);
+    res.render('community_notifications.ejs', { allnotifications: notificationsWithLawyerNames,notificationCount, userId, currentRoute: '/notifications'});
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+
+
+app.post('/notifications/mark-clicked', async (req, res) => {
+  const userId = req.user.id;
+  const notificationId = req.body.notificationId;
+  await pool.query('UPDATE notifications SET clicked = TRUE WHERE id = $1', [notificationId]);
+  res.sendStatus(200);
+});
+
+
+app.delete("/community/del-post/:postId", async (req, res) => {
+  const postId = req.params.postId;
+  try{
+    await pool.query('delete from community_posts where id=$1',[postId]);
+    res.json({success: true, message: 'Post deleted successfully!'});
+  } catch{
+    console.error('Error deleting Post:',error);
+    res.json({success: false, message:'Failed to delete Post'});
+  }
+})
+
+ 
+app.post('/community', isuAuthenticated, upload.single('image'), async (req, res) => {
+  try {
+    if (req.user.role !== 'lawyer') {
+      return res.status(403).send('Access denied. Only lawyers can create posts.');
+    }
+    
+    const content = req.body.content;
+    const lawyerName = req.user.name;
+    const userId = req.user.id;
+    let imageUrl = null;
+
+    if (!content) {
+      return res.status(400).send('Content cannot be empty.');
+    }
+
+    console.log('Uploaded file:', req.body.image);
+
+    if (req.file) {
+      try {
+        // Upload to Cloudinary
+        console.log('Uploading to Cloudinary...');
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          public_id: `community_post_${Date.now()}`,
+        });
+        console.log('Cloudinary upload result:', result);
+        imageUrl = result.secure_url;
+      } catch (uploadError) {
+        console.error('Error uploading to Cloudinary:', uploadError);
+        return res.status(500).json({ success: false, message: 'Error uploading image!' });
+      }
+    }
+
+    // Debugging: Log the SQL parameters
+    console.log('SQL Parameters:', [imageUrl, content, lawyerName, userId]);
+
+    // Insert the post into the database
+    const sql = `
+      INSERT INTO community_posts (image_path, content, lawyer_name, lawyer_id, created_at)
+      VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
+    `;
+    await pool.query(sql, [imageUrl, content, lawyerName, userId]);
+
+    res.redirect(`/community/user-profile?id=${userId}`);
+  } catch (error) {
+    console.error('Error creating community post:', error);
+    res.json({ success: false, message: 'Error uploading post!' });
+  }
+});
+
+
+
+
+
+
+
+
+app.post('/community/community-toggle-like', isuAuthenticated, async (req, res) => {
+  const userId = req.user.id;
+  const post_id = req.body.postId;
+  const client = await pool.connect();
+  try {
+    const query = `select * from impressions where user_id=$1 and post_id=$2`;
+    checkQuery = await pool.query(query,[userId,post_id]);
+
+    if (checkQuery.rows.length === 0){
+      await client.query('BEGIN');
+      const insertQuery = 'insert into impressions (user_id,post_id) values ($1,$2)';
+      impresssionsInsertQuery = await pool.query(insertQuery,[userId,post_id]);
+      
+  }
+  const likeResult = await client.query(
+    `SELECT * FROM community_likes WHERE user_id=$1 AND post_id=$2`,
+    [userId, post_id]
+  );
+
+  let liked;
+  if (likeResult.rows.length > 0) {
+    // Unlike
+    await client.query(
+      `DELETE FROM community_likes WHERE user_id=$1 AND post_id=$2`,
+      [userId, post_id]
+    );
+    liked = false;
+  } else {
+    // Like
+    await client.query(
+      `INSERT INTO community_likes (user_id, post_id) VALUES ($1, $2)`,
+      [userId, post_id]
+    );
+    liked = true;
+
+    // Add notification for post owner
+    const postOwnerResult = await client.query(
+      `SELECT lawyer_id FROM community_posts WHERE id=$1`,
+      [post_id]
+    );
+    
+
+    const postOwnerId = postOwnerResult.rows[0]?.lawyer_id;
+    console.log(postOwnerResult.rows);
+    if (postOwnerId && postOwnerId !== userId) {
+      const content = `liked your post.`;
+      const link = `/community/post/${post_id}`;
+      await client.query(
+        `INSERT INTO notifications (user_id, type, content, link,ref_id) VALUES ($1, $2, $3, $4,$5)`,
+        [postOwnerId, 'like', content, link,userId]
+      );
+    }
+  }
+
+  const countQuery = `SELECT COUNT(*) AS like_count FROM community_likes WHERE post_id=$1`;
+  const countResult = await client.query(countQuery, [post_id]);
+  const likeCount = countResult.rows[0].like_count;
+
+  await client.query('COMMIT');
+  res.json({ success: true, likeCount, liked });
+}
+   catch (error) {
+    if(client){
+      await client.query('ROLLBACK');
+    }
+    console.error('Error toggling like:', error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  } finally {
+    client.release();
+  }
+});
+
+
+app.post("/community/review", isuAuthenticated, async (req, res) => {
+  const postId = req.body.postId;
+  const user_id = req.user.id;
+  const comment = req.body.comment;
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+    const query = `select * from impressions where user_id=$1 and post_id=$2`;
+    checkQuery = await pool.query(query, [user_id, postId]);
+
+    if (checkQuery.rows.length === 0) {
+      await client.query("BEGIN");
+      const insertQuery =
+        "insert into impressions (user_id,post_id) values ($1,$2)";
+      impresssionsInsertQuery = await pool.query(insertQuery, [
+        user_id,
+        postId,
+      ]);
+    }
+    const insertResult = await client.query(
+      `INSERT INTO community_comments (post_id, user_id, content) 
+        VALUES ($1, $2, $3) 
+        RETURNING id, content, created_at`,
+      [postId, user_id, comment]
+    );
+  
+
+    // Add notification for post owner
+    const postOwnerResult = await client.query(
+      `SELECT lawyer_id FROM community_posts WHERE id=$1`,
+      [postId]
+    );
+    const postOwnerId = postOwnerResult.rows[0]?.lawyer_id;
+    console.log(postOwnerResult.rows);
+    if (postOwnerId && postOwnerId !== user_id) {
+      const content = `commented on your post.`;
+      const link = `community/post/${postId}`;
+      await client.query(
+        `INSERT INTO notifications (user_id, type, content, link,ref_id) VALUES ($1, $2, $3, $4,$5)`,
+        [postOwnerId, "comment", content, link, user_id]
+      );
+    }
+
+    //Fetching the inserted comment
+    const newComment = insertResult.rows[0];
+    const userQuery = `SELECT name FROM lawyers WHERE id = $1`;
+    const userResult = await client.query(userQuery, [user_id]);
+    const userName = userResult.rows[0].name;
+
+    await client.query("COMMIT");
+    res.json({
+      success: true,
+      message: "Comment submitted successfully!",
+      comment: {
+        id: newComment.id,
+        post_id: postId,
+        content: newComment.content,
+        created_at: new Date(newComment.created_at).toLocaleString(), // Format as needed
+        user_id,
+        lawyer_name: userName,
+        replies: [],
+      },
+      userId : user_id,
+    });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error submitting review:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error submitting review. Please try again later.",
+    });
+  } finally {
+    client.release();
+  }
+});
+
+
+app.post('/community-add-reply', isuAuthenticated, async (req, res) => {
+  const commentId = req.body.commentId;
+  const content = req.body.content;
+  const userId = req.user.id;
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+    const postIdQuery = `SELECT post_id from community_comments where id = $1`;
+    const currentPostId = await client.query(postIdQuery, [commentId]);
+    console.log(currentPostId);
+    const id = currentPostId.rows[0].post_id;
+    const query = `select * from impressions where user_id=$1 and post_id=$2`;
+    checkQuery = await pool.query(query,[userId,id]);
+
+    if (checkQuery.rows.length === 0){
+      await client.query('BEGIN');
+      const insertQuery = 'insert into impressions (user_id,post_id) values ($1,$2)';
+      impresssionsInsertQuery = await pool.query(insertQuery,[user_id,postId]);
+      
+  }
+    const queryText = `
+      INSERT INTO community_replies (comment_id, user_id, content)
+      VALUES ($1, $2, $3)
+    `;
+    const values = [commentId, userId, content];
+    await client.query(queryText, values);
+
+    // Add notification for comment owner
+    const commentOwnerResult = await client.query(
+      `SELECT user_id, post_id FROM community_comments WHERE id=$1`,
+      [commentId]
+    );
+
+    const commentOwnerId = commentOwnerResult.rows[0]?.user_id;
+    console.log(commentOwnerResult.rows);
+    const postId = commentOwnerResult.rows[0]?.post_id;
+    if (commentOwnerId && commentOwnerId !== userId) {
+      const notificationContent = `replied to your comment.`;
+      const link = `community/posts/${postId}`;
+      await client.query(
+        `INSERT INTO notifications (user_id, type, content, link,ref_id) VALUES ($1, $2, $3, $4,$5)`,
+        [commentOwnerId, 'reply', notificationContent, link,userId]
+      );
+    }
+
+    await client.query('COMMIT');
+    res.json({ success: true, message: 'Reply submitted successfully!' });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error adding reply:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error submitting reply, please try again later.',
+    });
+  } finally {
+    client.release();
+  }
+});
+
+
+app.post('/community/follow',isuAuthenticated, async (req, res) => {
+  const userId = req.user.id;
+
+  const lawyerId = req.body.lawyerId;
+  const postId = req.body.postId;
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+
+    const query = `select * from impressions where user_id=$1 and post_id=$2`;
+    checkQuery = await pool.query(query,[userId,postId]);
+
+    if (checkQuery.rows.length === 0){
+      await client.query('BEGIN');
+      const insertQuery = 'insert into impressions (user_id,post_id) values ($1,$2)';
+      impresssionsInsertQuery = await pool.query(insertQuery,[userId,postId]);
+      
+  }
+    
+
+    let follow;
+    const followResult = await client.query(
+      `SELECT * FROM follow WHERE follower_id = $1 AND followed_id = $2`,
+      [userId, lawyerId]
+    );
+
+    if (followResult.rows.length > 0) {
+      // Unfollow
+      await client.query(
+        `DELETE FROM follow WHERE follower_id = $1 AND followed_id = $2`,
+        [userId, lawyerId]
+      );
+      follow = false;
+    } else {
+      // Follow
+      await client.query(
+        `INSERT INTO follow (follower_id, followed_id) VALUES ($1, $2)`,
+        [userId, lawyerId]
+      );
+      follow = true;
+
+      // Add notification for the lawyer being followed
+      const notificationContent = `started following you.`;
+      const link = `community/user-profile?id=${userId}`;
+      await client.query(
+        `INSERT INTO notifications (user_id, type, content, link,ref_id) VALUES ($1, $2, $3, $4,$5)`,
+        [lawyerId, 'follow', notificationContent, link,userId]
+      );
+    }
+
+    await client.query('COMMIT');
+    res.json({ success: true, userId, follow });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error following:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  } finally {
+    client.release();
+  }
+});
+
+app.post('/community/post-impressions',async(req,res)=>{
+  console.log(req.body);
+  const postId = req.body.postId;
+  console.log(postId);
+})
+
+app.post("/lawyerAccount", isuAuthenticated, upload.single("image"), async function (req, res) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const userId = req.user.id;
+    const bio = req.body.bio;
+    let imageUrl = null;
+
+    // If an image is uploaded, upload it to Cloudinary
+    if (req.file) {
+      // Check if the image has already been uploaded in the current request session
+      if (!req.session.uploadedImageUrl) {
+        // Upload the image to Cloudinary without transformations
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          public_id: `lawyer_profile_${Date.now()}`, // Optionally, add a unique name
+        });
+
+        // Save the secure URL of the uploaded image
+        imageUrl = result.secure_url;
+
+        // Store the image URL in the session to prevent multiple uploads
+        req.session.uploadedImageUrl = imageUrl;
+      } else {
+        // Use the stored image URL if already uploaded
+        imageUrl = req.session.uploadedImageUrl;
+      }
+    }
+
+    let updateFields = [];
+    let updateParams = [];
+    let paramIndex = 1;
+
+    // Update the bio if provided
+    if (bio) {
+      updateFields.push(`community_bio=$${paramIndex++}`);
+      updateParams.push(bio);
+    }
+
+    // Update the image URL if provided
+    if (imageUrl) {
+      updateFields.push(`image=$${paramIndex++}`);
+      updateParams.push(imageUrl);
+    }
+
+    // If there are fields to update, construct and execute the query
+    if (updateFields.length > 0) {
+      const updateQuery = `UPDATE lawyers SET ${updateFields.join(
+        ", "
+      )} WHERE id=$${paramIndex}`;
+      updateParams.push(userId);
+      await client.query(updateQuery, updateParams);
+    }
+
+    await client.query("COMMIT");
+
+    // Redirect to the user's profile
+    res.redirect(`/community/user-profile?id=${userId}`);
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error updating profile:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  } finally {
+    client.release();
+  }
+});
+
+
+
+app.delete('/community/del-reply/:replyId',async(req,res)=>{
+  const replyId = req.params.replyId;
+  try{
+    await pool.query('delete from community_replies where id=$1',[replyId]);
+    res.json({success: true, message: 'Reply deleted successfully!'});
+  } catch{
+    console.error('Error deleting review:',error);
+    res.json({success: false, message:'Failed to delete review'});
+  }
+})
+
+app.delete('/community/comment/:commentId',async(req,res)=>{
+  const commentId = req.params.commentId;
+  try{
+    await pool.query('delete from community_comments where id=$1',[commentId]);
+    res.json({success: true, message: 'Comment deleted successfully!'});
+  } catch{
+    console.error('Error deleting review:',error);
+    res.json({success: false, message:'Failed to delete review'});
+  }
+})
+
+
+
 app.post('/signup', upload.single('image'), async (req, res) => {
   if (emailSendInProgress) {
     return res.render('home3', { message: 'Kindly check your email to verify your account', success: false });
@@ -1397,7 +2935,6 @@ app.post('/signup', upload.single('image'), async (req, res) => {
   let responseMessage = { message: 'An error occurred. Please try again.', success: false };
   const formType = req.query.formType;
   const saltRounds = 10; 
-
   try {
   
     if (formType === 'form1') {
@@ -1428,7 +2965,7 @@ app.post('/signup', upload.single('image'), async (req, res) => {
             port: 465,
             auth: {
               user: 'ilegaladvice26@gmail.com',
-              pass: 'dnfz hpgh rsfm pelx',
+              pass: 'rwmp eoti nzps mxxe',
             },
             pool: true,
           });
@@ -1486,7 +3023,7 @@ app.post('/signup', upload.single('image'), async (req, res) => {
               port: 465,
               auth: {
                 user: 'ilegaladvice26@gmail.com',
-                pass: 'dnfz hpgh rsfm pelx',
+                pass: 'rwmp eoti nzps mxxe',
               },
               pool: true,
             });
@@ -1511,11 +3048,20 @@ app.post('/signup', upload.single('image'), async (req, res) => {
   }
 });
 
-app.post('/upload',upload.single('upload'),(req,res)=>{
-  res.json({
-    url: `/uploads/${req.file.filename}`
-  })
-})
+ 
+// app.post('/login',passport.authenticate('client-login',{
+//   successRedirect: '/lawyerspage',
+//   failureRedirect: '/signup',
+  
+// }));
+
+// app.post('/upload',upload.single('upload'),(req,res)=>{
+//   res.json({
+//     url: `/uploads/${req.file.filename}`
+//   })
+// })
+
+
 
 app.post('/fullarticle/review',verifyAuthenticated,async(req,res)=>{
  try {
@@ -1529,6 +3075,36 @@ app.post('/fullarticle/review',verifyAuthenticated,async(req,res)=>{
    console.error('error submitting review:',error);
    res.json({success:false,message:'Error submitting review. Please try again later.'})
  }
+})
+
+app.post('/toggle-like',ensureAuthenticated,async(req,res)=>{
+  const userId = req.user.id;
+  const user_role = req.user.role;
+  const articleId = req.body.articleId;
+  const client = await pool.connect();
+try {
+  await client.query('BEGIN');
+   const likeResult = await client.query(`select * from likes where user_id=$1 and article_id=$2 and user_role=$3`,[userId,articleId,user_role]);
+   let liked;
+   if(likeResult.rows.length>0){
+     await client.query(`delete from likes where user_id=$1 and article_id=$2 and user_role=$3`,[userId,articleId,user_role]);
+     liked= false;
+   } else{
+    await client.query(`insert into likes (user_id,article_id,user_role) values ($1,$2,$3)`,[userId,articleId,user_role]);
+    liked = true;
+   }
+   const countQuery = `select count(*) as like_count from likes where article_id=$1`;
+   const countResult = await client.query(countQuery,[articleId]);
+   const likeCount = countResult.rows[0].like_count;
+    await client.query('COMMIT');
+   res.json({success: true,likeCount,liked});
+} catch(error){
+  await pool.query('ROLLBACK');
+  console.error('Error toggling like:',error);
+  res.status(500).json({success:false,error:'internal server error'});
+} finally{
+  client.release();
+}
 })
 
 // app.post('/fullarticle/review/:reviewid',async(req,res)=>{
@@ -1731,7 +3307,7 @@ app.post('/lawyersprofile', async (req, res) => {
       port: 465,
       auth: {
         user: 'ilegaladvice26@gmail.com',
-        pass: 'dnfz hpgh rsfm pelx'
+        pass: 'rwmp eoti nzps mxxe'
       },
       pool: true
     });
@@ -1785,7 +3361,6 @@ app.post('/lawyersprofile', async (req, res) => {
 });
 
 
-
  app.post('/forgetpassword',async(req,res)=>{
    const email = req.body.email;
    if(emailSendInProgress){
@@ -1809,7 +3384,7 @@ app.post('/lawyersprofile', async (req, res) => {
       const query = 'UPDATE lawyers SET token = $2, expires_at = NOW() + INTERVAL \'1 hour\' WHERE email = $1'
       await pool.query( query,[email,token]);
       await sendPasswordResetEmail(email, token);
-        responseMessage = {
+      responseMessage = {
         success: true,
         message: 'Password reset link sent to your email, please check your email.',
       };
@@ -1819,13 +3394,13 @@ app.post('/lawyersprofile', async (req, res) => {
       const query = 'UPDATE clientsignup SET token = $2, expires_at = NOW() + INTERVAL \'1 hour\' WHERE email = $1'
       await  pool.query(query,[email,token])
       await sendPasswordResetEmail(email, token)
-        responseMessage = {
+      responseMessage = {
         success: true,
         message: 'Password reset link sent to your email, please check your email.',
       };
       }
     else{
-        responseMessage = {
+      responseMessage = {
         success: false,
         message: 'Account not found, please verify your email.',
       };
@@ -1833,7 +3408,7 @@ app.post('/lawyersprofile', async (req, res) => {
    }
    
    catch(error){
-    console.error('Error sending email:', email);
+    console.error('Error sending email:', error.message);
    } finally{
     emailSendInProgress = false;
     res.json(responseMessage); 
@@ -1847,7 +3422,7 @@ app.post('/lawyersprofile', async (req, res) => {
       port: 465,
       auth: {
         user: 'ilegaladvice26@gmail.com', 
-        pass: 'dnfz hpgh rsfm pelx' 
+        pass: 'rwmp eoti nzps mxxe' 
       },
       pool: true
     });
@@ -1923,35 +3498,10 @@ app.post('/submit-article',isuAuthenticated,async(req,res)=>{
   }
 })
 
-app.post('/toggle-like',ensureAuthenticated,async(req,res)=>{
-  const userId = req.user.id;
-  const user_role = req.user.role;
-  const articleId = req.body.articleId;
-  const client = await pool.connect();
-try {
-  await client.query('BEGIN');
-   const likeResult = await client.query(`select * from likes where user_id=$1 and article_id=$2 and user_role=$3`,[userId,articleId,user_role]);
-   let liked;
-   if(likeResult.rows.length>0){
-     await client.query(`delete from likes where user_id=$1 and article_id=$2 and user_role=$3`,[userId,articleId,user_role]);
-     liked= false;
-   } else{
-    await client.query(`insert into likes (user_id,article_id,user_role) values ($1,$2,$3)`,[userId,articleId,user_role]);
-    liked = true;
-   }
-   const countQuery = `select count(*) as like_count from likes where article_id=$1`;
-   const countResult = await client.query(countQuery,[articleId]);
-   const likeCount = countResult.rows[0].like_count;
-    await client.query('COMMIT');
-   res.json({success: true,likeCount,liked});
-} catch(error){
-  await pool.query('ROLLBACK');
-  console.error('Error toggling like:',error);
-  res.status(500).json({success:false,error:'internal server error'});
-} finally{
-  client.release();
-}
-})
+
+
+
+
 
 app.post('/logOut',(req,res)=>{
   req.session.destroy((err)=>{
@@ -1962,135 +3512,138 @@ app.post('/logOut',(req,res)=>{
   })
 })
 
-app.post('/userAccount',isuAuthenticated, upload.single('image'),async function(req,res){
+app.post('/userAccount', isuAuthenticated, upload.single('image'), async function(req, res) {
   const client = await pool.connect();
- try{
-  await client.query('BEGIN');
-  // console.log(req.body);
-  // console.log(req.file);
-  const name= req.body.name;
-  const email= req.body.email;
-  const passw= req.body.passw;
-  const c_no= req.body.c_no;
-  const yrs_exp =req.body.yrs_exp;
-  const area_of_prac = req.body.areaofpractice;
-  const courts = req.body.courts;
-  const state = req.body.state;
-  const city = req.body.city;
-  const cpassw = req.body.cpassw;
-  const language = req.body.language;
-  const bio = req.body.bio;
-  const userId = req.user.id;
-  const address = req.body.address
-  const {title, content} = req.body;
-  // console.log(userId); 
-  let updateFields = [];
-  let updateParams = [];
-  let paramIndex = 1;
+  try {
+    await client.query('BEGIN');
 
-  if (name){
-    updateFields.push(`name=$${paramIndex++}`);
-    updateParams.push(name);
-  } 
-  if (email){
-    updateFields.push(`email=$${paramIndex++}`);
-    updateParams.push(email);
-  } 
-  if (yrs_exp){
-    updateFields.push(`yrs_exp=$${paramIndex++}`);
-    updateParams.push(yrs_exp);
-  } 
-  if (c_no){
-    updateFields.push(`c_no=$${paramIndex++}`);
-    updateParams.push(c_no);
-  } 
-  if (courts){
-    updateFields.push(`courts=$${paramIndex++}`);
-    updateParams.push(courts);
-  } 
-  if (city){
-    updateFields.push(`city=$${paramIndex++}`);
-    updateParams.push(city);
-  } 
-  if (area_of_prac){
-    updateFields.push(`area_of_prac=$${paramIndex++}`);
-    updateParams.push(area_of_prac);
-  } 
-  if (state){
-    updateFields.push(`states=$${paramIndex++}`);
-    updateParams.push(state);
-  }
-  if (language){
-    updateFields.push(`language=$${paramIndex++}`);
-    updateParams.push(language);
-  } 
-  if (bio){
-    updateFields.push(`bio=$${paramIndex++}`);
-    updateParams.push(bio);
-  }
- 
-  if (req.file){
-    updateFields.push(`image=$${paramIndex++}`);
-    updateParams.push(req.file.path);
-  } 
-  if (passw  && cpassw){
-    if(passw !== cpassw){
-      return res.status(400).json({success: false, message:'Password and confirm password do not match!'})
-    }
-    const hashedPassword = await bcrypt.hash(passw,saltRounds);
-    updateFields.push(`passw=$${paramIndex++}`);
-    updateParams.push(hashedPassword);
-  } else if (passw || cpassw){
-    return res.status(400).json({success: false, message: 'Both password and confirm password are required!'})
-  }
- 
-  
-  if(address){
-    let location;
-    try{
-      location = await geocodeAddress(address);
-      const latitude  = location ? location.lat : null;
-      const longitude = location ? location.lng : null;
-      updateFields.push(`address=$${paramIndex++}`);
-      updateFields.push(`latitude=$${paramIndex++}`);
-      updateFields.push(`longitude=$${paramIndex++}`);
-      updateParams.push(address,latitude, longitude)
+    const name = req.body.name;
+    const email = req.body.email;
+    const passw = req.body.passw;
+    const c_no = req.body.c_no;
+    const yrs_exp = req.body.yrs_exp;
+    const area_of_prac = req.body.areaofpractice;
+    const courts = req.body.courts;
+    const state = req.body.state;
+    const city = req.body.city;
+    const cpassw = req.body.cpassw;
+    const language = req.body.language;
+    const bio = req.body.bio;
+    const userId = req.user.id;
+    const address = req.body.address;
+    const { title, content } = req.body;
+    let updateFields = [];
+    let updateParams = [];
+    let paramIndex = 1;
 
-    } catch(error){
-      console.error('Geocoding failed:',error);
-      updateFields.push(`address=$${paramIndex++}`)
-      updateFields.push(`latitude = NULL`);
-      updateFields.push(`longitude = NULL`);
-      updateParams.push(address);
+    if (name) {
+      updateFields.push(`name=$${paramIndex++}`);
+      updateParams.push(name);
     }
-  }
-  
-  if (updateFields.length>0){ 
-    let updateQuery;
-    if(req.user.role==='lawyer'){
-      updateQuery= `update lawyers set ${updateFields.join(', ')} where id= $${paramIndex}`;
-    } else if(req.user.role==='client'){
-      updateQuery= `update clientsignup set ${updateFields.join(', ')} where id= $${paramIndex}`;
+    if (email) {
+      updateFields.push(`email=$${paramIndex++}`);
+      updateParams.push(email);
     }
-    updateParams.push(userId);
-    await client.query(updateQuery, updateParams);
-  }
-  
-  if(title && content){
-    await client.query('insert into articles (title, content, author_id) values($1, $2, $3)',[title, content, userId]);
+    if (yrs_exp) {
+      updateFields.push(`yrs_exp=$${paramIndex++}`);
+      updateParams.push(yrs_exp);
+    }
+    if (c_no) {
+      updateFields.push(`c_no=$${paramIndex++}`);
+      updateParams.push(c_no);
+    }
+    if (courts) {
+      updateFields.push(`courts=$${paramIndex++}`);
+      updateParams.push(courts);
+    }
+    if (city) {
+      updateFields.push(`city=$${paramIndex++}`);
+      updateParams.push(city);
+    }
+    if (area_of_prac) {
+      updateFields.push(`area_of_prac=$${paramIndex++}`);
+      updateParams.push(area_of_prac);
+    }
+    if (state) {
+      updateFields.push(`states=$${paramIndex++}`);
+      updateParams.push(state);
+    }
+    if (language) {
+      updateFields.push(`language=$${paramIndex++}`);
+      updateParams.push(language);
+    }
+    if (bio) {
+      updateFields.push(`bio=$${paramIndex++}`);
+      updateParams.push(bio);
+    }
+
+    if (req.file) {
+      // Upload the image to Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        public_id: `user_profile_${Date.now()}`,
+      });
+      updateFields.push(`image=$${paramIndex++}`);
+      updateParams.push(result.secure_url);
+    }
+
+    if (passw && cpassw) {
+      if (passw !== cpassw) {
+        return res.status(400).json({ success: false, message: 'Password and confirm password do not match!' });
+      }
+      const hashedPassword = await bcrypt.hash(passw, saltRounds);
+      updateFields.push(`passw=$${paramIndex++}`);
+      updateParams.push(hashedPassword);
+    } else if (passw || cpassw) {
+      return res.status(400).json({ success: false, message: 'Both password and confirm password are required!' });
+    }
+
+    if (address) {
+      let location;
+      try {
+        location = await geocodeAddress(address);
+        const latitude = location ? location.lat : null;
+        const longitude = location ? location.lng : null;
+        updateFields.push(`address=$${paramIndex++}`);
+        updateFields.push(`latitude=$${paramIndex++}`);
+        updateFields.push(`longitude=$${paramIndex++}`);
+        updateParams.push(address, latitude, longitude);
+      } catch (error) {
+        console.error('Geocoding failed:', error);
+        updateFields.push(`address=$${paramIndex++}`);
+        updateFields.push(`latitude = NULL`);
+        updateFields.push(`longitude = NULL`);
+        updateParams.push(address);
+      }
+    }
+
+    if (updateFields.length > 0) {
+      let updateQuery;
+      if (req.user.role === 'lawyer') {
+        updateQuery = `UPDATE lawyers SET ${updateFields.join(', ')} WHERE id=$${paramIndex}`;
+      } else if (req.user.role === 'client') {
+        updateQuery = `UPDATE clientsignup SET ${updateFields.join(', ')} WHERE id=$${paramIndex}`;
+      }
+      updateParams.push(userId);
+      await client.query(updateQuery, updateParams);
+    }
+
+    if (title && content) {
+      await client.query('INSERT INTO articles (title, content, author_id) VALUES($1, $2, $3)', [title, content, userId]);
+      await client.query('COMMIT');
+      return res.json({ success: true, message: 'Article Uploaded successfully!' });
+    }
+
     await client.query('COMMIT');
-    return res.json({success: true, message: 'Article Uploaded successfully!'})
-  }
-  await client.query('COMMIT');
-  res.json({success: true, message: 'Profile updated successfully!'})
-} catch (error){
-  await client.query('ROLLBACK')
-    console.error('error updating profile:',error);
-    res.status(500).json({success: false,message: 'Internal server error'})
-  } finally{
+    res.json({ success: true, message: 'Profile updated successfully!' });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error updating profile:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  } finally {
     client.release();
   }
-})
+});
+
 
 app.post('/delArticle',async(req,res)=>{
  
