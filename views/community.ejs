@@ -46,7 +46,7 @@
                                 <div class="write-post">
                                     <div class="profile-container">
                                         <div class="profile-image">
-                                            <img src="/uploads/avatar.png" alt="">
+                                            <img src="<%=user.image%>" alt="">
                                         </div>
                                     </div>
                                     <div class="post-text">
@@ -73,7 +73,7 @@
                                             <div class="profile-container">
 
                                                 <div class="profile-image">
-                                                    <img src="../uploads/avatar.png" alt="">
+                                                    <img src="<%=post.lawyer_profile_image%>" alt="">
                                                 </div>
                                             </div>
                                             <div class="user-name-day">
@@ -106,7 +106,7 @@
                                         <%if(post.image_path){ %>
                                             <div class="user-post-image">
                                                 <div class="post-img-box">
-                                                    <img src="/<%=post.image_path%>" alt="">
+                                                    <img src="<%=post.image_path%>" alt="">
                                                 </div>
                                             </div>
                                             <% } %>
@@ -184,7 +184,7 @@
                                         <div class="wrapper-profile">
                                             <div class="w-profile-container">
                                                 <div class="w-profile-image">
-                                                    <img src="../uploads/avatar.png" al"">
+                                                    <img src="<%=user.image%>" alt="">
                                                 </div>
                                             </div>
                                             <div class="w-user-name-day">
@@ -263,7 +263,7 @@
                                         <div class="profile-name">
                                             <div class="profile-container">
                                                 <div class="profile-image">
-                                                    <img src="../uploads/avatar.png" alt="">
+                                                    <img src="<%=mutual.lawyer_profile_image%>" alt="">
                                                 </div>
                                             </div>
                                             <div class="user-name-day">
@@ -654,7 +654,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="profile-name">
                             <div class="profile-container">
                                 <div class="profile-image">
-                                    <img src="../uploads/avatar.png" alt="">
+                                    <img src="${post.lawyer_profile_image}" alt="">
                                 </div>
                             </div>
                             <div class="user-name-day">
@@ -676,7 +676,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${post.image_path ? `
                         <div class="user-post-image">
                             <div class="post-img-box">
-                                <img src="/${post.image_path}" alt="">
+                                <img src="${post.image_path}" alt="">
                             </div>
                         </div>` : ''}
                     </div>
@@ -685,7 +685,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="like-comment">
                             <div class="likes-number"></div>
                             <div class="comment-number">
-                                <span>${comments.filter(c => c.post_id === post.post_id).length} Comments</span>
+                               <a href="/community/post/${post.post_id}"> <span>${comments.filter(c => c.post_id === post.post_id).length} Comments</span> </a> 
                             </div>
                         </div>
                         <hr>
