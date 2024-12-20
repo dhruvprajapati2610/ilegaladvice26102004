@@ -1517,6 +1517,7 @@ app.get('/community', isuAuthenticated, async (req, res) => {
   try {
     const userId = req.user.id;
     const currentUser = req.user || null;
+   
 
     if (req.user.role === 'lawyer') {
    
@@ -1526,7 +1527,7 @@ app.get('/community', isuAuthenticated, async (req, res) => {
 
 
       const postsResult = await client.query(`
-     WITH followed_posts AS (
+    WITH followed_posts AS (
     SELECT 
         cp.id AS post_id,
         cp.image_path,
@@ -1545,7 +1546,8 @@ app.get('/community', isuAuthenticated, async (req, res) => {
             SELECT 1
             FROM follow
             WHERE follower_id = $1 AND followed_id = cp.lawyer_id
-        ) AS user_follows_post_owner
+        ) AS user_follows_post_owner,
+        l.image AS lawyer_profile_image  -- Added lawyer's profile image
     FROM 
         community_posts cp
     LEFT JOIN (
@@ -1562,6 +1564,8 @@ app.get('/community', isuAuthenticated, async (req, res) => {
         ON cp.id = impression_counts.post_id
     INNER JOIN follow f
         ON f.followed_id = cp.lawyer_id
+    INNER JOIN lawyers l  -- Join lawyers table to get the profile image
+        ON l.id = cp.lawyer_id
     WHERE f.follower_id = $1
       AND cp.lawyer_id != $1 -- Exclude current user's posts
     ORDER BY cp.created_at DESC
@@ -1586,7 +1590,8 @@ mutual_posts AS (
             SELECT 1
             FROM follow
             WHERE follower_id = $1 AND followed_id = cp.lawyer_id
-        ) AS user_follows_post_owner
+        ) AS user_follows_post_owner,
+        l.image AS lawyer_profile_image  -- Added lawyer's profile image
     FROM 
         community_posts cp
     LEFT JOIN (
@@ -1605,6 +1610,8 @@ mutual_posts AS (
         ON f1.followed_id = cp.lawyer_id
     INNER JOIN follow f2
         ON f1.follower_id = f2.follower_id
+    INNER JOIN lawyers l  -- Join lawyers table to get the profile image
+        ON l.id = cp.lawyer_id
     WHERE 
         f2.followed_id = $1
         AND cp.lawyer_id != $1 -- Exclude current user's posts
@@ -1636,7 +1643,8 @@ impression_posts AS (
             SELECT 1
             FROM follow
             WHERE follower_id = $1 AND followed_id = cp.lawyer_id
-        ) AS user_follows_post_owner
+        ) AS user_follows_post_owner,
+        l.image AS lawyer_profile_image  -- Added lawyer's profile image
     FROM 
         community_posts cp
     LEFT JOIN (
@@ -1651,6 +1659,8 @@ impression_posts AS (
         GROUP BY post_id
     ) AS impression_counts
         ON cp.id = impression_counts.post_id
+    INNER JOIN lawyers l  -- Join lawyers table to get the profile image
+        ON l.id = cp.lawyer_id
     WHERE cp.lawyer_id != $1 -- Exclude current user's posts
     ORDER BY impression_counts.impression_count DESC NULLS LAST
     LIMIT 4
@@ -1666,7 +1676,8 @@ SELECT
     like_count,
     user_liked,
     impression_count,
-    user_follows_post_owner
+    user_follows_post_owner,
+    lawyer_profile_image  -- Return lawyer's profile image
 FROM (
     SELECT * FROM followed_posts
     UNION ALL
@@ -1684,6 +1695,7 @@ LIMIT 10;
 
    
       const postIds = posts.map(post => post.post_id); 
+
       const commentsResult = await client.query(`
         SELECT 
           c.*,
@@ -1723,10 +1735,11 @@ LIMIT 10;
       const replies = repliesResult.rows;
 
       const followDataMutuals = await pool.query(`
-   WITH mutuals AS (
+           WITH mutuals AS (
     SELECT 
         l.id AS lawyer_id,
         l.name AS lawyer_name,
+        l.image AS lawyer_profile_image, -- Added lawyer profile image
         COUNT(*) AS mutual_count,
         STRING_AGG(DISTINCT mutual_follower.name, ', ') AS mutual_follower_names -- Aggregate mutual followers' names
     FROM lawyers l
@@ -1735,13 +1748,14 @@ LIMIT 10;
     JOIN lawyers mutual_follower ON f2.follower_id = mutual_follower.id -- Find mutual followers' names
     WHERE f2.followed_id = $1 -- Current user (lawyer)
       AND l.id != $1 -- Exclude current user
-    GROUP BY l.id, l.name
+    GROUP BY l.id, l.name, l.image
     HAVING COUNT(*) >= 1
 ),
 popular_suggestions AS (
     SELECT 
         l.id AS lawyer_id,
         l.name AS lawyer_name,
+        l.image AS lawyer_profile_image, -- Added lawyer profile image
         COUNT(f1.follower_id) AS followers_following_count
     FROM lawyers l
     JOIN follow f1 ON f1.followed_id = l.id -- Followers of this lawyer
@@ -1751,19 +1765,20 @@ popular_suggestions AS (
       AND l.id NOT IN (
           SELECT followed_id FROM follow WHERE follower_id = $1
       ) -- Exclude already followed lawyers
-    GROUP BY l.id, l.name
+    GROUP BY l.id, l.name, l.image
 ),
 suggestions AS (
     SELECT 
         l.lawyer_id,
         l.lawyer_name,
+        l.lawyer_profile_image, -- Include lawyer profile image in the final output
         COALESCE(m.mutual_count, 0) AS mutual_count,
         COALESCE(p.followers_following_count, 0) AS followers_following_count,
         COALESCE(m.mutual_follower_names, '') AS mutual_follower_names -- Include mutual followers' names
     FROM (
-        SELECT DISTINCT lawyer_id, lawyer_name FROM mutuals
+        SELECT DISTINCT lawyer_id, lawyer_name, lawyer_profile_image FROM mutuals
         UNION
-        SELECT DISTINCT lawyer_id, lawyer_name FROM popular_suggestions
+        SELECT DISTINCT lawyer_id, lawyer_name, lawyer_profile_image FROM popular_suggestions
     ) l
     LEFT JOIN mutuals m ON l.lawyer_id = m.lawyer_id
     LEFT JOIN popular_suggestions p ON l.lawyer_id = p.lawyer_id
@@ -1771,6 +1786,7 @@ suggestions AS (
 SELECT 
     lawyer_id,
     lawyer_name,
+    lawyer_profile_image, 
     mutual_count,
     followers_following_count,
     mutual_follower_names
@@ -1788,6 +1804,7 @@ ORDER BY
     mutual_count DESC, 
     followers_following_count DESC
 LIMIT 6;
+
 `,[userId]);
 
 const mutuals = followDataMutuals.rows;
@@ -1807,6 +1824,7 @@ console.log(notificationCount);
         currentUser,
         notificationCount,
         mutuals,
+        user:req.user,
         currentRoute: '/community',
         likeCount: posts.length > 0 ? posts[0].like_count : 0 // Handle empty posts case
       });
@@ -1937,7 +1955,8 @@ app.get('/community/posts',isuAuthenticated, async (req, res) => {
             FROM community_likes cl
             WHERE cl.user_id = $1 AND cl.post_id = cp.id
         ) AS user_liked,
-        COALESCE(impression_counts.impression_count, 0) AS impression_count
+        COALESCE(impression_counts.impression_count, 0) AS impression_count,
+        l.image AS lawyer_profile_image
     FROM 
         community_posts cp
     LEFT JOIN (
@@ -1954,6 +1973,8 @@ app.get('/community/posts',isuAuthenticated, async (req, res) => {
         ON cp.id = impression_counts.post_id
     INNER JOIN follow f
         ON f.followed_id = cp.lawyer_id
+    INNER JOIN lawyers l
+        ON cp.lawyer_id = l.id
     WHERE f.follower_id = $1
       AND cp.lawyer_id != $1 -- Exclude current user's posts
 ),
@@ -1971,7 +1992,8 @@ mutual_posts AS (
             FROM community_likes cl
             WHERE cl.user_id = $1 AND cl.post_id = cp.id
         ) AS user_liked,
-        COALESCE(impression_counts.impression_count, 0) AS impression_count
+        COALESCE(impression_counts.impression_count, 0) AS impression_count,
+        l.image AS lawyer_profile_image
     FROM 
         community_posts cp
     LEFT JOIN (
@@ -1990,6 +2012,8 @@ mutual_posts AS (
         ON f1.followed_id = cp.lawyer_id
     INNER JOIN follow f2
         ON f1.follower_id = f2.follower_id
+    INNER JOIN lawyers l
+        ON cp.lawyer_id = l.id
     WHERE 
         f2.followed_id = $1
         AND cp.lawyer_id != $1 -- Exclude current user's posts
@@ -2013,7 +2037,8 @@ impression_posts AS (
             FROM community_likes cl
             WHERE cl.user_id = $1 AND cl.post_id = cp.id
         ) AS user_liked,
-        COALESCE(impression_counts.impression_count, 0) AS impression_count
+        COALESCE(impression_counts.impression_count, 0) AS impression_count,
+        l.image AS lawyer_profile_image
     FROM 
         community_posts cp
     LEFT JOIN (
@@ -2028,6 +2053,8 @@ impression_posts AS (
         GROUP BY post_id
     ) AS impression_counts
         ON cp.id = impression_counts.post_id
+    INNER JOIN lawyers l
+        ON cp.lawyer_id = l.id
     WHERE cp.lawyer_id != $1 -- Exclude current user's posts
     ORDER BY impression_counts.impression_count DESC NULLS LAST
 )
@@ -2041,7 +2068,8 @@ SELECT
     created_at,
     like_count,
     user_liked,
-    impression_count
+    impression_count,
+    lawyer_profile_image
 FROM (
     SELECT * FROM followed_posts
     UNION -- This removes duplicates from the combined result set
@@ -2051,6 +2079,7 @@ FROM (
 ) AS combined_posts
 ORDER BY created_at DESC
 LIMIT $2 OFFSET $3
+
   `, [userId,limit, offset]);
 
     const posts = postsResult.rows;
@@ -2121,7 +2150,9 @@ app.get("/community/post/:id", isuAuthenticated, async (req, res) => {
       return res.status(404).send("Post not found");
     }
     const post = result.rows[0];
- 
+    const profileImagePath = await client.query(`select image from lawyers where id = $1`, [post.lawyer_id]);
+    const profileImage = profileImagePath.rows[0].image;
+    console.log(profileImage);
     //Storing LAWYERID
     const lawyerId = post.lawyer_id;
   
@@ -2199,9 +2230,11 @@ app.get("/community/post/:id", isuAuthenticated, async (req, res) => {
       commentCount,
       like,
       likeCount,
+      user:req.user,
       currentRoute: '/community',
       notificationCount,
       follow,
+      profileImage
     });
   } catch (error) {
     console.error("Error loading post", error);
