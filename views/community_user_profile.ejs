@@ -45,7 +45,6 @@
                                     <% if(lawyerId==userId) { %>
                                         <div id="edit-profile" class="follow-btn edit-profile">Edit Profile</div>
                                    <% } else {%> 
-                                   
                                         <% if(follow) { %>
                                             <div class="follow-btn" id="follow-user">Following</div>
                                       <%  } else {%>
@@ -97,7 +96,7 @@
                     <span>Users Post</span>
                     <hr>
                  </div>
-                <div class="user-full-post">
+                <div class="user-full-post" onclick="redirectPostPage(<%=post.post_id%>)">
                     <div class="user-full-post-info">
                         <div class="post-info-date">
                             <div class="full-post-date">1 July 2024 at 08:12 pm</div>
@@ -132,7 +131,7 @@
                                 <span><%=post.like_count%> Likes</span>
                             </div>
                             <div class="post-info-comment-number">
-                                <span> Comments</span>
+                                <span><%=post.noOfComments%> Comments</span>
                             </div>
                         </div>
                     </div>
@@ -327,7 +326,7 @@
                             <div class="profile-name">
                                 <div class="profile-container">
                                     <div class="profile-image">
-                                        <img src="../uploads/avatar.png" alt="">
+                                        <img src="<%=follower.lawyer_profile_image%>" alt="">
                                     </div>
                                 </div>
                                 
@@ -372,7 +371,7 @@
                             <div class="profile-name">
                                 <div class="profile-container">
                                     <div class="profile-image">
-                                        <img src="../uploads/avatar.png" alt="">
+                                        <img src="<%=following.lawyer_profile_image %>" alt="">
                                     </div>
                                 </div>
                                 <div class="user-name-day">
@@ -392,7 +391,7 @@
             <div class="suggestion-container followed-by-list ">
                 <div class="s-heading">
                     <div class="followers-text">
-                    <span>Followers</span><div class="cancel-form"><i class="fa-solid fa-xmark" id="cancel-followed-by"></i></div>
+                    <span>Mutual Followers</span><div class="cancel-form"><i class="fa-solid fa-xmark" id="cancel-followed-by"></i></div>
                     </div>
                     <hr>
                     <div class="search-box-container">
@@ -412,7 +411,7 @@
                         <div class="profile-name">
                             <div class="profile-container">
                                 <div class="profile-image">
-                                    <img src="../uploads/avatar.png" alt="">
+                                    <img src="<%=mutual.lawyer_profile_image%>" alt="">
                                 </div>
                             </div>
                             <div class="user-name-day">
@@ -585,6 +584,9 @@ document.getElementById('search').addEventListener('input', async function () {
 });
 //-----------------------------------------------------------------
 
+const redirectPostPage = async (postId) => {
+    window.location.href = `/community/post/${postId}`
+}
 
   const followUser = document.querySelector("#follow-user");
   if(followUser){
@@ -1035,7 +1037,7 @@ async function fetchFollowingResults() {
                         <div class="profile-name">
                             <div class="profile-container">
                                 <div class="profile-image">
-                                    <img src="../uploads/avatar.png" alt="profile-image">
+                                    <img src="${user.image}" alt="profile-image">
                                 </div>
                             </div>
                             <div class="user-name-day">
@@ -1090,7 +1092,7 @@ async function fetchFollowerResults() {
                         <div class="profile-name">
                             <div class="profile-container">
                                 <div class="profile-image">
-                                    <img src="../uploads/avatar.png" alt="profile-image">
+                                    <img src="${user.image}" alt="profile-image">
                                 </div>
                             </div>
                             <div class="user-name-day">
