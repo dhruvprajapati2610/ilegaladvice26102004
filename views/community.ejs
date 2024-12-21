@@ -87,19 +87,24 @@
                                                             value="<%=post.lawyer_id%>">
                                             <input type="hidden" name="postIdForFollower" value="<%=post.post_id%>>">
                                             <% if(userId!==post.lawyer_id){ %>
-
-                                                <div class="follow-btn" id="follow-btn-post" data-post-id="<%= post.post_id %>"><% if(post.user_follows_post_owner){ %>
-                                                    Following
-                                              <%  }  else { %>
-                                                    Follow
-                                            <%  } %>
+                                                <% if(post.user_follows_post_owner === false){ %>
+                                                <div class="follow-btn" onclick="postLawyerFollow(<%=post.post_id%>, <%=post.lawyer_id%>)" id="follow-btn-post-<%=post.post_id%>" data-post-id="<%= post.post_id %>">
+                                                    
+                                                        <% if(post.user_follows_post_owner){ %>
+                                                            Following
+                                                      <%  }  else { %>
+                                                            Follow
+                                                    <%  } %>
+                                                   
+                                                    
                                             </div>
+                                           <% } %>
                                           <%  } %>
                                             
                                             <div class="follow-icon"><i class="fa-solid fa-user-plus"></i></div>
                                         </div>
                                     </div>
-                                    <div class="post-info">
+                                    <div class="post-info" onclick="redirectPostPage(<%=post.post_id%>)">
                                         <div id="posts-para" class="post-para" data-post-id="<%= post.post_id %>">
                                             <%=post.content%>
                                         </div>
@@ -112,7 +117,7 @@
                                             <% } %>
                                     </div>
                                     <div class="post-stat" data-post-id="<%= post.post_id %>">
-                                        <div class="like-comment">
+                                        <div class="like-comment" onclick="redirectPostPage(<%=post.post_id%>)">
                                             <div class="likes-number">
 
                                             
@@ -135,7 +140,7 @@
                                                 </span>
                                             </div>
                                             
-                                            <div class="comment" data-post-id="<%= post.post_id %>">
+                                            <div class="comment" data-post-id="<%= post.post_id %>" onclick="redirectPostPage(<%=post.post_id%>)">
                                                 <i class="fa-solid fa-comment"></i>
                                                 <span>Comment</span>
                                             </div>
@@ -256,6 +261,9 @@
                                 <Span>Suggestions for you</Span>
                             </div>
                             <div class="s-content">
+                                <% if(mutuals.length === 0){ %>
+                                    <div>No connections to suggest at the moment. Explore the community to find peers!</div>
+                                <% } %>
                               <% mutuals.forEach(mutual=>{  %>
                               
                                 <div class="suggestion-account">
@@ -279,7 +287,7 @@
                                     
                                     
                                     <div class="follow-container">
-                                        <div class="follow-btn" id="follow-suggestion">Follow</div>
+                                        <div class="follow-btn" onclick="suggestionLawyerFollow(<%=mutual.lawyer_id%>)" id="follow-suggestion-<%=mutual.lawyer_id%>">Follow</div>
                                     </div>
                                 </div>
                                 <%  }) %>
@@ -397,15 +405,11 @@ document.getElementById('search').addEventListener('input', async function () {
     }
 });
 //-----------------------------------------------------------------
-
-            const followUser = document.querySelector("#follow-suggestion")
-            
-;
-  if(followUser){
-    followUser.onclick = async () => {
-        console.log('Suggestion Follow button clicked')
+const suggestionLawyerFollow = async (lawyerId) => {
+    const followUser = document.querySelector(`#follow-suggestion-${lawyerId}`);
+    console.log('Suggestion Follow button clicked')
     try {
-        const lawyerId = document.querySelector("input[name='suggestedLawyerId']").value;
+        console.log(lawyerId)
        const response = await fetch("/community/follow", {
         method: "POST",
         headers: {
@@ -430,20 +434,15 @@ document.getElementById('search').addEventListener('input', async function () {
     } catch (error) {
         console.error("Error : ", error);
     }
-  }
-  }
-
- 
+}
+           
 
 
-  const followUserPost = document.querySelector("#follow-btn-post");
-            
-            
-              if(followUserPost){
-                followUserPost.onclick = async () => {
-                    console.log("button clicked");
+const postLawyerFollow = async (postId, lawyerId) => {
+    console.log("button clicked");
+    const followUserPost = document.querySelector(`#follow-btn-post-${postId}`);
                 try {
-                    const lawyerId = document.querySelector("input[name='postLawyerId']").value;
+                    
                     const postId = followUserPost.getAttribute('data-post-id');
                    const response = await fetch("/community/follow", {
                     method: "POST",
@@ -469,10 +468,8 @@ document.getElementById('search').addEventListener('input', async function () {
                 } catch (error) {
                     console.error("Error : ", error);
                 }
-              }
-              }
-
-    
+}
+ 
        
             //       const like=document.querySelector(".like")
             //like.onclick=()=>{
@@ -518,6 +515,10 @@ document.getElementById('search').addEventListener('input', async function () {
     }
 });
 
+//Redirect to Post Page
+const redirectPostPage = (postId) => {
+    window.location.href = `/community/post/${postId}`;
+}
 
 
 
@@ -664,13 +665,19 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div class="post-day">${formatDate(new Date(post.created_at))}</div>
                             </div>
                         </div>
+                        
                         <div class="follow-container">
                             <input type="hidden" name="postLawyerId" value="${post.lawyer_id}">
-                            ${userId !== post.lawyer_id ? `<div class="follow-btn-2" id="follow-btn-post" data-post-id="${post.post_id}">Follow</div>` : ''}
+                            ${post.user_follows_post_owner === false ?  `${userId !== post.lawyer_id ? `<div onclick="postLawyerFollow(${post.post_id}, ${post.lawyer_id})" class="follow-btn-2" id="follow-btn-post-${post.post_id}" data-post-id="${post.post_id}">
+                             
+                                  ${post.user_follows_post_owner ? 'Following' : 'Follow'}
+                                
+                                </div>` : ''}` : ''}
+                            
                             <div class="follow-icon"><i class="fa-solid fa-user-plus"></i></div>
                         </div>
                     </div>
-                    <div class="post-info">
+                    <div class="post-info" onclick="redirectPostPage(${post.post_id})">
                          
                         <div class="post-para" data-post-id="${post.post_id}">${post.content}</div>
                         ${post.image_path ? `
@@ -682,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                    
                          <div class="post-stat" data-post-id="${post.post_id}">
-                        <div class="like-comment">
+                        <div class="like-comment" onclick="redirectPostPage(${post.post_id})">
                             <div class="likes-number"></div>
                             <div class="comment-number">
                                <a href="/community/post/${post.post_id}"> <span>${comments.filter(c => c.post_id === post.post_id).length} Comments</span> </a> 
@@ -696,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                    data-post-id="${post.post_id}"></i>
                                 <span id="likes-${post.post_id}">${post.like_count} Likes</span>
                             </div>
-                            <div class="comment" data-post-id="${post.post_id}">
+                            <div class="comment" onclick="redirectPostPage(${post.post_id})" data-post-id="${post.post_id}">
                                 <i class="fa-solid fa-comment"></i>
                                 <span>Comment</span>
                             </div>
@@ -734,64 +741,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         isScrollingFinished = true;  // Make sure this is reset
-        attachFollowListeners(); // Reattach event listeners to new posts
+       // Reattach event listeners to new posts
     
     };
 
    
-
-    // Function to attach event listeners to "Follow" buttons
-    const attachFollowListeners = () => {
-        const followButtons = document.querySelectorAll('.follow-btn-2');
-        
-        followButtons.forEach(followBtn => {
-            followBtn.onclick = async () => {
-                console.log("Follow button clicked");
-
-                // Retrieve the lawyerId from the input field within the same parent
-                const lawyerIdInput = followBtn.closest('.follow-container').querySelector('input[name="postLawyerId"]');
-                if (!lawyerIdInput) {
-                    console.error("Lawyer ID not found");
-                    return;
-                }
-                 
-                const lawyerId = lawyerIdInput.value;
-
-                // const postIdInput = followBtn.closest('.follow-container').querySelector('.follow-btn-2');
-                // if (!postId) {
-                //     console.error("Lawyer ID not found");
-                //     return;
-                // }
-                // const postId = postIdInput.getAttribute("data-post-id");
-                // console.log(postId)
-
-                try {
-                    const response = await fetch("/community/follow", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ lawyerId }),
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        // Update the button text based on the follow status
-                        if (result.follow) {
-                            followBtn.innerText = "Following";
-                        } else {
-                            followBtn.innerText = "Follow";
-                        }
-                    } else {
-                        console.error("Error:", result.message);
-                    }
-                } catch (error) {
-                    console.error("Error:", error);
-                }
-            };
-        });
-    };
 
     // Handle the scroll event to trigger fetching posts when scrolled to the bottom
     const handleScroll = () => {
