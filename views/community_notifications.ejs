@@ -97,16 +97,16 @@
                         <div class="profile-container">
                             <div class="profile-img-container">
                                 <div class="profile-img">
-                                    <img src="../uploads/avatar.png" alt="">
+                                    <img src="<%= notification.lawyer_profile_image ? notification.lawyer_profile_image : '' %>"  alt="">
                                 </div>
                             </div>
                             <div class="notification-para"  onclick="markNotificationClicked(<%= notification.id %>, event)">
-                               <p><a href="<%= notification.link %>" "><%= notification.lawyer_name %><%= notification.content %></a></p>
+                               <p><a href="<%= notification.link %>"><%= notification.lawyer_name %> <%= notification.content %></a></p>
                             </div>
                         </div>
                         </div>
                         <div class="notification-time">
-                            <span>9h</span>
+                          <span class="time-ago" data-created-at="<%= notification.created_at %>"></span>
                         </div>
                     </li>
                     <% }) %>
@@ -353,8 +353,32 @@ document.getElementById('search').addEventListener('input', async function () {
     }
 });
 
+//How many hours ago notification was received
+function updateNotificationTimes() {
+    const timeAgoElements = document.querySelectorAll('.time-ago');
+    timeAgoElements.forEach(element => {
+        const createdAt = new Date(element.dataset.createdAt); 
+        const now = new Date();
+    
+        const diffMs = now - createdAt;
+        
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const diffHours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+        const diffMinutes = Math.floor((diffMs / (1000 * 60)) % 60);
+
+        if (diffDays >= 1) {
+            element.textContent = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+        } else if (diffHours >= 1) {
+            element.textContent = `${diffHours} hr${diffHours > 1 ? 's' : ''} ago`;
+        } else {
+            element.textContent = `${diffMinutes} min${diffMinutes > 1 ? 's' : ''} ago`;
+        }
+    });
+}
 
 
+updateNotificationTimes();
+setInterval(updateNotificationTimes, 60000);
 
 
 
