@@ -3024,6 +3024,10 @@ app.post('/signup', upload.single('image'), async (req, res) => {
         } else {
           const passw = await bcrypt.hash(l_password, saltRounds);
           const imageBuffer = req.file.path;
+          const resultImage = await cloudinary.uploader.upload(imageBuffer, {
+            public_id: `lawyer_profile_${Date.now()}`,
+          });
+          const imageUrl = resultImage.secure_url;
 
           const result = await pool.query('SELECT email FROM lawyers WHERE email = $1', [email]);
           const result1 = await pool.query('SELECT email FROM clientsignup WHERE email = $1', [email]);
@@ -3063,7 +3067,7 @@ app.post('/signup', upload.single('image'), async (req, res) => {
 
             await transporter.sendMail(mailOptions);
             const sql1 = 'INSERT INTO lawyers (name, email, passw, cpassw, c_no, area_of_prac, states, city, yrs_exp, bio, image, gender, language, courts, verification_token, is_verified, latitude, longitude, address, lic_no) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)';
-            await pool.query(sql1, [name, email, passw, passw, c_no, area_of_prac, state, city, yrs_exp, bio, imageBuffer, gender, language, courts, token, false, latitude, longitude, address, lic_no]);
+            await pool.query(sql1, [name, email, passw, passw, c_no, area_of_prac, state, city, yrs_exp, bio, imageUrl, gender, language, courts, token, false, latitude, longitude, address, lic_no]);
 
             responseMessage = { message: 'User registered! Please verify your email to complete registration.', success: true };
           }
