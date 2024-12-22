@@ -666,6 +666,7 @@ hr{
 }
 .notification-time span{
     font-size: 18px;
+    width:fit-content;
 }
 
 
@@ -1102,6 +1103,7 @@ color:#232121;
     }
     .notification-time span{
         font-size: 16px;
+        width:fit-content;
     }
     .notification-content{
         height: 400px;
@@ -1134,6 +1136,7 @@ color:#232121;
     }
     .notification-time span{
         font-size: 15px;
+        width:fit-content;
     }
 }
 
