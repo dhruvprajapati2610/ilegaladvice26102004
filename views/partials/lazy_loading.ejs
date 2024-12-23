@@ -1,0 +1,213 @@
+
+        <div class="user-post">
+            <div class="user-info">
+                <div class="profile-name">
+                    <div class="profile-container">
+
+                        <div class="profile-image">
+                            <img src="../uploads/avatar.png" alt="">
+                        </div>
+                    </div>
+                    <div class="user-name-day">
+                     <a href="/community/user-profile?id=<%=post.lawyer_id%>"><div class="user-name" ><%=post.lawyer_name%></div></a>   
+                        <div class="post-day"><%=formatDate(post.created_at)%></div>
+                    
+                    </div>
+                </div>
+                <div class="follow-container">
+                    <div class="follow-btn">Follow</div>
+                    <div class="follow-icon"><i class="fa-solid fa-user-plus"></i></div>
+                </div>
+            </div>
+            <div class="post-info">
+                <div class="post-para">
+                    <%=post.content%>
+                </div>
+                <%if(post.image_path){ %>
+                    <div class="user-post-image">
+                        <div class="post-img-box">
+                            <img src="/<%=post.image_path%>" alt="">
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+            <div class="post-stat">
+                <div class="like-comment">
+                    <div class="likes-number">
+
+                    
+                    </div>
+                    <div class="comment-number">
+                        <span>100 Comments</span>
+                    </div>
+                </div>
+                <hr>
+                <div class="like-share-comment">
+                    <div class="">
+                        <i class="fa-solid fa-thumbs-up like-bigger like-button <%= post.user_liked ? 'like-active' : '' %>" 
+                           data-user-id="<%= userId %>" 
+                           data-post-id="<%= post.post_id %>"></i>
+                        <span id="likes-<%= post.post_id %>">
+                            <%= post.like_count %> Likes
+                        </span>
+                    </div>
+                    
+                    <div class="comment">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>Comment</span>
+                    </div>
+                    <div class="share">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Share</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="post-comments">
+                <div class="post-comments-container">
+                    <div class="add-reveiew">
+                        <div class="add-reveiew-container">
+                            <form id="add-review" action="/community/review" method="post">
+                                <input type="hidden" name="postId"
+                                    value="<%=post.post_id%>">
+                                <div class="text-box">
+                                    <textarea name="comment" id="new-reveiew" cols="40"
+                                        rows="5" placeholder="add a comment"></textarea>
+                                    <div class="new-ok-cnc-btn">
+                                        <button type="submit"
+                                            class="new-ok-btn">Submit</button>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+               
+                    <% comments.forEach(comment=>{ %>
+                        <div class="reveiew-container">
+
+                            <div class="reveiew-name-rating">
+                                <div class="reveiew-name">
+                                    <%= comment.username %>
+
+                                </div>
+                                <div class="review-date-delete">
+                                    <div class="review-date">
+                                        <%= formatDate(comment.created_at)%>
+                                    </div>
+                                    <% if(currentUser!==null &&
+                                        currentUser.name===comment.username) { %>
+                                        <% if(comment.user_id===currentUser.id) { %>
+                                            <form id="commentDel"
+                                                action="/fullarticle/comment/<%=comment.id%>?_method=DELETE"
+                                                method="post">
+                                                <input type="hidden" id="commentId"
+                                                    value="<%=comment.id%>">
+                                                <div class="review-delete">
+                                                    <button class="delbtn" type="submit"><i
+                                                            class="fa-solid fa-trash-can"></i></button>
+                                                </div>
+                                            </form>
+                                            <% } %>
+                                                <% } %>
+                                </div>
+
+                            </div>
+
+
+                            <div class="reveiew-para">
+                                <p>
+                                    <%=comment.content%>
+                                </p>
+                            </div>
+                            <div class="lawyer-reply">
+                                <div class="reply-btn">
+                                    <div class="reply-btn-1">
+                                        <i class="fa-solid fa-reply "></i>
+                                        <span class="reply-btn-span"
+                                            data-comment-id="<%=comment.id%>">Reply</span>
+                                    </div>
+                                    <div class="reply-btn-2">
+                                        <span class="show-reply-btn"
+                                            data-comment-id="<%=comment.id%>">Show
+                                            replies</span>
+                                        <span class="hide-reply-btn"
+                                            data-comment-id="<%=comment.id%>">Hide
+                                            replies</span>
+                                    </div>
+                                </div>
+                                <div class="lawyer-reply-para"
+                                    data-comment-id="<%=comment.id%>">
+                                    <form id="add-reply" method="post"
+                                        action="/community-add-reply">
+                                        <input type="hidden" name="commentId"
+                                            value="<%=comment.id%>">
+                                        <textarea class="boxcolor" name="content"
+                                            id="reply-para" cols="40" rows="5"></textarea>
+                                        <div class="btn-ok-cnc">
+                                            <button type="submit"
+                                                class="ok-btn">Submit</button>
+                                            <div class="cnc-btn"
+                                                data-comment-id="<%=comment.id%>">Cancel
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <% replies.filter(reply=> reply.comment_id===
+                                    comment.id).forEach(reply=>{ %>
+                                    <div class="lawyer-previous-reply"
+                                        data-comment-id="<%=comment.id%>">
+                                        <div class="reply"></div>
+                                        <div class="p-reply" id="p-reply-1">
+                                            <div class="p-reply-name-date">
+                                                <div class="p-reply-name">
+                                                    <span
+                                                        class="<%= reply.user_id===post.post_id ? 'highlight-author-reply': ''%>">
+                                                        <%=reply.username%>
+                                                            <span class="author-label">
+                                                                <%=reply.user_id===post.post_id?'(Author)':''%>
+                                                            </span>
+                                                    </span>
+                                                </div>
+                                                <div class="p-reply-date-delete">
+                                                    <div class="p-reply-date">
+                                                        <span>
+                                                            <%=formatDate(reply.created_at)%>
+                                                        </span>
+                                                    </div>
+                                                    <% if(currentUser!==null &&
+                                                        currentUser.name===reply.username) {
+                                                        %>
+                                                        <% if(reply.user_id===currentUser.id)
+                                                            { %>
+                                                            <form
+                                                                action="/community/del-reply/<%=reply.id%>?_method=DELETE"
+                                                                id="replyDel" method="post">
+                                                                <input type="hidden"
+                                                                    id="replyId"
+                                                                    value="<%=reply.id%>">
+                                                                <div class="p-reply-delete">
+                                                                    <button class="delbtn"
+                                                                        type="submit"><i
+                                                                            class="fa-solid fa-trash-can"></i></button>
+                                                                </div>
+
+                                                            </form>
+                                                            <% } %>
+                                                                <% } %>
+                                                </div>
+                                            </div>
+                                            <p>
+                                                <%=reply.content%>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <%})%>
+                            </div>
+                        </div>
+                        <% }) %>
+                           
+                </div>
+            </div>
+        </div>
+        

@@ -329,6 +329,52 @@ app.get('/signup',async(req,res)=>{
 
 
 
+app.get('/admin',isuAuthenticated, async (req, res) => {
+  const userId = req.user.id;
+  const isAdminQuery = `select * from clientsignup where id = $1`;
+  const isAdmin = await pool.query(isAdminQuery, [userId]);
+  if(isAdmin.rows[0].is_admin === false){
+    res.redirect('/');
+    return;
+  }
+  res.render('admin-page');
+})
+
+app.get('/notVerifiedLawyers', async (req, res) => {
+  const notVerifiedLawyersQuery = await pool.query("select * from lawyers where admin_verified = false");
+  const notVerifiedLawyers = notVerifiedLawyersQuery.rows;
+  if(notVerifiedLawyers.length > 0){
+    res.json({success: true, notVerifiedLawyers});
+  }else{
+    res.json({successs: false, message:"No unverified available."})
+  }
+ 
+})
+
+app.post('/approveLawyer/:id', async (req, res) => {
+  const lawyerId = req.params.id;
+  try {
+      await pool.query("UPDATE lawyers SET admin_verified = true WHERE id = $1", [lawyerId]);
+      res.json({ success: true, message: 'Lawyer approved successfully.' });
+  } catch (error) {
+      console.error('Error approving lawyer:', error);
+      res.status(500).json({ success: false, message: 'Failed to approve lawyer.' });
+  }
+});
+
+app.post('/declineLawyer/:id', async (req, res) => {
+  const lawyerId = req.params.id;
+  try {
+      await pool.query("DELETE FROM lawyers WHERE id = $1", [lawyerId]);
+      res.json({ success: true, message: 'Lawyer declined successfully.' });
+  } catch (error) {
+      console.error('Error declining lawyer:', error);
+      res.status(500).json({ success: false, message: 'Failed to decline lawyer.' });
+  }
+});
+
+
+
 app.get('/forgetpassword',(req,res)=>{
   res.render('login.ejs');
 });
@@ -778,28 +824,32 @@ try{
 
   if(userLat && userLon) {
     const result = await client.query(`
-      with review_aggregates as(
-      select lawyer_id,
-      avg(rating) as average_rating,
-      count(client_id) as client_count
-      from reviews
-      group by lawyer_id     
-     )
-      select
-      l.*,
-      ra.average_rating,
-      ra.client_count,
-      ST_Distance(
-      ST_SetSRID(ST_MakePoint(l.longitude,l.latitude), 4326)::geography,
-      ST_SetSRID(ST_MakePoint($1,$2), 4326)::geography
-      )/1000 as distance
-      from lawyers l
-      left join review_aggregates ra on l.id=ra.lawyer_id
-      where ST_Distance(
-      ST_SetSRID(ST_MakePoint(l.longitude, l.latitude), 4326):: geography,
-      ST_SetSRID(ST_MakePoint($1,$2), 4326):: geography
-      ) / 1000 <= 10
-      order by distance ASC
+      with review_aggregates as (
+    select 
+        lawyer_id,
+        avg(rating) as average_rating,
+        count(client_id) as client_count
+    from reviews
+    group by lawyer_id
+)
+select
+    l.*,
+    ra.average_rating,
+    ra.client_count,
+    ST_Distance(
+        ST_SetSRID(ST_MakePoint(l.longitude, l.latitude), 4326)::geography,
+        ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
+    ) / 1000 as distance
+from lawyers l
+left join review_aggregates ra on l.id = ra.lawyer_id
+where 
+    l.admin_verified = TRUE
+    and ST_Distance(
+        ST_SetSRID(ST_MakePoint(l.longitude, l.latitude), 4326)::geography,
+        ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
+    ) / 1000 <= 10
+order by distance ASC;
+
     `,[userLon,userLat]);
    
      var lawyers = result.rows.map(row=>{
@@ -848,22 +898,32 @@ try{
   }
 else{
   const countResult = await client.query(`
-    SELECT COUNT(*) AS total_lawyers
-    FROM lawyers
+   SELECT COUNT(*) AS total_lawyers
+  FROM lawyers
+  WHERE admin_verified = TRUE;
+
   `);
   const totalLawyers = parseInt(countResult.rows[0].total_lawyers, 10);
   const totalPages = Math.ceil(totalLawyers / limit);
   result = await client.query(`
         WITH review_aggregates AS (
-          SELECT lawyer_id, AVG(rating) AS average_rating, COUNT(client_id) AS client_count
-          FROM reviews
-          GROUP BY lawyer_id
-        )
-        SELECT l.*, ra.average_rating, ra.client_count
-        FROM lawyers l
-        LEFT JOIN review_aggregates ra ON l.id = ra.lawyer_id
-        ORDER BY ra.average_rating asc, ra.client_count asc
-        LIMIT $1 OFFSET $2`, [limit, offset]
+    SELECT 
+        lawyer_id, 
+        AVG(rating) AS average_rating, 
+        COUNT(client_id) AS client_count
+    FROM reviews
+    GROUP BY lawyer_id
+)
+SELECT 
+    l.*, 
+    ra.average_rating, 
+    ra.client_count
+FROM lawyers l
+LEFT JOIN review_aggregates ra ON l.id = ra.lawyer_id
+WHERE l.admin_verified = TRUE
+ORDER BY ra.average_rating ASC, ra.client_count ASC
+LIMIT $1 OFFSET $2;
+`, [limit, offset]
   )
   var lawyers  = result.rows.map(row=>{
     let image = row.image ? row.image.substring(8) : null;
@@ -942,14 +1002,14 @@ app.get('/filter-lawyers', async (req, res) => {
   const limit = 10;
   const offset = (page - 1) * limit;
 
-  let countQuery = `SELECT count(DISTINCT l.id) as total_count FROM lawyers l LEFT JOIN reviews r ON l.id = r.lawyer_id WHERE 1=1`;
+  let countQuery = `SELECT count(DISTINCT l.id) as total_count FROM lawyers l LEFT JOIN reviews r ON l.id = r.lawyer_id WHERE 1=1 AND  l.admin_verified = TRUE`;
   
   let query = `
     SELECT l.id, l.name, l.yrs_exp, l.image, l.city, l.states, l.gender, l.language,
            l.area_of_prac, AVG(r.rating) AS average_rating, COUNT(r.client_id) AS client_count
     FROM lawyers l
     LEFT JOIN reviews r ON l.id = r.lawyer_id
-    WHERE 1=1
+    WHERE 1=1 AND l.admin_verified = TRUE
   `;
 
   let queryParams = [];
@@ -1119,7 +1179,7 @@ app.get('/verify-email', async(req,res)=>{
       return res.render('home3', { message: 'Lawyer email verified successfully! Please login now.', success: true });
     }
     await pool.query('update clientsignup set is_verified = TRUE, verification_token = NULL where verification_token = $1',[token]);
-    res.render('home3',{message: 'Email verified successfully! Please login now.', success: true});
+    res.render('home3',{message: 'Email verified successfully! Please wait for 24 hours while we verify your identity.', success: true});
   } catch(error){
     console.error('Error verifying email:', error);
     res.status(500).send('Internal server error');
@@ -1149,7 +1209,7 @@ try{
   const whereClauses = searchWords.map((_, index) => `(name ilike $${index+1} or area_of_prac ilike $${index+1})`);
   const whereClause = whereClauses.join(' OR ');
 
-  const searchLawyersResult = `select count(*) from lawyers where ${whereClause}`;
+  const searchLawyersResult = `select count(*) from lawyers where ${whereClause} and lawyers.admin_verified = TRUE`;
   // const values =`%${searchWords}%`;
   const result1 = await client.query(searchLawyersResult, searchWords);
   const totalLawyers = parseInt(result1.rows[0].count, 10);
@@ -1169,7 +1229,7 @@ try{
    ra.client_count
    from lawyers l
    left join review_aggregates ra on l.id=ra.lawyer_id
-   where ${whereClause}
+   where ${whereClause} and l.admin_verified = TRUE
    order by ra.average_rating desc nulls last
    limit $${searchWords.length+1} offset $${searchWords.length+2}
  `,[...searchWords,limit,offset]);
@@ -1277,8 +1337,8 @@ app.get('/search-homepage-lawyers', async (req, res) => {
     // 1. Query to count total number of lawyers matching the filters
     const totalLawyersResult = await pool.query(`
       SELECT COUNT(*) as total_count
-      FROM lawyers l
-      ${whereClauseString}
+      FROM lawyers l  
+      ${whereClauseString} and l.admin_verified = TRUE
     `, queryParams);
     
     const totalLawyers = parseInt(totalLawyersResult.rows[0].total_count, 10);
@@ -1300,7 +1360,7 @@ app.get('/search-homepage-lawyers', async (req, res) => {
         ra.client_count
       FROM lawyers l
       LEFT JOIN review_aggregates ra ON l.id = ra.lawyer_id
-      ${whereClauseString}
+      ${whereClauseString} and l.admin_verified = TRUE
       ORDER BY ra.average_rating DESC, ra.client_count DESC
       LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}
     `, [...queryParams, limit, offset]);
@@ -3332,7 +3392,7 @@ app.post('/login',(req,res,next)=>{
         userData = result.rows[0];
          if (!userData.is_verified) {
           return res.json({ success: false, message: 'Please verify your email before logging in(client).' });
-        }
+        } 
       } else{
         result = await pool.query('SELECT * FROM lawyers WHERE email = $1', [user.email]);
         if (result.rowCount > 0) {
@@ -3340,7 +3400,11 @@ app.post('/login',(req,res,next)=>{
           if (!userData.is_verified) {
             return res.json({ success: false, message: 'Please verify your email before logging in(lawyer).' });
           }
-      } else{
+          else if(!userData.admin_verified){
+         return res.json({success: false, message: 'Please wait for 24 hours while we verify your account.'})
+          }
+      } 
+      else{
         return res.json({ success: false, message: 'Invalid login credentials.' });
       }
     }  
@@ -3360,7 +3424,36 @@ app.post('/login',(req,res,next)=>{
 })
 
 
-// res.render('home',{message: 'User already exists, please use different email id.', success: false});
+
+app.post('/admin-login', async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.passw;
+  const query = 'SELECT * FROM clientsignup WHERE email = $1';
+
+  try {
+    const result = await pool.query(query, [email]);
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ success: false, message: 'Invalid email or password' });
+    }
+
+    const user = result.rows[0]; 
+    const hashedPassword = user.passw; 
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+
+    if (isMatch) {
+      return res.redirect('/admin');
+    } else {
+      return res.status(401).json({ success: false, message: 'Invalid email or password' });
+    }
+  } catch (error) {
+    console.error('Error during admin login:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+
+
 
 
 const sendEmailWithRetry = async (mailOptions, transporter, retries = 3) => {

@@ -88,8 +88,8 @@
                                             <input type="hidden" name="postIdForFollower" value="<%=post.post_id%>>">
                                             <% if(userId!==post.lawyer_id){ %>
                                                 <% if(post.user_follows_post_owner === false){ %>
-                                                <div class="follow-btn" onclick="postLawyerFollow(<%=post.post_id%>, <%=post.lawyer_id%>)" id="follow-btn-post-<%=post.post_id%>" data-post-id="<%= post.post_id %>">
-                                                    
+                                                <div class="follow-btn follow-<%=post.lawyer_id%>"  onclick="postLawyerFollow(<%=post.post_id%>, <%=post.lawyer_id%>)" id="follow-btn-post-<%=post.post_id%>" data-post-id="<%= post.post_id %>">
+    
                                                         <% if(post.user_follows_post_owner){ %>
                                                             Following
                                                       <%  }  else { %>
@@ -454,12 +454,20 @@ const postLawyerFollow = async (postId, lawyerId) => {
                   const result = await response.json();
                   
                   if(result.success){
-            
+                   
                     if (result.follow) {
                     followUserPost.innerText = "Following";
+                    document.querySelectorAll(`.follow-${lawyerId}`).forEach(element => {
+                     element.innerHTML = 'Following';
+                   });
                   } else {
                     followUserPost.innerText = "Follow";
+                    document.querySelectorAll(`.follow-${lawyerId}`).forEach(element => {
+                     element.innerHTML = 'Follow';
+                   });
                   }
+
+                 
             
                   }else{
                     console.error("Error :", result.message);
@@ -499,13 +507,8 @@ const postLawyerFollow = async (postId, lawyerId) => {
                 // Toggle the UI like-active class
                 button.classList.toggle('like-active', data.liked);
 
-                // Update the like count based on the server response
-                if (data.liked) {
-                    currentLikes += 1;
-                } else {
-                    currentLikes -= 1;
-                }
-                likesElement.innerText = `${currentLikes} Likes`;
+        
+                likesElement.innerText = `${data.likeCount} Likes`;
             } else {
                 console.error('Server error:', data.message);
             }
@@ -668,7 +671,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         <div class="follow-container">
                             <input type="hidden" name="postLawyerId" value="${post.lawyer_id}">
-                            ${post.user_follows_post_owner === false ?  `${userId !== post.lawyer_id ? `<div onclick="postLawyerFollow(${post.post_id}, ${post.lawyer_id})" class="follow-btn-2" id="follow-btn-post-${post.post_id}" data-post-id="${post.post_id}">
+                            ${post.user_follows_post_owner === false ?  `${userId !== post.lawyer_id ? `<div  onclick="postLawyerFollow(${post.post_id}, ${post.lawyer_id})" class="follow-btn-2 follow-${post.lawyer_id}" id="follow-btn-post-${post.post_id}" data-post-id="${post.post_id}">
                              
                                   ${post.user_follows_post_owner ? 'Following' : 'Follow'}
                                 

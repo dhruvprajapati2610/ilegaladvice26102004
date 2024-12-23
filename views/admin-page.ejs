@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .user-list {
+            margin-top: 20px;
+        }
+
+        .user {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user:nth-child(even) {
+            background: #f0f0f5;
+        }
+
+        .user span {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .approve, .decline {
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            color: #fff;
+        }
+
+        .approve {
+            background-color: #4caf50;
+        }
+
+        .approve:hover {
+            background-color: #45a049;
+        }
+
+        .decline {
+            background-color: #f44336;
+        }
+
+        .decline:hover {
+            background-color: #e53935;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+         <div style="display:flex; justify-content:space-between">
+           <h1>Admin Panel</h1>
+           <button onclick="renderUsers()" class="fetchuser">Fetch Users</button>
+         </div>
+        
+        <div class="user-list" id="userList">
+        </div>
+    </div>
+
+    <script>
+        const users = [
+            { id: 1, name: 'Alice Smith' },
+            { id: 2, name: 'John Doe' },
+            { id: 3, name: 'Emma Johnson' },
+            { id: 4, name: 'Michael Brown' }
+        ];
+
+        async function renderUsers() {
+            const response = await fetch('/notVerifiedLawyers');
+            const result = await response.json(); 
+        
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+
+            if(result.success){
+                const users = result.notVerifiedLawyers;
+
+            users.forEach(user => {
+                const userDiv = document.createElement('div');
+                userDiv.className = 'user';
+                userDiv.id = `user-${user.id}`;
+                userDiv.innerHTML = `
+                <div class="user-info"> 
+                     <span>Name: ${user.name}</span>
+                       <span>Email: ${user.email}</span>
+                          <span>Enrollment no: ${user.lic_no}</span>
+                             <span>Contact number: ${user.c_no}</span>
+                             <span>User address: ${user.address}</span>
+                </div>
+                    
+                    <div class="actions">
+                        <button class="approve" onclick="approveUser(${user.id})">✔ Approve</button>
+                        <button class="decline">❌ Decline</button>
+                    </div>
+                `;
+                userList.appendChild(userDiv);
+            });
+            }else{
+                userList.innerHTML = `<p>${result.message}</p>`;
+            }
+
+        }
+
+        async function approveUser(id) {
+    try {
+        const response = await fetch(`/approveLawyer/${id}`, { method: 'POST' });
+        const result = await response.json();
+
+        if (result.success) {
+            alert('Lawyer approved successfully.');
+            const userDiv = document.getElementById(`user-${id}`);
+            if (userDiv) userDiv.remove();
+        } else {
+            alert('Failed to approve lawyer.');
+        }
+    } catch (error) {
+        console.error('Error approving lawyer:', error);
+        alert('An error occurred while approving the lawyer.');
+    }
+}
+
+async function declineUser(id) {
+    try {
+        const response = await fetch(`/declineLawyer/${id}`, { method: 'POST' });
+        const result = await response.json();
+
+        if (result.success) {
+            alert('Lawyer declined successfully.');
+            const userDiv = document.getElementById(`user-${id}`);
+            if (userDiv) userDiv.remove();
+        } else {
+            alert('Failed to decline lawyer.');
+        }
+    } catch (error) {
+        console.error('Error declining lawyer:', error);
+        alert('An error occurred while declining the lawyer.');
+    }
+}
+
+
+        
+        </script>
+</body>
+</html>
