@@ -494,6 +494,7 @@ transform: translate(-50%,-50%);
 .input-field{
     height: 50px;
     width: 100%;
+    max-width: 322px;
 }
 .input-field input{
     height: 100%;

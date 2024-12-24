@@ -26,7 +26,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Slab&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="community2.css">
+    <link rel="stylesheet" href="community.css">
 
 
 
@@ -78,7 +78,7 @@
                                             </div>
                                             <div class="user-name-day">
                                              <a href="/community/user-profile?id=<%=post.lawyer_id%>"><div class="user-name" ><%=post.lawyer_name%></div></a>   
-                                                <div class="post-day"><%=formatDate(post.created_at)%></div>
+                                                <div class="post-day"><%=post.timeAgo%></div>
                                             
                                             </div>
                                         </div>
@@ -101,7 +101,7 @@
                                            <% } %>
                                           <%  } %>
                                             
-                                            <div class="follow-icon"><i class="fa-solid fa-user-plus"></i></div>
+                                            
                                         </div>
                                     </div>
                                     <div class="post-info" onclick="redirectPostPage(<%=post.post_id%>)">
@@ -131,7 +131,7 @@
                                         </div>
                                         <hr>
                                         <div class="like-share-comment">
-                                            <div class="">
+                                            <div class="like">
                                                 <i class="like-btn fa-solid fa-thumbs-up like-bigger like-button <%= post.user_liked ? 'like-active' : '' %>" 
                                                    data-user-id="<%= userId %>" 
                                                    data-post-id="<%= post.post_id %>"></i>
@@ -677,7 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 
                                 </div>` : ''}` : ''}
                             
-                            <div class="follow-icon"><i class="fa-solid fa-user-plus"></i></div>
+                            
                         </div>
                     </div>
                     <div class="post-info" onclick="redirectPostPage(${post.post_id})">
@@ -899,6 +899,7 @@ const form1 = document.getElementById('communityForm');
         }
     })
 });
+
 
 
 

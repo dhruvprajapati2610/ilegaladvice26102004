@@ -597,6 +597,7 @@ hr{
     height: 500px;
     overflow-y: auto;
     row-gap: 10px;
+    overflow-x: hidden;
 }
 .notification-container ul{
     padding: 0!important;

@@ -35,18 +35,18 @@
                     
                  </li> 
                  <li class="dropdown-item item-5">
-                   <a href="/notifications">
-                    <div class="nav-link dropdown-button nav-link-notification" href="" style="<% if (currentRoute === '/notifications') { %>color: goldenrod;<% } %>"> 
+                  
+                   <a href="/notifications"> <div class="nav-link dropdown-button nav-link-notification" href="/notifications" style="<% if (currentRoute === '/notifications') { %>color: goldenrod;<% } %>"> 
                         <div class="notification-icon">
-                            <a href="/notifications">   <i class="fa-solid fa-bell"></i>
+                             <i class="fa-solid fa-bell"></i>
                             <%    if(notificationCount!=0){ %>
                                 <span><%=notificationCount%></span>
                              <%   }  %> 
                       
-                        </div></a>
+                        </div>
                         <span>Notification </span>
-                    </div> 
-                   </a>
+                    </div> </a>
+                  
                     
                     
                  </li>

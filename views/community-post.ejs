@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Slab&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/community-post2.css">  
+    <link rel="stylesheet" href="/community-post.css">  
 
     
         
@@ -54,12 +54,12 @@
                             <% if(follow) { %>
                                <div class="follow-container">
                                    <div class="follow-btn" onclick="toggleFollow(<%= lawyerId %>)">Following</div>
-                                   <div class="follow-icon"><i class="fa-solid fa-user-plus"></i></div>
+                                   
                                </div>
                             <% } else { %>
                                <div class="follow-container">
                                    <div class="follow-btn" onclick="toggleFollow(<%= lawyerId %>)">Follow</div>
-                                   <div class="follow-icon"><i class="fa-solid fa-user-plus"></i></div>
+                                   
                                </div>
                             <% } %>
                          <% } %>
@@ -627,11 +627,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(result);
             if (result.success) {
                 const newCommentElement = document.createElement('div');
-                newCommentElement.classList.add('review-container');
+                newCommentElement.classList.add('reveiew-container');
                 newCommentElement.id = `comment-${result.comment.id}`; 
 
                 newCommentElement.innerHTML = `
-                    <div class="reveiew-container" id="comment-${result.comment.id}">
+                  
         <div class="reveiew-name-rating">
             <div class="reveiew-name">
                 <a href="/community/user-profile?id=${result.comment.user_id}">
@@ -738,7 +738,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `).join('')}
         </div>
-    </div>
+    
                 `;
 
                 commentsContainer.prepend(newCommentElement);

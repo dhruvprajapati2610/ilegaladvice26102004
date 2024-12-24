@@ -13,7 +13,11 @@
          </div>
          <div class="nav-menu" id="nav-menu">
              <ul class="nav-list">
-                 
+                <li class="dropdown-item item-5">
+                   
+                    <a class="nav-link dropdown-button" href="/articles">Community</a> 
+                    
+                 </li> 
                   <li class="dropdown-item">
                      <div class="nav-link dropdown-button">
                          Find Lawyer <i class="ri-arrow-down-s-line dropdown-arrow"></i>
@@ -194,8 +198,45 @@
 
                          </div>
                  </li>
+                 <li class="dropdown-item">
+                    <div class="nav-link dropdown-button">
+                        Legal Info<i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                    </div>
+            
+                    <div class="dropdown-container">
+                        <div class="dropdown-content">
+            
+                            <div class="dropdown-group">
+                               <!-- <div class="dropdown-icon">
+                                <i class="ri-community-line"></i>
+                               </div> -->
+                               <span class="dropdown-title">Sections   </span>
+                               <ul class="dropdown-list">
+                                <li>
+                                    <a href="/allipc"class="dropdown-link">IPC Sections</a>
+                                </li>
+                                <li>
+                                   <a href="/crpclist" class="dropdown-link">CRPC Sections</a>
+                               </li>
+                                <li>
+                                    <a href="/bns"class="dropdown-link">BNS Sections</a>
+                                </li>
+                                
+                               </ul>
+                            </div>
+                            
+                     
+            
+                        </div>
+                    </div>
+            
+                </li>
                  <!-- <li><a href="#" class="nav-link">Legal Info</a></li> -->  
-                 
+                 <li class="dropdown-item item-5">
+                   
+                    <a class="nav-link dropdown-button" href="/articles">Articles</a> 
+                    
+                 </li> 
                  <li class="dropdown-item">
                      <div class="nav-link dropdown-button">
                          Company<i class="ri-arrow-down-s-line dropdown-arrow"></i>
@@ -240,46 +281,15 @@
                      </div>
              
                  </li>
-                 <li class="dropdown-item">
-                    <div class="nav-link dropdown-button">
-                        Legal Info<i class="ri-arrow-down-s-line dropdown-arrow"></i>
-                    </div>
-            
-                    <div class="dropdown-container">
-                        <div class="dropdown-content">
-            
-                            <div class="dropdown-group">
-                               <!-- <div class="dropdown-icon">
-                                <i class="ri-community-line"></i>
-                               </div> -->
-                               <span class="dropdown-title">Sections   </span>
-                               <ul class="dropdown-list">
-                                <li>
-                                    <a href="/allipc"class="dropdown-link">IPC Sections</a>
-                                </li>
-                                <li>
-                                   <a href="/crpclist" class="dropdown-link">CRPC Sections</a>
-                               </li>
-                                <li>
-                                    <a href="/bns"class="dropdown-link">BNS Sections</a>
-                                </li>
-                                
-                               </ul>
-                            </div>
-                            
-                     
-            
-                        </div>
-                    </div>
-            
-                </li>
-                 <li class="dropdown-item item-5">
-                   
-                    <a class="nav-link dropdown-button" href="/articles">Articles</a> 
-                    
-                 </li> 
+               
+                 
                  <li class="dropdown-item item-5" >
-                   <a class="nav-link dropdown-button" href="/userAccount">My Account</a> 
+                    <% if(userId){ %>
+                        <a class="nav-link dropdown-button" href="/userAccount">My Account</a> 
+                   <% } else{ %>
+                    <a class="nav-link dropdown-button" href="/signup">Login/Signup</a> 
+                 <%  } %>
+                  
                          <!-- <i class="ri-arrow-down-s-line dropdown-arrow"></i> -->
                  
 

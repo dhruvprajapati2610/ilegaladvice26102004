@@ -85,6 +85,10 @@ app.use((req,res,next)=>{
   res.locals.errorMessage = req.flash('errorMessage');
   next(); 
 });
+app.use((req, res, next) => {
+  res.locals.userId = req.user ? req.user.id : false; // Set userId or false
+  next();
+});
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 app.set('partials',path.join(__dirname,'views/partials'));
@@ -240,32 +244,38 @@ async function geocodeAddress(address) {
 // geocodeAddress('Shop No.04, YourLawyer - Law Firm, Samanvay CHS Ltd, Plot No.13, beside Bank Of Maharashtra, Block G, Sector 11, Kharghar, Navi Mumbai, Maharashtra 410210 ');
 
 app.get('/about-us',(req,res)=>{
-  res.render('aboutus');
+  const userId = req.user.id;
+  res.render('aboutus',{userId});
 })
 
 app.get('/privacy-policy',(req,res)=>{
-  res.render('privacy_policy');
+  const userId = req.user.id;
+  res.render('privacy_policy',{userId});
 })
 
 app.get('/terms-of-use',(req,res)=>{
-  res.render('terms-of-use');
+  const userId = req.user.id;
+  res.render('terms-of-use',{userId});
 })
 
 app.get('/contact-us',(req,res)=>{
-  res.render('contact-us')
+  const userId = req.user.id;
+  res.render('contact-us',{userId});
 })
 
 app.get('/crpclist',(req,res)=>{
-  res.render('crpclist.ejs');
+  const userId = req.user.id;
+  res.render('crpclist.ejs',{userId});
 })
 
 app.get('/crpc',async(req,res)=>{
   const chapter = req.query.chapter;
+  const userId = req.user.id;
   try{
     var sql = 'select * from crpc_data where chapter_number=$1'
     var crpc = await pool.query(sql,[chapter]);
     console.log(crpc.rows);
-    res.render('crpcDrop.ejs',{data: crpc.rows});
+    res.render('crpcDrop.ejs',{data: crpc.rows, userId});
   } catch (err) {
     console.error('Error retrieving data from the database:',err);
     res.status(500).send('Internal server error');
@@ -273,12 +283,14 @@ app.get('/crpc',async(req,res)=>{
 })
 
 app.get('/bns',(req,res)=>{
-  res.render('bnschapters.ejs');
+  const userId = req.user.id;
+  res.render('bnschapters.ejs',{userId});
 })
 
 
 app.get('/',async(req,res)=>{
   try{
+    const userId = req.user.id;
     const result = await pool.query(`
       WITH review_aggregates AS (
       SELECT lawyer_id, AVG(rating) AS average_rating, COUNT(client_id) AS client_count
@@ -300,17 +312,23 @@ app.get('/',async(req,res)=>{
         average_rating: row.average_rating || 0,
         client_count: row.client_count || 0,
         city: row.city,
-        state: row.states,
+        state: row.states
     }))
-    res.render('homepage.ejs',{lawyers,roundToOneDecimalPlace: roundToOneDecimalPlace});
+    res.render('homepage.ejs',{lawyers,userId,roundToOneDecimalPlace: roundToOneDecimalPlace});
   } catch(error){
     console.log(error);
   } 
 });
 
-app.get('/signup',async(req,res)=>{
-  res.render('home3.ejs',{message: '',success: false});
+app.get('/signup', async (req, res) => {
+  // Check if req.user exists and has an id
+  if (req.user && req.user.id) {
+    res.render('home3.ejs', { userId: req.user.id, message: '', success: false });
+  } else {
+    res.render('home3.ejs', { userId: false, message: '', success: false });
+  }
 });
+
 
 // app.get('/api',(req,res)=>{
 //   res.render('api.ejs');
@@ -333,12 +351,24 @@ app.get('/admin',isuAuthenticated, async (req, res) => {
   const userId = req.user.id;
   const isAdminQuery = `select * from clientsignup where id = $1`;
   const isAdmin = await pool.query(isAdminQuery, [userId]);
+  if (isAdmin.rows.length === 0) {
+    res.redirect('/');
+    return;
+  }
   if(isAdmin.rows[0].is_admin === false){
     res.redirect('/');
     return;
   }
-  res.render('admin-page');
+  res.render('admin-page', {userId});
 })
+
+
+
+
+
+
+
+
 
 app.get('/notVerifiedLawyers', async (req, res) => {
   const notVerifiedLawyersQuery = await pool.query("select * from lawyers where admin_verified = false");
@@ -498,8 +528,6 @@ app.get('/bns_section', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
-
-
 
 app.get('/search-ipc',async(req,res)=>{
   try{
@@ -715,9 +743,9 @@ app.get('/userAccount',isuAuthenticated,async(req,res)=>{
       likes: parseInt(article.like_count,10)
     }));
 
-      res.render('lawyeraccount',{user: req.user, reviews, averageRating:parseFloat(averageRating)||0, clientCount:clientCount||0,articles});
+      res.render('lawyeraccount',{user: req.user,userId, reviews, averageRating:parseFloat(averageRating)||0, clientCount:clientCount||0,articles});
     } else {
-      res.render('clientaccount',{user: req.user});
+      res.render('clientaccount',{user: req.user, userId});
     }
   } catch(err){
     console.log(err);
@@ -728,6 +756,7 @@ app.get('/userAccount',isuAuthenticated,async(req,res)=>{
 app.get('/lawyersprofile',async(req,res)=>{
 const client = await pool.connect();
 const lawyerId = req.query.lawyerId;
+const userId = req.user.id;
 console.log(lawyerId);
 const currentUser= req.user||null;
 try{
@@ -785,7 +814,7 @@ try{
     clientCount = reviewsResult.rows[0].client_count;
   }
   await client.query('COMMIT');
-  res.render('lawyerprofile',{lawyerId,lawyers,currentUser, reviews, averageRating:parseFloat(averageRating)||0, clientCount:clientCount||0, successMessage: req.flash('success'),errorMessage: req.flash('error')});
+  res.render('lawyerprofile',{lawyerId,userId,lawyers,currentUser, reviews, averageRating:parseFloat(averageRating)||0, clientCount:clientCount||0, successMessage: req.flash('success'),errorMessage: req.flash('error')});
  
  } catch (error){
     await client.query('ROLLBACK');
@@ -801,6 +830,7 @@ app.get('/lawyerspage', async(req, res) => {
   const client = await pool.connect();
 try{
   const userLat = req.query.latitude;
+  const userId = req.user.id;
   console.log(userLat);
   const userLon = req.query.longitude;
   const law = req.query.law;
@@ -841,9 +871,9 @@ select
         ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
     ) / 1000 as distance
 from lawyers l
-left join review_aggregates ra on l.id = ra.lawyer_id
+left join review_aggregates ra on l.id = ra.lawyer_id 
 where 
-    l.admin_verified = TRUE
+    l.admin_verified = TRUE and l.lead_community = TRUE
     and ST_Distance(
         ST_SetSRID(ST_MakePoint(l.longitude, l.latitude), 4326)::geography,
         ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
@@ -894,13 +924,14 @@ order by distance ASC;
      genderFilter,
      experienceFilter,
      search,
+     userId
    })
   }
 else{
   const countResult = await client.query(`
    SELECT COUNT(*) AS total_lawyers
   FROM lawyers
-  WHERE admin_verified = TRUE;
+  WHERE admin_verified = TRUE and lead_community = TRUE;
 
   `);
   const totalLawyers = parseInt(countResult.rows[0].total_lawyers, 10);
@@ -921,6 +952,7 @@ SELECT
 FROM lawyers l
 LEFT JOIN review_aggregates ra ON l.id = ra.lawyer_id
 WHERE l.admin_verified = TRUE
+and l.lead_community = TRUE
 ORDER BY ra.average_rating ASC, ra.client_count ASC
 LIMIT $1 OFFSET $2;
 `, [limit, offset]
@@ -959,7 +991,8 @@ LIMIT $1 OFFSET $2;
     languageFilter,
     genderFilter,
     experienceFilter,
-    search
+    search,
+    userId
     })
 }
 }
@@ -997,19 +1030,19 @@ app.get('/filter-lawyers', async (req, res) => {
   const city = req.query.city;
   const language = req.query.language;
   const search = req.query.search||'';
-
+  const userId = req.user.id;
   const page = parseInt(req.query.page, 10) || 1;
   const limit = 10;
   const offset = (page - 1) * limit;
 
-  let countQuery = `SELECT count(DISTINCT l.id) as total_count FROM lawyers l LEFT JOIN reviews r ON l.id = r.lawyer_id WHERE 1=1 AND  l.admin_verified = TRUE`;
+  let countQuery = `SELECT count(DISTINCT l.id) as total_count FROM lawyers l LEFT JOIN reviews r ON l.id = r.lawyer_id WHERE 1=1 AND  l.admin_verified = TRUE AND l.lead_community = TRUE`;
   
   let query = `
     SELECT l.id, l.name, l.yrs_exp, l.image, l.city, l.states, l.gender, l.language,
            l.area_of_prac, AVG(r.rating) AS average_rating, COUNT(r.client_id) AS client_count
     FROM lawyers l
     LEFT JOIN reviews r ON l.id = r.lawyer_id
-    WHERE 1=1 AND l.admin_verified = TRUE
+    WHERE 1=1 AND l.admin_verified = TRUE AND l.lead_community = TRUE
   `;
 
   let queryParams = [];
@@ -1156,6 +1189,7 @@ app.get('/filter-lawyers', async (req, res) => {
       languageFilter,
       genderFilter,
       experienceFilter,
+      userId,
       search
     });
   } catch (err) {
@@ -1191,6 +1225,7 @@ app.get('/search-lawyers', async(req, res) => {
   const client = await pool.connect();
 try{
   await client.query('BEGIN');
+  const userId = req.user.id;
   const cityFilter = req.query.cityFilter;
   const stateFilter = req.query.state;
   const aopFilter = req.query.areaofpractice;
@@ -1209,7 +1244,7 @@ try{
   const whereClauses = searchWords.map((_, index) => `(name ilike $${index+1} or area_of_prac ilike $${index+1})`);
   const whereClause = whereClauses.join(' OR ');
 
-  const searchLawyersResult = `select count(*) from lawyers where ${whereClause} and lawyers.admin_verified = TRUE`;
+  const searchLawyersResult = `select count(*) from lawyers where ${whereClause} and admin_verified = TRUE and lead_community = TRUE`;
   // const values =`%${searchWords}%`;
   const result1 = await client.query(searchLawyersResult, searchWords);
   const totalLawyers = parseInt(result1.rows[0].count, 10);
@@ -1230,6 +1265,7 @@ try{
    from lawyers l
    left join review_aggregates ra on l.id=ra.lawyer_id
    where ${whereClause} and l.admin_verified = TRUE
+   and l.lead_community = TRUE
    order by ra.average_rating desc nulls last
    limit $${searchWords.length+1} offset $${searchWords.length+2}
  `,[...searchWords,limit,offset]);
@@ -1271,6 +1307,7 @@ limit,
 offset,
 law,
 city,
+userId,
 language,
 cityFilter,
 stateFilter,
@@ -1307,6 +1344,7 @@ app.get('/search-homepage-lawyers', async (req, res) => {
   const ratingFilter = req.query.rating;
   const stateFilter = req.query.state;
   const search = req.query.search||'';
+  const userId = req.user.id;
   const queryParams = [];
   let whereClause = [];
 
@@ -1338,7 +1376,7 @@ app.get('/search-homepage-lawyers', async (req, res) => {
     const totalLawyersResult = await pool.query(`
       SELECT COUNT(*) as total_count
       FROM lawyers l  
-      ${whereClauseString} and l.admin_verified = TRUE
+      ${whereClauseString} and l.admin_verified = TRUE and l.lead_community = TRUE
     `, queryParams);
     
     const totalLawyers = parseInt(totalLawyersResult.rows[0].total_count, 10);
@@ -1361,6 +1399,7 @@ app.get('/search-homepage-lawyers', async (req, res) => {
       FROM lawyers l
       LEFT JOIN review_aggregates ra ON l.id = ra.lawyer_id
       ${whereClauseString} and l.admin_verified = TRUE
+      and l.lead_community = TRUE
       ORDER BY ra.average_rating DESC, ra.client_count DESC
       LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}
     `, [...queryParams, limit, offset]);
@@ -1404,6 +1443,7 @@ app.get('/search-homepage-lawyers', async (req, res) => {
       stateFilter,
       languageFilter,
       cityFilter,
+      userId,
       search
     });
 
@@ -1869,11 +1909,30 @@ LIMIT 6;
 `,[userId]);
 
 const mutuals = followDataMutuals.rows;
-
 //Notification Count
 const notificationCountQuery = await pool.query(`SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`, [userId]);
 const notificationCount = notificationCountQuery.rows[0].count;
 console.log(notificationCount);
+
+for (let post of posts) {
+  const createdAt = new Date(post.created_at);
+  const now = new Date();
+
+  const diffMs = now - createdAt;
+
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffHours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+  const diffMinutes = Math.floor((diffMs / (1000 * 60)) % 60);
+
+  if (diffDays >= 1) {
+      post.timeAgo = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+  } else if (diffHours >= 1) {
+      post.timeAgo = `${diffHours} hr${diffHours > 1 ? 's' : ''} ago`;
+  } else {
+      post.timeAgo = `${diffMinutes} min${diffMinutes > 1 ? 's' : ''} ago`;
+  }
+}
+
 
       await client.query('COMMIT');
 
@@ -3137,6 +3196,8 @@ app.post('/signup', upload.single('image'), async (req, res) => {
       } else {
         const { l_password, l_c_password, l_name: name, l_email: email, phone: c_no, areaofpractice: area_of_prac, state, city, experience: yrs_exp, bio, gender, language, courts, address, lic_no } = req.body;
 
+        const leadAccountChecked = req.body.leadAccount === 'on';
+        const lead_community = leadAccountChecked ? false : true;
        
         if (l_password !== l_c_password) {
           responseMessage = { message: 'Password and confirm password do not match, please try again.', success: false };
@@ -3185,8 +3246,9 @@ app.post('/signup', upload.single('image'), async (req, res) => {
             });
 
             await transporter.sendMail(mailOptions);
-            const sql1 = 'INSERT INTO lawyers (name, email, passw, cpassw, c_no, area_of_prac, states, city, yrs_exp, bio, image, gender, language, courts, verification_token, is_verified, latitude, longitude, address, lic_no) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)';
-            await pool.query(sql1, [name, email, passw, passw, c_no, area_of_prac, state, city, yrs_exp, bio, imageUrl, gender, language, courts, token, false, latitude, longitude, address, lic_no]);
+
+            const sql1 = 'INSERT INTO lawyers (name, email, passw, cpassw, c_no, area_of_prac, states, city, yrs_exp, bio, image, gender, language, courts, verification_token, is_verified, latitude, longitude, address, lic_no, lead_community) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)';
+            await pool.query(sql1, [name, email, passw, passw, c_no, area_of_prac, state, city, yrs_exp, bio, imageUrl, gender, language, courts, token, false, latitude, longitude, address, lic_no, lead_community]);
 
             responseMessage = { message: 'User registered! Please verify your email to complete registration.', success: true };
           }
