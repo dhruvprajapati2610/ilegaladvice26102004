@@ -86,9 +86,13 @@ app.use((req,res,next)=>{
   next(); 
 });
 app.use((req, res, next) => {
-  res.locals.userId = req.user ? req.user.id : false; // Set userId or false
+  res.locals.userId = req.user ? req.user.id : false;
+  res.locals.role = req.user? req.user.role : false // Set userId or false
   next();
 });
+
+
+
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 app.set('partials',path.join(__dirname,'views/partials'));
@@ -745,6 +749,7 @@ app.get('/userAccount',isuAuthenticated,async(req,res)=>{
 
       res.render('lawyeraccount',{user: req.user,userId, reviews, averageRating:parseFloat(averageRating)||0, clientCount:clientCount||0,articles});
     } else {
+      const userId = req.user.id;
       res.render('clientaccount',{user: req.user, userId});
     }
   } catch(err){
