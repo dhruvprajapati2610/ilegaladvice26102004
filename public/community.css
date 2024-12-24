@@ -1623,9 +1623,9 @@ a {
     .share span, .comment span{
         display: none;
     }
-    .like-share-comment span{
+    /* .like-share-comment span{
         display: none;
-    }
+    } */
     .like-share-comment i{
         font-size: 25px;
     }
