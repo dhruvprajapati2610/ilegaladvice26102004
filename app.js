@@ -294,7 +294,6 @@ app.get('/bns',(req,res)=>{
 
 app.get('/',async(req,res)=>{
   try{
-    const userId = req.user.id;
     const result = await pool.query(`
       WITH review_aggregates AS (
       SELECT lawyer_id, AVG(rating) AS average_rating, COUNT(client_id) AS client_count
@@ -318,7 +317,7 @@ app.get('/',async(req,res)=>{
         city: row.city,
         state: row.states
     }))
-    res.render('homepage.ejs',{lawyers,userId,roundToOneDecimalPlace: roundToOneDecimalPlace});
+    res.render('homepage.ejs',{lawyers,roundToOneDecimalPlace: roundToOneDecimalPlace});
   } catch(error){
     console.log(error);
   } 
