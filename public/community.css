@@ -1216,6 +1216,9 @@ a {
     border: 1px solid rgb(255, 255, 255);
     border-radius: 10px;
 }
+.mobile-suggestions{
+    display: none;
+}
 .s-heading{
     padding: 1rem;
 }
@@ -1321,10 +1324,9 @@ a {
 }
 .follow-btn, .follow-btn-2{
     background-color: #f5c44a;
-} {
     font-size: 20px;
     padding: 4px 17px;
-}
+} 
 .suggestion-account .profile-image img {
     height: 50px;
     width: 50px;
@@ -1361,11 +1363,9 @@ a {
 }
 @media screen and (max-width:992px){
     .follow-btn, .follow-btn-2{
-        background-color: #f5c44a;
-    } {
         font-size: 17px;
         padding: 7px 14px;
-    }
+    } 
     .form-headings h2{
         font-size: 25px;
     }
@@ -1502,14 +1502,132 @@ a {
     }
 }
 @media screen and (max-width:768px){
+    .b-suggestions{
+        display: none!important;
+    }
+    .sub-body{
+        padding: 2rem 0rem 2rem 0rem;
+        align-items: center;
+    }
+.w-user-name {
+    font-size: 25px;
+}    
+.swiper-pagination{
+    top: 345px!important;
+}
+
+.sub-body{
+    flex-direction: column;
+    row-gap: 2rem;
+}
+.community-section-3{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    padding-bottom: 5rem;
+    right: 0;
+    margin: 0;
+}
+.mobile-suggestions{
+    display: block;
+   }
+   .suggestion-container {
+        width: 100%;
+        margin: 0 1rem;
+        box-shadow: none;
+        border-top: 1px solid #a2a2a2;
+        border-bottom: 1px solid #a2a2a2;
+        background: #f8f8f8;
+        border-radius: 0px;
+    }
+    
+    .s-content {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .swiper-container {
+        width: 100%;
+        padding: 10px;
+        overflow: hidden;
+    }
+    .swiper-wrapper {
+        display: flex;
+        
+          
+    }
+    .swiper-slide {
+        flex-direction: column;
+        width: 100%;
+        
+    }
+    
+    .suggestion-account {
+        flex-direction: column;
+        max-width: 32%;
+        row-gap: 1rem;
+        align-items: center;
+        box-shadow: 0.1rem 0.1rem 0.5rem rgba(0, 0, 0, 0.3);
+        border: 1px solid rgb(255, 255, 255);
+        border-radius: 10px;
+        padding: 1rem 0.5rem;
+        box-sizing: border-box;
+       
+    }
+    
+    .suggestion-account .user-name-day {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .suggestion-account .follow-btn {
+        width: 100px;
+        display: flex;
+        justify-content: center;
+        font-size: 17px;
+        padding: 5px 13px;
+    }
+    
+    .suggestion-account .follow-icon {
+        display: none;
+    }
+    
+    .suggestion-account .user-name, .suggestion-account .followed-by {
+        text-align: center;
+    }
+    
+    .suggestion-account .profile-name {
+        width: 100%;
+        padding-right: 0;
+    }
+    
+    .suggestion-account .profile-name {
+        row-gap: 0.5rem;
+    }
+    
+    .suggestion-account .profile-name {
+        flex-direction: column;
+    }
+    
+    .suggestion-account .profile-image img {
+        height: 115px;
+        width: 115px;
+    }
+    
+    .suggestion-account .profile-image {
+        height: 115px;
+        width: 115px;
+    }
+
     .w-user-name {
         font-size: 23px;
     }
-    .community-section-3{
-        display: none;
-    }
+ 
     .post-section-0 {
         width: 90%;
+        padding: 0 0.5rem;
     }
     .bio {
         height: 200px !important;
@@ -1544,12 +1662,15 @@ a {
 
 }
 @media screen and (max-width:640px){
-    .sub-body {
+    /* .sub-body {
         padding: 2rem 1.5rem 2rem 1.5rem;
-    }
+    } */
     .post-section-0{
         width: 100%;
         padding: 0;
+    }
+    .suggestion-container {
+        column-gap: 2rem;
     }
     .like, .comment, .share {
         height: 30px;
@@ -1567,6 +1688,37 @@ a {
  
 }
 @media screen and (max-width:575px){
+    .swiper-pagination{
+        top: 310px !important;
+    }
+    .suggestion-account .profile-image img {
+        height: 100px;
+        width: 100px;
+    }
+    
+    .suggestion-account .profile-image {
+        height: 100px;
+        width: 100px;
+    }
+    .suggestion-account .follow-btn {
+        width: 90px;
+        display: flex;
+        justify-content: center;
+        font-size: 15px;
+        padding: 3px 5px;
+    }
+    .suggestion-account{
+        row-gap: 0.5rem;
+    }
+    .suggestion-account .profile-name {
+        row-gap: 5px;
+    }
+    .suggestion-account .user-name {
+        font-size: 14px;
+    }
+    .suggestion-account .followed-by {
+        font-size: 12px;
+    }
     .body{
         top: 12%;
     }
@@ -1588,8 +1740,7 @@ a {
         font-size: 16px;
     }
     .user-info .follow-btn, .follow-btn-2{
-        background-color: #f5c44a;
-    }{
+        
         font-size: 13px;
         padding: 5px 11px;
     }
@@ -1667,6 +1818,9 @@ a {
     }
 }
 @media screen and (max-width:490px) {
+    .suggestion-account {
+        max-width: 50%; 
+    }
     .user-info .profile-image img,.write-post .profile-image img {
         height: 50px;
         width: 50px;
