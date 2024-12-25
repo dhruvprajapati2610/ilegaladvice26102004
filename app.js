@@ -248,38 +248,34 @@ async function geocodeAddress(address) {
 // geocodeAddress('Shop No.04, YourLawyer - Law Firm, Samanvay CHS Ltd, Plot No.13, beside Bank Of Maharashtra, Block G, Sector 11, Kharghar, Navi Mumbai, Maharashtra 410210 ');
 
 app.get('/about-us',(req,res)=>{
-  const userId = req.user.id;
-  res.render('aboutus',{userId});
+  res.render('aboutus');
 })
 
 app.get('/privacy-policy',(req,res)=>{
-  const userId = req.user.id;
-  res.render('privacy_policy',{userId});
+  res.render('privacy_policy');
 })
 
 app.get('/terms-of-use',(req,res)=>{
-  const userId = req.user.id;
-  res.render('terms-of-use',{userId});
+  
+  res.render('terms-of-use');
 })
 
 app.get('/contact-us',(req,res)=>{
-  const userId = req.user.id;
-  res.render('contact-us',{userId});
+  res.render('contact-us');
 })
 
 app.get('/crpclist',(req,res)=>{
-  const userId = req.user.id;
-  res.render('crpclist.ejs',{userId});
+
+  res.render('crpclist.ejs');
 })
 
 app.get('/crpc',async(req,res)=>{
   const chapter = req.query.chapter;
-  const userId = req.user.id;
   try{
     var sql = 'select * from crpc_data where chapter_number=$1'
     var crpc = await pool.query(sql,[chapter]);
     console.log(crpc.rows);
-    res.render('crpcDrop.ejs',{data: crpc.rows, userId});
+    res.render('crpcDrop.ejs',{data: crpc.rows});
   } catch (err) {
     console.error('Error retrieving data from the database:',err);
     res.status(500).send('Internal server error');
@@ -287,8 +283,7 @@ app.get('/crpc',async(req,res)=>{
 })
 
 app.get('/bns',(req,res)=>{
-  const userId = req.user.id;
-  res.render('bnschapters.ejs',{userId});
+  res.render('bnschapters.ejs');
 })
 
 
@@ -760,7 +755,6 @@ app.get('/userAccount',isuAuthenticated,async(req,res)=>{
 app.get('/lawyersprofile',async(req,res)=>{
 const client = await pool.connect();
 const lawyerId = req.query.lawyerId;
-const userId = req.user.id;
 console.log(lawyerId);
 const currentUser= req.user||null;
 try{
@@ -818,7 +812,7 @@ try{
     clientCount = reviewsResult.rows[0].client_count;
   }
   await client.query('COMMIT');
-  res.render('lawyerprofile',{lawyerId,userId,lawyers,currentUser, reviews, averageRating:parseFloat(averageRating)||0, clientCount:clientCount||0, successMessage: req.flash('success'),errorMessage: req.flash('error')});
+  res.render('lawyerprofile',{lawyerId,lawyers,currentUser, reviews, averageRating:parseFloat(averageRating)||0, clientCount:clientCount||0, successMessage: req.flash('success'),errorMessage: req.flash('error')});
  
  } catch (error){
     await client.query('ROLLBACK');
@@ -834,7 +828,6 @@ app.get('/lawyerspage', async(req, res) => {
   const client = await pool.connect();
 try{
   const userLat = req.query.latitude;
-  const userId = req.user.id;
   console.log(userLat);
   const userLon = req.query.longitude;
   const law = req.query.law;
@@ -928,7 +921,6 @@ order by distance ASC;
      genderFilter,
      experienceFilter,
      search,
-     userId
    })
   }
 else{
@@ -996,7 +988,6 @@ LIMIT $1 OFFSET $2;
     genderFilter,
     experienceFilter,
     search,
-    userId
     })
 }
 }
@@ -1034,7 +1025,6 @@ app.get('/filter-lawyers', async (req, res) => {
   const city = req.query.city;
   const language = req.query.language;
   const search = req.query.search||'';
-  const userId = req.user.id;
   const page = parseInt(req.query.page, 10) || 1;
   const limit = 10;
   const offset = (page - 1) * limit;
@@ -1193,7 +1183,6 @@ app.get('/filter-lawyers', async (req, res) => {
       languageFilter,
       genderFilter,
       experienceFilter,
-      userId,
       search
     });
   } catch (err) {
@@ -1229,7 +1218,6 @@ app.get('/search-lawyers', async(req, res) => {
   const client = await pool.connect();
 try{
   await client.query('BEGIN');
-  const userId = req.user.id;
   const cityFilter = req.query.cityFilter;
   const stateFilter = req.query.state;
   const aopFilter = req.query.areaofpractice;
@@ -1311,7 +1299,6 @@ limit,
 offset,
 law,
 city,
-userId,
 language,
 cityFilter,
 stateFilter,
@@ -1348,7 +1335,6 @@ app.get('/search-homepage-lawyers', async (req, res) => {
   const ratingFilter = req.query.rating;
   const stateFilter = req.query.state;
   const search = req.query.search||'';
-  const userId = req.user.id;
   const queryParams = [];
   let whereClause = [];
 
@@ -1373,14 +1359,18 @@ app.get('/search-homepage-lawyers', async (req, res) => {
     whereClause.push(`l.language ILIKE $${queryParams.length}`);
   }
 
-  const whereClauseString = whereClause.length > 0 ? `WHERE ${whereClause.join(' AND ')}` : '';
+  const whereClauseString = whereClause.length > 0 
+  ? `WHERE ${whereClause.join(' AND ')} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
+  : `WHERE l.admin_verified = TRUE AND l.lead_community = TRUE`;
+
+
 
   try {
     // 1. Query to count total number of lawyers matching the filters
     const totalLawyersResult = await pool.query(`
       SELECT COUNT(*) as total_count
       FROM lawyers l  
-      ${whereClauseString} and l.admin_verified = TRUE and l.lead_community = TRUE
+      ${whereClauseString}
     `, queryParams);
     
     const totalLawyers = parseInt(totalLawyersResult.rows[0].total_count, 10);
@@ -1402,8 +1392,7 @@ app.get('/search-homepage-lawyers', async (req, res) => {
         ra.client_count
       FROM lawyers l
       LEFT JOIN review_aggregates ra ON l.id = ra.lawyer_id
-      ${whereClauseString} and l.admin_verified = TRUE
-      and l.lead_community = TRUE
+      ${whereClauseString}
       ORDER BY ra.average_rating DESC, ra.client_count DESC
       LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}
     `, [...queryParams, limit, offset]);
@@ -1447,7 +1436,6 @@ app.get('/search-homepage-lawyers', async (req, res) => {
       stateFilter,
       languageFilter,
       cityFilter,
-      userId,
       search
     });
 
