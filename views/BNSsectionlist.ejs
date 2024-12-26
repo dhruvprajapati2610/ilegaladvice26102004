@@ -22,8 +22,8 @@
        <div class="ipc-container">
         <div class="search-box-container">
             <div class="search-box">
-             <form action="#">
-               <input type="search" name="search" placeholder="Search for BNS Sections" id="search">
+             <form action="#" id="bnsSearch">
+               <input type="search" name="search" placeholder="Search for BNS Sections" id="search" oninput="performSearch()">
                <i class="fa-solid fa-magnifying-glass"></i>
                </form>
             </div>
@@ -126,6 +126,69 @@ const crpcSections=document.querySelector(".crpc-sub-chapters");
 
 crpcChp.onclick= () => {
    crpcSections.classList.toggle("crpc-subsec-active")
+}
+
+document.getElementById('bnsSearch').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault(); 
+  }
+});
+
+//BNS SECTIONS SEARCH IN A CHAPTER
+async function performSearch() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const chapterNumber = urlParams.get('chapter');
+    const searchInput = document.getElementById('search');
+    const resultsContainer = document.querySelector('.ipc-list');
+    const searchTerm = searchInput.value.trim();
+
+    if (!searchTerm) {
+        console.log('NO SEARCH TERM')
+        const response1 = await fetch(`/bns_sections/${chapterNumber}`);
+        const data1 = await response1.json();
+                resultsContainer.innerHTML = data1.data
+                    .map(section => `
+                        <li>
+            <span class="arrow">➤</span>
+            <span class="crpc-link">
+                <a href="/bns_section?section_number=${section.section_number}">
+                <span class="crpc-chp">BNS Section ${section.section_number} - ${section.section_name}></span>
+                </a>
+            </span>
+        </li>
+                    `)
+                    .join('');
+            
+        return;
+    }
+ 
+    try {
+        const response = await fetch(`/bns_sections/search/${chapterNumber}?search=${encodeURIComponent(searchTerm)}`);
+        const data = await response.json();
+        if (data.success) {
+            if (data.data.length > 0) {
+                resultsContainer.innerHTML = data.data
+                    .map(section => `
+                        <li>
+            <span class="arrow">➤</span>
+            <span class="crpc-link">
+                <a href="/bns_section?section_number=${section.section_number}">
+                <span class="crpc-chp">BNS Section ${section.section_number} - ${section.section_name}></span>
+                </a>
+            </span>
+        </li>
+                    `)
+                    .join('');
+            } else {
+                resultsContainer.innerHTML = '<p>No results found.</p>';
+            }
+        } else {
+            resultsContainer.innerHTML = `<p>${data.message}</p>`;
+        }
+    } catch (error) {
+        console.error('Error performing search:', error);
+        resultsContainer.innerHTML = '<p>An error occurred while fetching results.</p>';
+    }
 }
 
  
