@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Chat</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/chat.js" defer></script>
+</head>
+<body>
+  <h1>Welcome to the Chat</h1>
+  <input type="hidden" id="currentUserId" value="<%= currentUserId %>">
+  <select id="receiverId">
+    <% users.forEach(user => { %>
+      <option value="<%= user.id %>"><%= user.username %></option>
+    <% }); %>
+  </select>
+
+  <div id="chatBox"></div>
+  <p id="typingIndicator"></p>
+
+  <input id="messageInput" type="text" placeholder="Type a message">
+  <button id="sendButton">Send</button>
+
+
+  <script>
+    const socket = io();
+
+const currentUserId = document.getElementById("currentUserId").value;
+
+// Notify the server about the connection
+socket.emit("userConnected", currentUserId);
+
+// Handle typing indicator
+const inputField = document.getElementById("messageInput");
+inputField.addEventListener("keypress", () => {
+  const to = document.getElementById("receiverId").value;
+  socket.emit("typing", { from: currentUserId, to });
+});
+
+socket.on("userTyping", (data) => {
+  const typingIndicator = document.getElementById("typingIndicator");
+  typingIndicator.textContent = `${data.from} is typing...`;
+  setTimeout(() => (typingIndicator.textContent = ""), 2000);
+});
+
+// Send messages
+document.getElementById("sendButton").addEventListener("click", () => {
+  const content = inputField.value;
+  const to = document.getElementById("receiverId").value;
+  socket.emit("sendMessage", { from: currentUserId, to, content });
+  inputField.value = "";
+});
+
+// Receive messages
+socket.on("receiveMessage", (data) => {
+  const chatBox = document.getElementById("chatBox");
+  const message = document.createElement("div");
+  message.textContent = `${data.from}: ${data.content}`;
+  chatBox.appendChild(message);
+});
+
+  </script>
+</body>
+</html>

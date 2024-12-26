@@ -1,4 +1,5 @@
 const express= require('express');
+const cron = require("node-cron");
 const bodyParser= require('body-parser');
 const {Pool}= require('pg');
 const axios = require('axios');
@@ -61,6 +62,21 @@ const pool= new Pool({
   max: 30,                 
   idleTimeoutMillis: 60000,   
   connectionTimeoutMillis: 3000
+});
+
+cron.schedule("0 0 * * *", async () => {
+  console.log("Running scheduled task: Deleting 1-week-old notifications");
+
+  try {
+    const query = `
+      DELETE FROM notifications 
+      WHERE created_at < NOW() - INTERVAL '7 days';
+    `;
+    await pool.query(query); 
+    console.log("1-week-old notifications successfully deleted.");
+  } catch (error) {
+    console.error("Error running the scheduled task:", error);
+  }
 });
 
 
