@@ -3263,7 +3263,7 @@ app.post('/signup', upload.single('image'), async (req, res) => {
             port: 465,
             auth: {
               user: 'ilegaladvice26@gmail.com',
-              pass: 'rwmp eoti nzps mxxe',
+              pass: 'csfa hkqe dfbx jyxw',
             },
             pool: true,
           });
@@ -3327,7 +3327,7 @@ app.post('/signup', upload.single('image'), async (req, res) => {
               port: 465,
               auth: {
                 user: 'ilegaladvice26@gmail.com',
-                pass: 'rwmp eoti nzps mxxe',
+                pass: 'csfa hkqe dfbx jyxw',
               },
               pool: true,
             });
@@ -3645,7 +3645,7 @@ app.post('/lawyersprofile', async (req, res) => {
       port: 465,
       auth: {
         user: 'ilegaladvice26@gmail.com',
-        pass: 'rwmp eoti nzps mxxe'
+        pass: 'csfa hkqe dfbx jyxw'
       },
       pool: true
     });
@@ -3760,7 +3760,7 @@ app.post('/lawyersprofile', async (req, res) => {
       port: 465,
       auth: {
         user: 'ilegaladvice26@gmail.com', 
-        pass: 'rwmp eoti nzps mxxe' 
+        pass: 'csfa hkqe dfbx jyxw' 
       },
       pool: true
     });
