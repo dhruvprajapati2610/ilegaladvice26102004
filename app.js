@@ -288,7 +288,7 @@ app.get('/crpclist',(req,res)=>{
 app.get('/crpc',async(req,res)=>{
   const chapter = req.query.chapter;
   try{
-    var sql = 'select * from crpc_data where chapter_number=$1'
+    var sql = 'select * from crpc_chapters where chapter_number=$1'
     var crpc = await pool.query(sql,[chapter]);
     console.log(crpc.rows);
     res.render('crpcDrop.ejs',{data: crpc.rows});
