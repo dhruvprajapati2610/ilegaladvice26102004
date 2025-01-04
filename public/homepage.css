@@ -2268,7 +2268,7 @@ color:#232121;
       }
       @media screen and (max-width:575px) {
         .step-box{
-            max-width: 60%;
+            max-width: 65%;
         }
         .strip-header h2 {
             font-size: 1.7rem;
@@ -2277,6 +2277,7 @@ color:#232121;
       @media screen and (max-width: 490px) {
         .step-box {
             max-width: 70%;
+            padding: 7px;
         }
         .strip-header h2{
             line-height: 35px;
@@ -2286,8 +2287,4 @@ color:#232121;
 
         }
     }
-    @media screen and (max-width: 430px) {
-        .step-box {
-            max-width: 80%;
-        }
-    }
+  
