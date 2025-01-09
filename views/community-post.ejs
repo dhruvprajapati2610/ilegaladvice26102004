@@ -118,9 +118,81 @@
                             <i class="fa-solid fa-paper-plane"></i>
                             <span>Share</span>
                           </div>
+                          <div
+                        id="share-container-<%=post.id%>"
+                        class="share-suggestion-container share-container-<%=post.id%> followed-by-list"
+                      >
+                        <div class="share-s-heading">
+                          <div class="share-followers-text">
+                            <span>Following</span>
+                            <div class="share-cancel-form">
+                              <i
+                                class="fa-solid fa-xmark"
+                                id="cancel-followed-by"
+                              ></i>
+                            </div>
+                          </div>
+                          <hr />
+                          <div class="share-search-box-container">
+                            <div class="share-search-box">
+                              <form action="" method="get">
+                                <input
+                                type="search"
+                                name="followingSearch"
+                                placeholder="Search"
+                                id="followingSearch-<%=post.id%>"
+                                oninput="fetchFollowingResults(<%=userId%>, <%=post.id%>)"
+                              />
+                                <button class="share-ipc-submit" type="submit">
+                                  <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="share-s-content-<%=post.id%>" class="share-s-content">
+                          <% following.forEach((account) => { %>
+                          <div class="share-suggestion-account">
+                            <div class="share-profile-name">
+                              <div class="share-profile-container">
+                                <div class="share-profile-image">
+                                  <a
+                                    href="/community/user-profile?id=<%=account.following_id%>"
+                                  >
+                                    <img
+                                      src="<%=account.lawyer_profile_image%>"
+                                      alt=""
+                                    />
+                                  </a>
+                                </div>
+                              </div>
+                              <div class="share-user-name-day">
+                                <a
+                                  href="/community/user-profile?id=<%=account.following_id%>"
+                                >
+                                  <div class="share-user-name">
+                                    <%= account.following_name %>
+                                  </div>
+                                </a>
+                              </div>
+                              <div class="share-follow-container">
+                                <div
+                                  id="send-button-<%=post.id%>-<%=account.following_id%>"
+                                  onclick="handleSendPost(<%=post.id%>,<%=account.following_id%>)"
+                                  class="share-follow-btn"
+                                >
+                                  send
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <%}) %>
+                        </div>
+                      </div>
                      </div>
                      </div>
-                     <div class="sharethis-inline-share-buttons post-share"></div>
+                     
                      <div class="post-comments">
                         <div class="post-comments-container">
                         <div class="add-reveiew">
@@ -469,6 +541,93 @@ document.getElementById('search').addEventListener('input', async function () {
 }
 
 
+document.addEventListener("DOMContentLoaded", () => {
+        // Select all share buttons
+        const shareButtons = document.querySelectorAll(".share");
+
+        // Add click event listener to each share button
+        shareButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            // Find the corresponding share-suggestion-container
+            const shareContainer = this.nextElementSibling;
+
+            // Toggle the visibility of the share-suggestion-container
+            if (
+              shareContainer.classList.contains("share-suggestion-container")
+            ) {
+              if (
+                shareContainer.style.display === "none" ||
+                !shareContainer.style.display
+              ) {
+                shareContainer.style.display = "flex"; // Open the container
+              } else {
+                shareContainer.style.display = "none"; // Close the container
+              }
+            }
+          });
+        });
+
+        // Add click event listener to all close icons
+        const closeIcons = document.querySelectorAll("#cancel-followed-by");
+        closeIcons.forEach((icon) => {
+          icon.addEventListener("click", function () {
+            // Find the closest share-suggestion-container and hide it
+            const shareContainer = this.closest(".share-suggestion-container");
+            if (shareContainer) {
+              shareContainer.style.display = "none";
+            }
+          });
+        });
+      });
+
+      //Function for Opening Share Accounts Container
+      const handleShareContainer = (postId) => {
+        // const shareContainer = document.getElementById(
+        //   `share-container-${postId}`
+        // );
+        const shareContainer = document.querySelector(`.share-container-${postId}`)
+      
+        console.log(shareContainer.style.display);
+          shareContainer.style.display = "flex";
+        
+      };
+      //Function to close the share container
+      const closeShareContainer = (postId) => {
+        const shareContainer = document.getElementById(
+          `share-container-${postId}`
+        );
+        if (shareContainer) {
+          shareContainer.style.display = "none";
+        }
+      };
+
+      const handleSendPost = async (postId, followingId) => {
+        try {
+          const response = await fetch(
+            `/sharePostNotification?postId=${postId}&lawyerId=${followingId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const result = await response.json();
+          if (!result.success) {
+            throw new Error("Failed to send the post notification.");
+          }
+          if(result.success === true){
+            const sendButton = document.getElementById(`send-button-${postId}-${followingId}`);
+            sendButton.innerHTML = "sent";
+            sendButton.style.background="rgb(106 111 122)";
+            sendButton.style.border="1px solid rgb(106 111 122)"
+          }
+          console.log("Notification sent successfully:", result);
+        } catch (error) {
+          console.error("Error sending post notification:", error);
+        }
+      };
 
 
  
@@ -592,12 +751,12 @@ const cancelButtons = document.querySelectorAll(".cnc-btn");
 
 
 
-const share=document.querySelector(".share")
-const shareContainer=document.querySelector(".post-share")
-share.onclick=()=>{
-    shareContainer.classList.toggle("post-share-active")
-    share.classList.toggle("share-active")
-}
+// const share=document.querySelector(".share")
+// const shareContainer=document.querySelector(".post-share")
+// share.onclick=()=>{
+//     shareContainer.classList.toggle("post-share-active")
+//     share.classList.toggle("share-active")
+// }
 
 //ADD A NEW COMMENT
 document.addEventListener('DOMContentLoaded', () => {
@@ -1039,6 +1198,85 @@ const deletereply=document.querySelector(".replydelbtn");
     deletereplyform.classList.remove("delete-form-active")
  }
 
+
+ //Following share search
+ async function fetchFollowingResults(userId, postId) {
+        const searchInput = document.getElementById(
+          `followingSearch-${postId}`
+        ).value;
+        console.log(searchInput);
+
+        try {
+          // Make an asynchronous GET request to the server
+
+          const response = await fetch(`/followingSearch`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              followingSearch: `${searchInput}%`,
+              id: userId,
+            }),
+          });
+          const data = await response.json(); // Parse the response JSON
+          console.log(data);
+          // Update the DOM with the search results
+          const resultsContainer = document.getElementById(
+            `share-s-content-${postId}`
+          );
+          resultsContainer.innerHTML = ""; // Clear previous results
+
+          if (data.following.length > 0) {
+            // Render each user in the result
+            data.following.forEach((account) => {
+              const userDiv = `
+                    <div class="share-suggestion-account">
+                            <div class="share-profile-name">
+                              <div class="share-profile-container">
+                                <div class="share-profile-image">
+                                  <a
+                                    href="/community/user-profile?id=${account.id}"
+                                  >
+                                    <img
+                                      src="${account.image}"
+                                      alt=""
+                                    />
+                                  </a>
+                                </div>
+                              </div>
+                              <div class="share-user-name-day">
+                                <a
+                                  href="/community/user-profile?id=${account.id}"
+                                >
+                                  <div class="share-user-name">
+                                    ${account.name}
+                                  </div>
+                                </a>
+                              </div>
+                              <div class="share-follow-container">
+                                <div
+                                  id="send-button-${postId}-${account.id}"
+                                  onclick="handleSendPost(${postId},${account.id})"
+                                  class="share-follow-btn"
+                                >
+                                
+                                  send
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                `;
+              resultsContainer.insertAdjacentHTML("beforeend", userDiv);
+            });
+          } else {
+            // Show a message when no results are found
+            resultsContainer.innerHTML = "<p>No results found</p>";
+          }
+        } catch (error) {
+          console.error("Error fetching results:", error);
+        }
+      }
 
 
 
