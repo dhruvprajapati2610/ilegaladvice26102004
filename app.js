@@ -2020,6 +2020,22 @@ for (let post of posts) {
   }
 }
 
+const followingResult = await pool.query(`
+  SELECT 
+      l.image AS lawyer_profile_image,
+      l.id AS following_id,
+      l.name AS following_name
+  FROM 
+      follow f
+  JOIN 
+      lawyers l ON f.followed_id = l.id
+  WHERE 
+      f.follower_id = $1;
+`, [userId]);
+
+const following = followingResult.rows;
+
+
 
       await client.query('COMMIT');
 
@@ -2032,6 +2048,7 @@ for (let post of posts) {
         notificationCount,
         mutuals,
         user:req.user,
+        following,
         currentRoute: '/community',
         likeCount: posts.length > 0 ? posts[0].like_count : 0 // Handle empty posts case
       });
@@ -2350,10 +2367,24 @@ app.get('/community/posts',isuAuthenticated, async (req, res) => {
     `, [commentIds]);
 
     const replies = repliesResult.rows;
+    const followingResult = await pool.query(`
+      SELECT 
+          l.image AS lawyer_profile_image,
+          l.id AS following_id,
+          l.name AS following_name
+      FROM 
+          follow f
+      JOIN 
+          lawyers l ON f.followed_id = l.id
+      WHERE 
+          f.follower_id = $1;
+    `, [userId]);
+    
+    const following = followingResult.rows;
 
     await client.query('COMMIT');
 
-    res.json({ posts, comments, replies, userId });
+    res.json({ posts, comments, replies, userId, following });
   } catch (error) {
     await client.query('ROLLBACK');
     console.error('Error loading more posts:', error);
@@ -2448,6 +2479,23 @@ app.get("/community/post/:id", isuAuthenticated, async (req, res) => {
     //NOTIFICATION COUNT
     const notificationCountQuery = await pool.query(`SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`, [userId]);
    const notificationCount = notificationCountQuery.rows[0].count;
+    
+   //Following
+   
+const followingResult = await pool.query(`
+  SELECT 
+      l.image AS lawyer_profile_image,
+      l.id AS following_id,
+      l.name AS following_name
+  FROM 
+      follow f
+  JOIN 
+      lawyers l ON f.followed_id = l.id
+  WHERE 
+      f.follower_id = $1;
+`, [userId]);
+
+const following = followingResult.rows;
 
     res.render("community-post.ejs", {
       userId,
@@ -2461,7 +2509,8 @@ app.get("/community/post/:id", isuAuthenticated, async (req, res) => {
       currentRoute: '/community',
       notificationCount,
       follow,
-      profileImage
+      profileImage,
+      following
     });
   } catch (error) {
     console.error("Error loading post", error);
@@ -2470,6 +2519,31 @@ app.get("/community/post/:id", isuAuthenticated, async (req, res) => {
     client.release();
   }
 });
+
+app.get("/sharePostNotification", async (req, res) => {
+  try {
+    const { postId, lawyerId } = req.query;
+    const userId = req.user.id; 
+
+    if (!postId || !lawyerId || !userId) {
+      return res.status(400).json({ error: "Missing required parameters." });
+    }
+    const content = `shared a post with you.`;
+    const link = `/community/post/${postId}`;
+
+    // Insert the notification into the database
+    await pool.query(
+      `INSERT INTO notifications (user_id, type, content, link, ref_id) VALUES ($1, $2, $3, $4, $5)`,
+      [lawyerId, 'share', content, link, userId]
+    );
+
+    res.status(200).json({success: true, message: "Notification sent successfully." });
+  } catch (error) {
+    console.error("Error sending notification:", error);
+    res.status(500).json({ error: "An error occurred while sending the notification." });
+  }
+});
+
 
 
 app.get('/community/user-profile', async (req, res) => {
@@ -2686,6 +2760,7 @@ posts.forEach(async (post) => {
   
 //   res.render('community_notifications.ejs', { allnotifications });
 // });
+
 
 app.get('/notifications', async (req, res) => {
   const userId = req.user.id;
