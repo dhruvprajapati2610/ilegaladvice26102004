@@ -1,303 +1,490 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>iLegal Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Slab&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="community.css">
-    <link rel="stylesheet" href="swiper-bundle.min.css">
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Slab&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="community.css" />
+    <link rel="stylesheet" href="swiper-bundle.min.css" />
+  </head>
 
-
-
-</head>
-
-<body>
+  <body>
     <%- include('partials/community-header') %>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-        <div class="body">
-            <div class="main-body">
-                <div class="sub-body">
+    <div class="body">
+      <div class="main-body">
+        <div class="sub-body">
+          <div class="post-section-0">
+            <div class="post-section">
+              <div class="write-post-container">
+                <div class="write-post">
+                  <div class="profile-container">
+                    <div class="profile-image">
+                      <img src="<%=user.image%>" alt="" />
+                    </div>
+                  </div>
+                  <div class="post-text">
+                    <span>Share a Post...</span>
+                  </div>
+                </div>
+                <div class="post-media">
+                  <div class="post-image">
+                    <i class="fa-solid fa-image"></i><span>Image</span>
+                  </div>
+                </div>
+              </div>
 
-                    <div class="post-section-0">
+              <div id="posts-container" class="user-post-container">
+                <% posts.forEach((post, index)=> { %>
 
-                        <div class="post-section">
-                            <div class="write-post-container">
-                                <div class="write-post">
-                                    <div class="profile-container">
-                                        <div class="profile-image">
-                                            <img src="<%=user.image%>" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="post-text">
-                                        <span>Share a Post...</span>
-                                    </div>
-                                </div>
-                                <div class="post-media">
+                <div
+                  id="post-container"
+                  class="user-post"
+                  data-post-id="<%= post.post_id %>"
+                >
+                  <div class="user-info">
+                    <div class="profile-name">
+                      <div class="profile-container">
+                        <div class="profile-image">
+                          <img src="<%=post.lawyer_profile_image%>" alt="" />
+                        </div>
+                      </div>
+                      <div class="user-name-day">
+                        <a href="/community/user-profile?id=<%=post.lawyer_id%>"
+                          ><div class="user-name"><%=post.lawyer_name%></div></a
+                        >
+                        <div class="post-day"><%=post.timeAgo%></div>
+                      </div>
+                    </div>
+                    <div class="follow-container">
+                      <input
+                        type="hidden"
+                        name="postLawyerId"
+                        value="<%=post.lawyer_id%>"
+                      />
+                      <input
+                        type="hidden"
+                        name="postIdForFollower"
+                        value="<%=post.post_id%>>"
+                      />
+                      <% if(userId!==post.lawyer_id){ %> <%
+                      if(post.user_follows_post_owner === false){ %>
+                      <div
+                        class="follow-btn follow-<%=post.lawyer_id%>"
+                        onclick="postLawyerFollow(<%=post.post_id%>, <%=post.lawyer_id%>)"
+                        id="follow-btn-post-<%=post.post_id%>"
+                        data-post-id="<%= post.post_id %>"
+                      >
+                        <% if(post.user_follows_post_owner){ %> Following <% }
+                        else { %> Follow <% } %>
+                      </div>
+                      <% } %> <% } %>
+                    </div>
+                  </div>
+                  <div
+                    class="post-info"
+                    onclick="redirectPostPage(<%=post.post_id%>)"
+                  >
+                    <div
+                      id="posts-para"
+                      class="post-para"
+                      data-post-id="<%= post.post_id %>"
+                    >
+                      <%=post.content%>
+                    </div>
+                    <%if(post.image_path){ %>
+                    <div class="user-post-image">
+                      <div class="post-img-box">
+                        <img src="<%=post.image_path%>" alt="" />
+                      </div>
+                    </div>
+                    <% } %>
+                  </div>
+                  <div class="post-stat" data-post-id="<%= post.post_id %>">
+                    <div
+                      class="like-comment"
+                      onclick="redirectPostPage(<%=post.post_id%>)"
+                    >
+                      <div class="likes-number"></div>
+                      <div class="comment-number">
+                        <a href="/community/post/<%=post.post_id%>"
+                          ><span
+                            ><%=comments.filter(c => c.post_id ===
+                            post.post_id).length %> comments</span
+                          ></a
+                        >
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="like-share-comment">
+                      <div class="like">
+                        <i
+                          class="like-btn fa-solid fa-thumbs-up like-bigger like-button <%= post.user_liked ? 'like-active' : '' %>"
+                          data-user-id="<%= userId %>"
+                          data-post-id="<%= post.post_id %>"
+                        ></i>
+                        <span id="likes-<%= post.post_id %>">
+                          <%= post.like_count %> Likes
+                        </span>
+                      </div>
 
-
-                                    <div class="post-image">
-                                        <i class="fa-solid fa-image"></i><span>Image</span>
-                                    </div>
-
-                                </div>
-
+                      <div
+                        class="comment"
+                        data-post-id="<%= post.post_id %>"
+                        onclick="redirectPostPage(<%=post.post_id%>)"
+                      >
+                        <i class="fa-solid fa-comment"></i>
+                        <span>Comment</span>
+                      </div>
+                      <div class="share">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Share</span>
+                      </div>
+                      <!--Share suggestion Container-->
+                      <div
+                        id="share-container-<%=post.post_id%>"
+                        class="share-suggestion-container share-container-<%=post.post_id%> followed-by-list"
+                      >
+                        <div class="share-s-heading">
+                          <div class="share-followers-text">
+                            <span>Following</span>
+                            <div class="share-cancel-form">
+                              <i
+                                class="fa-solid fa-xmark"
+                                id="cancel-followed-by"
+                              ></i>
                             </div>
-
-                            <div id="posts-container" class="user-post-container">
-                                <% posts.forEach((post, index)=> { %>
-                                   
-                                <div id="post-container"  class="user-post"  data-post-id="<%= post.post_id %>">
-                                    <div class="user-info">
-                                        <div class="profile-name">
-                                            <div class="profile-container">
-
-                                                <div class="profile-image">
-                                                    <img src="<%=post.lawyer_profile_image%>" alt="">
-                                                </div>
-                                            </div>
-                                            <div class="user-name-day">
-                                             <a href="/community/user-profile?id=<%=post.lawyer_id%>"><div class="user-name" ><%=post.lawyer_name%></div></a>   
-                                                <div class="post-day"><%=post.timeAgo%></div>
-                                            
-                                            </div>
-                                        </div>
-                                        <div class="follow-container">
-                                            <input type="hidden" name="postLawyerId"
-                                                            value="<%=post.lawyer_id%>">
-                                            <input type="hidden" name="postIdForFollower" value="<%=post.post_id%>>">
-                                            <% if(userId!==post.lawyer_id){ %>
-                                                <% if(post.user_follows_post_owner === false){ %>
-                                                <div class="follow-btn follow-<%=post.lawyer_id%>"  onclick="postLawyerFollow(<%=post.post_id%>, <%=post.lawyer_id%>)" id="follow-btn-post-<%=post.post_id%>" data-post-id="<%= post.post_id %>">
-    
-                                                        <% if(post.user_follows_post_owner){ %>
-                                                            Following
-                                                      <%  }  else { %>
-                                                            Follow
-                                                    <%  } %>
-                                                   
-                                                    
-                                            </div>
-                                           <% } %>
-                                          <%  } %>
-                                            
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="post-info" onclick="redirectPostPage(<%=post.post_id%>)">
-                                        <div id="posts-para" class="post-para" data-post-id="<%= post.post_id %>">
-                                            <%=post.content%>
-                                        </div>
-                                        <%if(post.image_path){ %>
-                                            <div class="user-post-image">
-                                                <div class="post-img-box">
-                                                    <img src="<%=post.image_path%>" alt="">
-                                                </div>
-                                            </div>
-                                            <% } %>
-                                    </div>
-                                    <div class="post-stat" data-post-id="<%= post.post_id %>">
-                                        <div class="like-comment" onclick="redirectPostPage(<%=post.post_id%>)">
-                                            <div class="likes-number">
-
-                                            
-                                            </div>
-                                            <div class="comment-number">
-                                              
-                                                   <a href="/community/post/<%=post.post_id%>"><span><%=comments.filter(c => c.post_id === post.post_id).length %> comments</span></a> 
-                                    
-                                              
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="like-share-comment">
-                                            <div class="like">
-                                                <i class="like-btn fa-solid fa-thumbs-up like-bigger like-button <%= post.user_liked ? 'like-active' : '' %>" 
-                                                   data-user-id="<%= userId %>" 
-                                                   data-post-id="<%= post.post_id %>"></i>
-                                                <span id="likes-<%= post.post_id %>">
-                                                    <%= post.like_count %> Likes
-                                                </span>
-                                            </div>
-                                            
-                                            <div class="comment" data-post-id="<%= post.post_id %>" onclick="redirectPostPage(<%=post.post_id%>)">
-                                                <i class="fa-solid fa-comment"></i>
-                                                <span>Comment</span>
-                                            </div>
-                                            <div class="share">
-                                                <i class="fa-solid fa-paper-plane"></i>
-                                                <span>Share</span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="post-comments">
-                                        <div class="post-comments-container">
-                                            <div class="add-reveiew">
-                                                <div class="add-reveiew-container">
-                                                    <form id="add-review" action="/community/review" method="post">
-                                                        <input type="hidden" name="postId"
-                                                            value="<%=post.post_id%>">
-                                                        <div class="text-box">
-                                                            <textarea name="comment" id="new-reveiew" cols="40"
-                                                                rows="5" placeholder="add a comment"></textarea>
-                                                            <div class="new-ok-cnc-btn">
-                                                                <button type="submit"
-                                                                    class="new-ok-btn">Submit</button>
-
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                       
-                                    
-                                                   
-                                        </div>
-                                    </div>
-                                </div>
-                                <% if(mutuals.length > 0){ %>
-                                    <%if(posts.length < 3) { %>
-                                        <% if(index + 1 === posts.length){ %>
-                                        <div class="mobile-suggestions suggestion-container">
-                                            <div class="s-heading">
-                                                <span>Suggestions for you</span>
-                                            </div>
-                                            <div class="s-content">
-                                               
-                                                <div class="swiper-container">
-                                                    <div class="swiper-wrapper">
-                                                      <% mutuals.forEach((mutual) => { %> 
-                                                        <div class="swiper-slide suggestion-account mutual-account-<%=mutual.lawyer_id%>">
-                                                            <div class="profile-name" onclick="redirectSuggestionAccount(<%=mutual.lawyer_id%>)">
-                                                                <div class="profile-container">
-                                                                    <div class="profile-image">
-                                                                        <a href="/community/user-profile?id=<%=mutual.lawyer_id%>">       <img src="<%=mutual.lawyer_profile_image %>" alt=""> </a>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="user-name-day">
-                                                                    <div class="user-name"> <a href="/community/user-profile?id=<%=mutual.lawyer_id%>"><%=mutual.lawyer_name%> </a></div>
-                                                                    <div class="followed-by">Followed by <%=mutual.mutual_follower_names%></div> 
-                                                                </div>
-                                                            </div>
-                                                            <div class="follow-container">
-                                                                <div class="follow-btn" onclick="suggestionLawyerFollow(<%=mutual.lawyer_id%>)" id="follow-suggestion-<%=mutual.lawyer_id%>">Follow</div>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                        <% }) %>
-                                                    </div>
-                                                    <div class="swiper-pagination lawyers-swiper-pagination"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <% } %>
-                                        <% }else if((index + 1) % 3 === 0) { %> 
-                                            <div class="mobile-suggestions suggestion-container">
-                                                <div class="s-heading">
-                                                    <span>Suggestions for you</span>
-                                                </div>
-                                                <div class="s-content">
-                                                   
-                                                    <div class="swiper-container">
-                                                        <div class="swiper-wrapper">
-                                                          <% mutuals.forEach((mutual) => { %> 
-                                                            <div class="swiper-slide suggestion-account mutual-account-<%=mutual.lawyer_id%>">
-                                                                <div class="profile-name" onclick="redirectSuggestionAccount(<%=mutual.lawyer_id%>)">
-                                                                    <div class="profile-container">
-                                                                        <div class="profile-image">
-                                                                            <a href="/community/user-profile?id=<%=mutual.lawyer_id%>">   <img src="<%=mutual.lawyer_profile_image %>" alt=""> </a>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="user-name-day">
-                                                                        <div class="user-name"><a href="/community/user-profile?id=<%=mutual.lawyer_id%>"> <%=mutual.lawyer_name%> </a></div>
-                                                                        <div class="followed-by">Followed by <%=mutual.mutual_follower_names%></div> 
-                                                                    </div>
-                                                                </div>
-                                                                <div class="follow-container">
-                                                                    <div class="follow-btn" onclick="suggestionLawyerFollow(<%=mutual.lawyer_id%>)" id="follow-suggestion-<%=mutual.lawyer_id%>">Follow</div>
-                                                                </div>
-                                                                
-                                                            </div>
-                                                            <% }) %>
-                                                        </div>
-                                                        <div class="swiper-pagination lawyers-swiper-pagination"></div>
-                                                    </div>
-                                                </div>
-                                            </div> 
-                                        <% } %>
-                                <% } %>
-                                
-                              
-                                    <% }) %>
+                          </div>
+                          <hr />
+                          <div class="share-search-box-container">
+                            <div class="share-search-box">
+                              <form action="" method="get">
+                                <input
+                                  type="search"
+                                  name="followingSearch"
+                                  placeholder="Search"
+                                  id="followingSearch-<%=post.post_id%>"
+                                  oninput="fetchFollowingResults(<%=userId%>, <%=post.post_id%>)"
+                                />
+                                <button class="share-ipc-submit" type="submit">
+                                  <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                              </form>
                             </div>
-                            
-                            
+                          </div>
+                        </div>
 
+                        <div
+                          id="share-s-content-<%=post.post_id%>"
+                          class="share-s-content"
+                        >
+                          <% following.forEach((account) => { %>
+                          <div class="share-suggestion-account">
+                            <div class="share-profile-name">
+                              <div class="share-profile-container">
+                                <div class="share-profile-image">
+                                  <a
+                                    href="/community/user-profile?id=<%=account.following_id%>"
+                                  >
+                                    <img
+                                      src="<%=account.lawyer_profile_image%>"
+                                      alt=""
+                                    />
+                                  </a>
+                                </div>
+                              </div>
+                              <div class="share-user-name-day">
+                                <a
+                                  href="/community/user-profile?id=<%=account.following_id%>"
+                                >
+                                  <div class="share-user-name">
+                                    <%= account.following_name %>
+                                  </div>
+                                </a>
+                              </div>
+                              <div class="share-follow-container">
+                                <div
+                                  id="send-button-<%=post.post_id%>-<%=account.following_id%>"
+                                  onclick="handleSendPost(<%=post.post_id%>,<%=account.following_id%>)"
+                                  class="share-follow-btn"
+                                >
+                                  send
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <%}) %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="post-comments">
+                    <div class="post-comments-container">
+                      <div class="add-reveiew">
+                        <div class="add-reveiew-container">
+                          <form
+                            id="add-review"
+                            action="/community/review"
+                            method="post"
+                          >
+                            <input
+                              type="hidden"
+                              name="postId"
+                              value="<%=post.post_id%>"
+                            />
+                            <div class="text-box">
+                              <textarea
+                                name="comment"
+                                id="new-reveiew"
+                                cols="40"
+                                rows="5"
+                                placeholder="add a comment"
+                              ></textarea>
+                              <div class="new-ok-cnc-btn">
+                                <button type="submit" class="new-ok-btn">
+                                  Submit
+                                </button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% if(mutuals.length > 0){ %> <%if(posts.length < 3) { %> <%
+                if(index + 1 === posts.length){ %>
+                <div class="mobile-suggestions suggestion-container">
+                  <div class="s-heading">
+                    <span>Suggestions for you</span>
+                  </div>
+                  <div class="s-content">
+                    <div class="swiper-container">
+                      <div class="swiper-wrapper">
+                        <% mutuals.forEach((mutual) => { %>
+                        <div
+                          class="swiper-slide suggestion-account mutual-account-<%=mutual.lawyer_id%>"
+                        >
+                          <div
+                            class="profile-name"
+                            onclick="redirectSuggestionAccount(<%=mutual.lawyer_id%>)"
+                          >
+                            <div class="profile-container">
+                              <div class="profile-image">
+                                <a
+                                  href="/community/user-profile?id=<%=mutual.lawyer_id%>"
+                                >
+                                  <img
+                                    src="<%=mutual.lawyer_profile_image %>"
+                                    alt=""
+                                  />
+                                </a>
+                              </div>
+                            </div>
+                            <div class="user-name-day">
+                              <div class="user-name">
+                                <a
+                                  href="/community/user-profile?id=<%=mutual.lawyer_id%>"
+                                  ><%=mutual.lawyer_name%>
+                                </a>
+                              </div>
+                              <div class="followed-by">
+                                Followed by <%=mutual.mutual_follower_names%>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="follow-container">
+                            <div
+                              class="follow-btn"
+                              onclick="suggestionLawyerFollow(<%=mutual.lawyer_id%>)"
+                              id="follow-suggestion-<%=mutual.lawyer_id%>"
+                            >
+                              Follow
+                            </div>
+                          </div>
+                        </div>
+                        <% }) %>
+                      </div>
+                      <div
+                        class="swiper-pagination lawyers-swiper-pagination"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <% } %> <% }else if((index + 1) % 3 === 0) { %>
+                <div class="mobile-suggestions suggestion-container">
+                  <div class="s-heading">
+                    <span>Suggestions for you</span>
+                  </div>
+                  <div class="s-content">
+                    <div class="swiper-container">
+                      <div class="swiper-wrapper">
+                        <% mutuals.forEach((mutual) => { %>
+                        <div
+                          class="swiper-slide suggestion-account mutual-account-<%=mutual.lawyer_id%>"
+                        >
+                          <div
+                            class="profile-name"
+                            onclick="redirectSuggestionAccount(<%=mutual.lawyer_id%>)"
+                          >
+                            <div class="profile-container">
+                              <div class="profile-image">
+                                <a
+                                  href="/community/user-profile?id=<%=mutual.lawyer_id%>"
+                                >
+                                  <img
+                                    src="<%=mutual.lawyer_profile_image %>"
+                                    alt=""
+                                  />
+                                </a>
+                              </div>
+                            </div>
+                            <div class="user-name-day">
+                              <div class="user-name">
+                                <a
+                                  href="/community/user-profile?id=<%=mutual.lawyer_id%>"
+                                >
+                                  <%=mutual.lawyer_name%>
+                                </a>
+                              </div>
+                              <div class="followed-by">
+                                Followed by <%=mutual.mutual_follower_names%>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="follow-container">
+                            <div
+                              class="follow-btn"
+                              onclick="suggestionLawyerFollow(<%=mutual.lawyer_id%>)"
+                              id="follow-suggestion-<%=mutual.lawyer_id%>"
+                            >
+                              Follow
+                            </div>
+                          </div>
+                        </div>
+                        <% }) %>
+                      </div>
+                      <div
+                        class="swiper-pagination lawyers-swiper-pagination"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <% } %> <% } %> <% }) %>
+              </div>
 
-                            <div class="write-post-form-container-0">
-                                <div class="write-post-form-container">
-                                    <div class="cancel-form"><i class="fa-solid fa-xmark" id="cancel-form"></i></div>
-                                    <div class="wrapper">
-                                        <div class="wrapper-profile">
-                                            <div class="w-profile-container">
-                                                <div class="w-profile-image">
-                                                    <img src="<%=user.image%>" alt="">
-                                                </div>
-                                            </div>
-                                            <div class="w-user-name-day">
-                                                <div class="w-user-name"><%=currentUser.name%></div>
-
-                                            </div>
-                                        </div>
-                                         <form action="/community" enctype="multipart/form-data" method="post"
-                                            class="write-post-form">
-
-                                            <div class="post-media">
-
-                                                <input type="file" name="image" id="image-upload">
-                                                <label for="image-upload" class="post-image">
-                                                    <i class="fa-solid fa-image"></i><span>Image</span>
-                                                </label>
-                                                <div id="previewContainer">
-                                                    <img id="imagePreview"
-                                                        style="display: none; max-width: 650px; max-height: 400px;"
-                                                        margin-top="1rem" alt="Image Preview" />
-                                                    <div class="cancel-image" style="display:none;"><i
-                                                            class="fa-solid fa-circle-xmark" id="cancel-image"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="input-field if-field bio">
-                                                <textarea name="content" id="address" cols="30" rows="10"
-                                                    placeholder="Write about Your Post" required></textarea>
-                                            </div>
-                                            <div class="submit-btn-container">
-                                                <input type="submit" class="submit-btn" value="Post">
-                                            </div>
-                                    </form> 
-                                        <!-- <form id="communityForm" action="/community" enctype="multipart/form-data" method="post"
+              <div class="write-post-form-container-0">
+                <div class="write-post-form-container">
+                  <div class="cancel-form">
+                    <i class="fa-solid fa-xmark" id="cancel-form"></i>
+                  </div>
+                  <div class="wrapper">
+                    <div class="wrapper-profile">
+                      <div class="w-profile-container">
+                        <div class="w-profile-image">
+                          <img src="<%=user.image%>" alt="" />
+                        </div>
+                      </div>
+                      <div class="w-user-name-day">
+                        <div class="w-user-name"><%=currentUser.name%></div>
+                      </div>
+                    </div>
+                    <form
+                      action="/community"
+                      enctype="multipart/form-data"
+                      method="post"
+                      class="write-post-form"
+                    >
+                      <div class="post-media">
+                        <input type="file" name="image" id="image-upload" />
+                        <label for="image-upload" class="post-image">
+                          <i class="fa-solid fa-image"></i><span>Image</span>
+                        </label>
+                        <div id="previewContainer">
+                          <img
+                            id="imagePreview"
+                            style="
+                              display: none;
+                              max-width: 650px;
+                              max-height: 400px;
+                            "
+                            margin-top="1rem"
+                            alt="Image Preview"
+                          />
+                          <div class="cancel-image" style="display: none">
+                            <i
+                              class="fa-solid fa-circle-xmark"
+                              id="cancel-image"
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="input-field if-field bio">
+                        <textarea
+                          name="content"
+                          id="address"
+                          cols="30"
+                          rows="10"
+                          placeholder="Write about Your Post"
+                          required
+                        ></textarea>
+                      </div>
+                      <div class="submit-btn-container">
+                        <input type="submit" class="submit-btn" value="Post" />
+                      </div>
+                    </form>
+                    <!-- <form id="communityForm" action="/community" enctype="multipart/form-data" method="post"
                                             class="write-post-form">
 
                                             <div class="post-media">
@@ -323,53 +510,64 @@
                                                 <input id="submitButton" type="submit" class="submit-btn" value="Post">
                                             </div>
                                         </form> -->
-                                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="community-section-3">
+            <div class="suggestion-container b-suggestions">
+              <div class="s-heading">
+                <Span>Suggestions for you</Span>
+              </div>
+              <div class="s-content">
+                <% if(mutuals.length === 0){ %>
+                <div>
+                  No connections to suggest at the moment. Explore the community
+                  to find peers!
+                </div>
+                <% } %> <% mutuals.forEach(mutual=>{ %>
 
-                                </div>
-                            </div>
-                        </div>
+                <div class="suggestion-account">
+                  <div class="profile-name">
+                    <div class="profile-container">
+                      <div class="profile-image">
+                        <img src="<%=mutual.lawyer_profile_image%>" alt="" />
+                      </div>
                     </div>
-                    <div class="community-section-3">
-                        <div class="suggestion-container b-suggestions">
-                            <div class="s-heading">
-                                <Span>Suggestions for you</Span>
-                            </div>
-                            <div class="s-content">
-                                <% if(mutuals.length === 0){ %>
-                                    <div>No connections to suggest at the moment. Explore the community to find peers!</div>
-                                <% } %>
-                              <% mutuals.forEach(mutual=>{  %>
-                              
-                                <div class="suggestion-account">
-                                    
-                                        <div class="profile-name">
-                                            <div class="profile-container">
-                                                <div class="profile-image">
-                                                    <img src="<%=mutual.lawyer_profile_image%>" alt="">
-                                                </div>
-                                            </div>
-                                            <div class="user-name-day">
-                                                <input type="hidden" name="suggestedLawyerId"
-                                                                value="<%=mutual.lawyer_id%>">
-                                              
-                                               <a href="/community/user-profile?id=<%=mutual.lawyer_id%>"> <div class="user-name"> <%=mutual.lawyer_name%> </div> </a>
-                                              
-                                                <div class="followed-by">Followed by <%=mutual.mutual_follower_names%></div>
-                                                
-                                            </div>
-                                        </div>
-                                    
-                                    
-                                    <div class="follow-container">
-                                        <div class="follow-btn" onclick="suggestionLawyerFollow(<%=mutual.lawyer_id%>)" id="follow-suggestion-<%=mutual.lawyer_id%>">Follow</div>
-                                    </div>
-                                </div>
-                                <%  }) %>
-                             
+                    <div class="user-name-day">
+                      <input
+                        type="hidden"
+                        name="suggestedLawyerId"
+                        value="<%=mutual.lawyer_id%>"
+                      />
 
-                            </div>
-                        </div>
-                        <!-- <div class="mobile-suggestions suggestion-container">
+                      <a
+                        href="/community/user-profile?id=<%=mutual.lawyer_id%>"
+                      >
+                        <div class="user-name"><%=mutual.lawyer_name%></div>
+                      </a>
+
+                      <div class="followed-by">
+                        Followed by <%=mutual.mutual_follower_names%>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="follow-container">
+                    <div
+                      class="follow-btn"
+                      onclick="suggestionLawyerFollow(<%=mutual.lawyer_id%>)"
+                      id="follow-suggestion-<%=mutual.lawyer_id%>"
+                    >
+                      Follow
+                    </div>
+                  </div>
+                </div>
+                <% }) %>
+              </div>
+            </div>
+            <!-- <div class="mobile-suggestions suggestion-container">
                             <div class="s-heading">
                                 <span>Suggestions for you</span>
                             </div>
@@ -503,91 +701,80 @@
                                 </div>
                             </div>
                         </div> -->
-                    </div>
-                </div>
-            </div>
-            <div id="loading-spinner">
-                <div class="loader"></div>
-            </div>
-
+          </div>
         </div>
-        <script src="swiper-bundle.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-        <script>
+      </div>
+      <div id="loading-spinner">
+        <div class="loader"></div>
+      </div>
+    </div>
+    <script src="swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+      //Swiper Suggestions
 
-//Swiper Suggestions
+      const swiper = new Swiper(".swiper-container", {
+        slidesPerView: 3,
+        spaceBetween: 20,
+        loop: true,
+        grabCursor: true,
 
-const swiper = new Swiper('.swiper-container', {
-    slidesPerView: 3,    
-    spaceBetween: 20,    
-    loop: true,          
-    grabCursor: true,
-
-
-    pagination: {
-        el: '.swiper-pagination',  
-        clickable: true,           
-        dynamicBullets: true,
-    },
-    breakpoints: {
-        
-        // 768: {
-        //     slidesPerView: 3,
-        //      spaceBetween: 20,
-        // },
-        490: {  
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+          dynamicBullets: true,
+        },
+        breakpoints: {
+          // 768: {
+          //     slidesPerView: 3,
+          //      spaceBetween: 20,
+          // },
+          490: {
             slidesPerView: 3,
             spaceBetween: 20,
-        },
-        0: {    
+          },
+          0: {
             slidesPerView: 2,
-            spaceBetween: 30, 
+            spaceBetween: 30,
+          },
         },
-      
-    },
-   
-});
+      });
 
+      //SEARCH BAR FUNCTIONS ---------------------------------------------
+      const searchLogo = document.querySelector(".search-logo");
+      const navBar = document.querySelector(".nav-menu");
+      const searchBar = document.querySelector(" .search-box-container");
+      const cancelSearch = document.querySelector(".cancel-search");
 
+      searchLogo.onclick = () => {
+        navBar.classList.add("unactive");
+        searchLogo.classList.add("unactive-search");
+        searchBar.classList.add("search-box-active");
+        cancelSearch.classList.add("cancel-search-active");
+      };
 
+      cancelSearch.onclick = () => {
+        setTimeout(() => {
+          searchBar.classList.remove("search-box-active");
+          cancelSearch.classList.remove("cancel-search-active");
+          navBar.classList.remove("unactive");
+          searchLogo.classList.remove("unactive-search");
+        }, 100);
+      };
 
-//SEARCH BAR FUNCTIONS ---------------------------------------------
-const searchLogo=document.querySelector(".search-logo")
-const navBar=document.querySelector(".nav-menu")
-const searchBar=document.querySelector(" .search-box-container")
-const cancelSearch=document.querySelector(".cancel-search")
+      const searchResult = document.querySelector(".search-result-container");
+      const searchInput = document.querySelector("#search");
+      const searchButton = document.querySelector(".ipc-submit");
 
-searchLogo.onclick=()=>{
-navBar.classList.add("unactive");
-searchLogo.classList.add("unactive-search");
-searchBar.classList.add("search-box-active");
-cancelSearch.classList.add("cancel-search-active");
-}
+      searchInput.onkeyup = () => {
+        if (searchInput.value.trim() === "") {
+          searchResult.classList.remove("search-result-active");
+        } else {
+          searchResult.classList.add("search-result-active");
+        }
+      };
 
-cancelSearch.onclick=()=>{
-   
-    setTimeout(() => {
-        searchBar.classList.remove("search-box-active");
-        cancelSearch.classList.remove("cancel-search-active");
-        navBar.classList.remove("unactive");
-        searchLogo.classList.remove("unactive-search");
-    }, 100); 
-}
-
-const searchResult = document.querySelector(".search-result-container");
-const searchInput = document.querySelector("#search");
-const searchButton = document.querySelector(".ipc-submit");
-
- searchInput.onkeyup = () => {
-  
-   if (searchInput.value.trim() === "") {
-     searchResult.classList.remove("search-result-active");
-   } else {
-    searchResult.classList.add("search-result-active");
-   }
- };
-
-/*
+      /*
 searchButton.onclick=()=>{
     if (searchInput.value.trim() === "") {
     searchResult.classList.remove("search-result-active");
@@ -596,273 +783,451 @@ searchButton.onclick=()=>{
   }
 } */
 
+      searchButton.addEventListener("click", (e) => {
+        e.preventDefault();
+      });
 
+      searchInput.addEventListener("input", () => {
+        if (searchInput.value.trim() === "") {
+          searchResult.classList.remove("search-result-active");
+        }
+      });
 
-searchButton.addEventListener("click", (e) => {
-  e.preventDefault(); 
-  
-});
+      document
+        .getElementById("search")
+        .addEventListener("input", async function () {
+          const query = this.value;
 
+          if (query.trim() === "") {
+            document.querySelector(".search-results").innerHTML = ""; // Clear results
+            return;
+          }
 
-searchInput.addEventListener("input", () => {
-  
-  if (searchInput.value.trim() === "") {
-    searchResult.classList.remove("search-result-active");
-  }
-});
+          try {
+            const response = await fetch(
+              `/community/search?search=${encodeURIComponent(query)}`
+            );
+            const results = await response.json();
+            console.log(results);
+            const resultsContainer = document.querySelector(".search-results");
+            resultsContainer.innerHTML = ""; // Clear previous results
 
-document.getElementById('search').addEventListener('input', async function () {
-    const query = this.value;
-
-    if (query.trim() === '') {
-        document.querySelector('.search-results').innerHTML = ''; // Clear results
-        return;
-    }
-
-    try {
-        const response = await fetch(`/community/search?search=${encodeURIComponent(query)}`);
-        const results = await response.json();
-        console.log(results);
-        const resultsContainer = document.querySelector('.search-results');
-        resultsContainer.innerHTML = ''; // Clear previous results
-       
-        results.forEach(result => {
-            console.log(result);
-            const resultHTML = `
+            results.forEach((result) => {
+              console.log(result);
+              const resultHTML = `
                 <div class="search-result-account">
                     <div class="search-profile-image-container">
                         <div class="search-profile-image">
-                            <img src="${result.image || '../uploads/avatar.png'}" alt="${result.name}">
+                            <img src="${
+                              result.image || "../uploads/avatar.png"
+                            }" alt="${result.name}">
                         </div>
                     </div>
                     <div class="search-profile-name">
-                       <a href="/community/user-profile?id=${result.id}"> <div class="search-user-name">${result.name}</div></a>
+                       <a href="/community/user-profile?id=${
+                         result.id
+                       }"> <div class="search-user-name">${
+                result.name
+              }</div></a>
                        
                         
                     </div>
                 </div>
             `;
-            resultsContainer.insertAdjacentHTML('beforeend', resultHTML);
+              resultsContainer.insertAdjacentHTML("beforeend", resultHTML);
+            });
+          } catch (err) {
+            console.error("Error fetching search results:", err);
+          }
         });
-    } catch (err) {
-        console.error('Error fetching search results:', err);
-    }
-});
-//-----------------------------------------------------------------
-const suggestionLawyerFollow = async (lawyerId) => {
-    const followUser = document.querySelector(`#follow-suggestion-${lawyerId}`);
-    console.log('Suggestion Follow button clicked')
-    try {
-        console.log(lawyerId)
-       const response = await fetch("/community/follow", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({lawyerId}),
-      });
-      const result = await response.json();
-      
-      if(result.success){
-
-        if (result.follow) {
-        followUser.innerText = "Following";
-      } else {
-        followUser.innerText = "Follow";
-      }
-
-      }else{
-        console.error("Error :", result.message);
-      }
-     
-    } catch (error) {
-        console.error("Error : ", error);
-    }
-}
-           
-
-
-const postLawyerFollow = async (postId, lawyerId) => {
-    console.log("button clicked");
-    const followUserPost = document.querySelector(`#follow-btn-post-${postId}`);
-                try {
-                    
-                    const postId = followUserPost.getAttribute('data-post-id');
-                   const response = await fetch("/community/follow", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({lawyerId, postId}),
-                  });
-                  const result = await response.json();
-                  
-                  if(result.success){
-                   
-                    if (result.follow) {
-                    followUserPost.innerText = "Following";
-                    document.querySelectorAll(`.follow-${lawyerId}`).forEach(element => {
-                     element.innerHTML = 'Following';
-                   });
-                  } else {
-                    followUserPost.innerText = "Follow";
-                    document.querySelectorAll(`.follow-${lawyerId}`).forEach(element => {
-                     element.innerHTML = 'Follow';
-                   });
-                  }
-
-                 
-            
-                  }else{
-                    console.error("Error :", result.message);
-                  }
-                 
-                } catch (error) {
-                    console.error("Error : ", error);
-                }
-}
- 
-       
-            //       const like=document.querySelector(".like")
-            //like.onclick=()=>{
-            //  likeI.classList.toggle("like-active")
-            //}
-            document.addEventListener('click', async (event) => {
-    if (event.target.matches('.like-button')) {
-        console.log('Button clicked:', event.target); // Log the button element
-        const button = event.target;
-        console.log('Data attributes:', button.dataset); // Log all data attributes
-        const postId = button.dataset.postId; // Extract the post ID
-        const likesElement = document.getElementById(`likes-${postId}`); // Target the likes count display
-        let currentLikes = parseInt(likesElement.innerText.split(' ')[0]); // Extract the current like count
-
+      //-----------------------------------------------------------------
+      const suggestionLawyerFollow = async (lawyerId) => {
+        const followUser = document.querySelector(
+          `#follow-suggestion-${lawyerId}`
+        );
+        console.log("Suggestion Follow button clicked");
         try {
+          console.log(lawyerId);
+          const response = await fetch("/community/follow", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ lawyerId }),
+          });
+          const result = await response.json();
+
+          if (result.success) {
+            if (result.follow) {
+              followUser.innerText = "Following";
+            } else {
+              followUser.innerText = "Follow";
+            }
+          } else {
+            console.error("Error :", result.message);
+          }
+        } catch (error) {
+          console.error("Error : ", error);
+        }
+      };
+
+      const postLawyerFollow = async (postId, lawyerId) => {
+        console.log("button clicked");
+        const followUserPost = document.querySelector(
+          `#follow-btn-post-${postId}`
+        );
+        try {
+          const postId = followUserPost.getAttribute("data-post-id");
+          const response = await fetch("/community/follow", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ lawyerId, postId }),
+          });
+          const result = await response.json();
+
+          if (result.success) {
+            if (result.follow) {
+              followUserPost.innerText = "Following";
+              document
+                .querySelectorAll(`.follow-${lawyerId}`)
+                .forEach((element) => {
+                  element.innerHTML = "Following";
+                });
+            } else {
+              followUserPost.innerText = "Follow";
+              document
+                .querySelectorAll(`.follow-${lawyerId}`)
+                .forEach((element) => {
+                  element.innerHTML = "Follow";
+                });
+            }
+          } else {
+            console.error("Error :", result.message);
+          }
+        } catch (error) {
+          console.error("Error : ", error);
+        }
+      };
+
+      //       const like=document.querySelector(".like")
+      //like.onclick=()=>{
+      //  likeI.classList.toggle("like-active")
+      //}
+
+      document.addEventListener("click", async (event) => {
+        if (event.target.matches(".like-button")) {
+          console.log("Button clicked:", event.target); // Log the button element
+          const button = event.target;
+          console.log("Data attributes:", button.dataset); // Log all data attributes
+          const postId = button.dataset.postId; // Extract the post ID
+          const likesElement = document.getElementById(`likes-${postId}`); // Target the likes count display
+          let currentLikes = parseInt(likesElement.innerText.split(" ")[0]); // Extract the current like count
+
+          try {
             // Send the like/unlike request to the server
-            const response = await fetch('/community/community-toggle-like', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ postId })
+            const response = await fetch("/community/community-toggle-like", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ postId }),
             });
 
             const data = await response.json();
             if (data.success) {
-                console.log(data.liked ? 'Post liked' : 'Post unliked');
+              console.log(data.liked ? "Post liked" : "Post unliked");
 
-                // Toggle the UI like-active class
-                button.classList.toggle('like-active', data.liked);
+              // Toggle the UI like-active class
+              button.classList.toggle("like-active", data.liked);
 
-        
-                likesElement.innerText = `${data.likeCount} Likes`;
+              likesElement.innerText = `${data.likeCount} Likes`;
             } else {
-                console.error('Server error:', data.message);
+              console.error("Server error:", data.message);
             }
-        } catch (error) {
-            console.error('Error:', error);
+          } catch (error) {
+            console.error("Error:", error);
+          }
         }
-    }
-});
+      });
 
-//Redirect to Post Page
-const redirectPostPage = (postId) => {
-    window.location.href = `/community/post/${postId}`;
-}
+      //Redirect to Post Page
+      const redirectPostPage = (postId) => {
+        window.location.href = `/community/post/${postId}`;
+      };
 
+      document.addEventListener("DOMContentLoaded", () => {
+        // Select all share buttons
+        const shareButtons = document.querySelectorAll(".share");
 
+        // Add click event listener to each share button
+        shareButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            // Find the corresponding share-suggestion-container
+            const shareContainer = this.nextElementSibling;
 
-
-            // document.querySelector("#select-dropdown-2").parentNode.classList.add("disabled");
-
-            const postText = document.querySelector(".post-text");
-            const postImage = document.querySelector(".post-image");
-            const CancelForm = document.querySelector("#cancel-form")
-            const WritePostForm = document.querySelector(".write-post-form-container-0");
-
-            postText.onclick = () => {
-                WritePostForm.classList.add("form-active");
+            // Toggle the visibility of the share-suggestion-container
+            if (
+              shareContainer.classList.contains("share-suggestion-container")
+            ) {
+              if (
+                shareContainer.style.display === "none" ||
+                !shareContainer.style.display
+              ) {
+                shareContainer.style.display = "flex"; // Open the container
+              } else {
+                shareContainer.style.display = "none"; // Close the container
+              }
             }
+          });
+        });
 
-            postImage.onclick = () => {
-                WritePostForm.classList.add("form-active");
+        // Add click event listener to all close icons
+        const closeIcons = document.querySelectorAll("#cancel-followed-by");
+        closeIcons.forEach((icon) => {
+          icon.addEventListener("click", function () {
+            // Find the closest share-suggestion-container and hide it
+            const shareContainer = this.closest(".share-suggestion-container");
+            if (shareContainer) {
+              shareContainer.style.display = "none";
             }
+          });
+        });
+      });
 
-            CancelForm.onclick = () => {
-                WritePostForm.classList.remove("form-active");
+      //Function for Opening Share Accounts Container
+      const handleShareContainer = (postId) => {
+        // const shareContainer = document.getElementById(
+        //   `share-container-${postId}`
+        // );
+        const shareContainer = document.querySelector(
+          `.share-container-${postId}`
+        );
+
+        console.log(shareContainer.style.display);
+        shareContainer.style.display = "flex";
+      };
+      //Function to close the share container
+      const closeShareContainer = (postId) => {
+        const shareContainer = document.getElementById(
+          `share-container-${postId}`
+        );
+        if (shareContainer) {
+          shareContainer.style.display = "none";
+        }
+      };
+
+      const handleSendPost = async (postId, followingId) => {
+        try {
+          const response = await fetch(
+            `/sharePostNotification?postId=${postId}&lawyerId=${followingId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
             }
+          );
 
+          const result = await response.json();
+          if (!result.success) {
+            throw new Error("Failed to send the post notification.");
+          }
+          if (result.success === true) {
+            const sendButton = document.getElementById(
+              `send-button-${postId}-${followingId}`
+            );
+            sendButton.innerHTML = "sent";
+            sendButton.style.background="rgb(106 111 122)";
+            sendButton.style.border="1px solid rgb(106 111 122)"
+          }
+          console.log("Notification sent successfully:", result);
+        } catch (error) {
+          console.error("Error sending post notification:", error);
+        }
+      };
 
+      // document.querySelector("#select-dropdown-2").parentNode.classList.add("disabled");
 
-            const imageUpload = document.getElementById('image-upload');
-            const imagePreview = document.getElementById('imagePreview');
-            const previewContainer = document.getElementById('previewContainer');
-            const cancelImage = document.querySelector('.cancel-image');
+      const postText = document.querySelector(".post-text");
+      const postImage = document.querySelector(".post-image");
+      const CancelForm = document.querySelector("#cancel-form");
+      const WritePostForm = document.querySelector(
+        ".write-post-form-container-0"
+      );
 
-            // Event listener for image upload
-            imageUpload.addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        imagePreview.src = e.target.result;
-                        imagePreview.style.display = 'block';
-                        cancelImage.style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
+      postText.onclick = () => {
+        WritePostForm.classList.add("form-active");
+      };
 
-            // Event listener for cancel button
-            cancelImage.addEventListener('click', () => {
-                imagePreview.style.display = 'none';
-                cancelImage.style.display = 'none';
-                imagePreview.src = '';
-                imageUpload.value = ''; // Clear the file input
-            });
+      postImage.onclick = () => {
+        WritePostForm.classList.add("form-active");
+      };
 
+      CancelForm.onclick = () => {
+        WritePostForm.classList.remove("form-active");
+      };
 
+      const imageUpload = document.getElementById("image-upload");
+      const imagePreview = document.getElementById("imagePreview");
+      const previewContainer = document.getElementById("previewContainer");
+      const cancelImage = document.querySelector(".cancel-image");
 
+      // Event listener for image upload
+      imageUpload.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = "block";
+            cancelImage.style.display = "block";
+          };
+          reader.readAsDataURL(file);
+        }
+      });
 
+      // Event listener for cancel button
+      cancelImage.addEventListener("click", () => {
+        imagePreview.style.display = "none";
+        cancelImage.style.display = "none";
+        imagePreview.src = "";
+        imageUpload.value = ""; // Clear the file input
+      });
 
+      // const share = document.querySelector(".share")
+      // const shareContainer = document.querySelector(".post-share")
+      // share.onclick = () => {
+      //     shareContainer.classList.toggle("post-share-active")
+      //     share.classList.toggle("comment-share-active")
+      // }
 
-            const share = document.querySelector(".share")
-            const shareContainer = document.querySelector(".post-share")
-            share.onclick = () => {
-                shareContainer.classList.toggle("post-share-active")
-                share.classList.toggle("comment-share-active")
-            }
-
-            function formatDate(date) {
-    const options = {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true 
-    };
-    return date.toLocaleString('en-GB', options).replace(',', ' at');
-}
-
-
-
-            
-document.addEventListener('DOMContentLoaded', () => {
-    let offset = 10;
-    const limit = 10;
-    const container = document.querySelector('.user-post-container');
-    let isLoading = false; 
-    let isScrollingFinished = false; // Flag to control fetching posts
-
-    // Function to fetch posts from the server
-    const fetchPosts = async () => {
-        if (isLoading) return; // Prevent duplicate requests while loading
-        isLoading = true;
-
-        const spinner = document.getElementById('loading-spinner');
-        spinner.style.display = 'block';
+      function formatDate(date) {
+        const options = {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        };
+        return date.toLocaleString("en-GB", options).replace(",", " at");
+      }
+      async function fetchFollowingResults(userId, postId) {
+        const searchInput = document.getElementById(
+          `followingSearch-${postId}`
+        ).value;
+        console.log(searchInput);
 
         try {
-            const response = await fetch(`/community/posts?offset=${offset}&limit=${limit}`);
-            if (!response.ok) throw new Error('Failed to fetch posts');
+          // Make an asynchronous GET request to the server
+
+          const response = await fetch(`/followingSearch`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              followingSearch: `${searchInput}%`,
+              id: userId,
+            }),
+          });
+          const data = await response.json(); // Parse the response JSON
+          console.log(data);
+          // Update the DOM with the search results
+          const resultsContainer = document.getElementById(
+            `share-s-content-${postId}`
+          );
+          resultsContainer.innerHTML = ""; // Clear previous results
+
+          if (data.following.length > 0) {
+            // Render each user in the result
+            data.following.forEach((account) => {
+              const userDiv = `
+                    <div class="share-suggestion-account">
+                            <div class="share-profile-name">
+                              <div class="share-profile-container">
+                                <div class="share-profile-image">
+                                  <a
+                                    href="/community/user-profile?id=${account.id}"
+                                  >
+                                    <img
+                                      src="${account.image}"
+                                      alt=""
+                                    />
+                                  </a>
+                                </div>
+                              </div>
+                              <div class="share-user-name-day">
+                                <a
+                                  href="/community/user-profile?id=${account.id}"
+                                >
+                                  <div class="share-user-name">
+                                    ${account.name}
+                                  </div>
+                                </a>
+                              </div>
+                              <div class="share-follow-container">
+                                <div
+                                  id="send-button-${postId}-${account.id}"
+                                  onclick="handleSendPost(${postId},${account.id})"
+                                  class="share-follow-btn"
+                                >
+                                
+                                  send
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                `;
+              resultsContainer.insertAdjacentHTML("beforeend", userDiv);
+            });
+          } else {
+            // Show a message when no results are found
+            resultsContainer.innerHTML = "<p>No results found</p>";
+          }
+        } catch (error) {
+          console.error("Error fetching results:", error);
+        }
+      }
+      // //Filtering initial posts so that same posts are not appended to dom
+      // let initialPostsIds;
+      // async function loadInitialPosts() {
+      //   try {
+      //     const initialPostResponse = await fetch("/initialCommunityPosts");
+      //     if (!initialPostResponse.ok)
+      //       throw new Error("Initial Post response was not ok");
+
+      //     const initialPostsData = await initialPostResponse.json();
+      //     if (initialPostsData.success === false)
+      //       throw new Error("Failed to fetch initial posts");
+      //     initialPostsIds = initialPostsData.initialPosts.map((post) => post.id);
+
+      //     console.log("Initial Load", initialPostsData.initialPosts);
+      //   } catch (error) {
+      //     console.error("Error fetching initial posts:", error);
+      //   }
+      // }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        let offset = 10;
+        const limit = 10;
+        const container = document.querySelector(".user-post-container");
+        let isLoading = false;
+        let isScrollingFinished = false; // Flag to control fetching posts
+
+        // Function to fetch posts from the server
+        const fetchPosts = async () => {
+          if (isLoading) return; // Prevent duplicate requests while loading
+          isLoading = true;
+
+          const spinner = document.getElementById("loading-spinner");
+          spinner.style.display = "block";
+
+          try {
+            const response = await fetch(
+              `/community/posts?offset=${offset}&limit=${limit}`
+            );
+            if (!response.ok) throw new Error("Failed to fetch posts");
             const data = await response.json();
 
             // Simulate delay for spinner visibility
@@ -870,172 +1235,318 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Append posts to the DOM
             console.log(data.posts);
-            appendPosts(data.posts, data.comments, data.replies, data.userId);
+
+            appendPosts(
+              data.posts,
+              data.comments,
+              data.replies,
+              data.following,
+              data.userId
+            );
 
             // Update the offset for the next fetch
             offset += limit;
 
             // If no more posts, stop further fetching
             if (data.posts.length < limit) {
-                window.removeEventListener('scroll', handleScroll);
+              window.removeEventListener("scroll", handleScroll);
             }
-
-        } catch (error) {
-            console.error('Error fetching posts:', error);
-        } finally {
+          } catch (error) {
+            console.error("Error fetching posts:", error);
+          } finally {
             // Hide the spinner and set isLoading to false
-            const spinner = document.getElementById('loading-spinner');
-            spinner.style.display = 'none';
+            const spinner = document.getElementById("loading-spinner");
+            spinner.style.display = "none";
             isLoading = false;
 
             // Reset the flag to allow for the next scroll event
             isScrollingFinished = true;
-        }
-    };
+          }
+        };
 
-    // Function to append posts to the DOM
-    const appendPosts = (posts, comments, replies, userId) => {
-        posts.forEach((post) => {
+        // Function to append posts to the DOM
+        const appendPosts = (posts, comments, replies, following, userId) => {
+          posts.forEach((post) => {
             const postHTML = `
                 <div class="user-post" data-post-id=${post.post_id}>
                     <div class="user-info">
                         <div class="profile-name">
                             <div class="profile-container">
                                 <div class="profile-image">
-                                    <img src="${post.lawyer_profile_image}" alt="">
+                                    <img src="${
+                                      post.lawyer_profile_image
+                                    }" alt="">
                                 </div>
                             </div>
                             <div class="user-name-day">
-                                <a href="/community/user-profile?id=${post.lawyer_id}">
-                                    <div class="user-name">${post.lawyer_name}</div>
+                                <a href="/community/user-profile?id=${
+                                  post.lawyer_id
+                                }">
+                                    <div class="user-name">${
+                                      post.lawyer_name
+                                    }</div>
                                 </a>
-                                <div class="post-day">${formatDate(new Date(post.created_at))}</div>
+                                <div class="post-day">${formatDate(
+                                  new Date(post.created_at)
+                                )}</div>
                             </div>
                         </div>
                         
                         <div class="follow-container">
-                            <input type="hidden" name="postLawyerId" value="${post.lawyer_id}">
-                            ${post.user_follows_post_owner === false ?  `${userId !== post.lawyer_id ? `<div  onclick="postLawyerFollow(${post.post_id}, ${post.lawyer_id})" class="follow-btn-2 follow-${post.lawyer_id}" id="follow-btn-post-${post.post_id}" data-post-id="${post.post_id}">
+                            <input type="hidden" name="postLawyerId" value="${
+                              post.lawyer_id
+                            }">
+                            ${
+                              post.user_follows_post_owner === false
+                                ? `${
+                                    userId !== post.lawyer_id
+                                      ? `<div  onclick="postLawyerFollow(${
+                                          post.post_id
+                                        }, ${
+                                          post.lawyer_id
+                                        })" class="follow-btn-2 follow-${
+                                          post.lawyer_id
+                                        }" id="follow-btn-post-${
+                                          post.post_id
+                                        }" data-post-id="${post.post_id}">
                              
-                                  ${post.user_follows_post_owner ? 'Following' : 'Follow'}
+                                  ${
+                                    post.user_follows_post_owner
+                                      ? "Following"
+                                      : "Follow"
+                                  }
                                 
-                                </div>` : ''}` : ''}
+                                </div>`
+                                      : ""
+                                  }`
+                                : ""
+                            }
                             
                             
                         </div>
                     </div>
-                    <div class="post-info" onclick="redirectPostPage(${post.post_id})">
+                    <div class="post-info" onclick="redirectPostPage(${
+                      post.post_id
+                    })">
                          
-                        <div class="post-para" data-post-id="${post.post_id}">${post.content}</div>
-                        ${post.image_path ? `
+                        <div class="post-para" data-post-id="${post.post_id}">${
+              post.content
+            }</div>
+                        ${
+                          post.image_path
+                            ? `
                         <div class="user-post-image">
                             <div class="post-img-box">
                                 <img src="${post.image_path}" alt="">
                             </div>
-                        </div>` : ''}
+                        </div>`
+                            : ""
+                        }
                     </div>
                    
                          <div class="post-stat" data-post-id="${post.post_id}">
-                        <div class="like-comment" onclick="redirectPostPage(${post.post_id})">
+                        <div class="like-comment" onclick="redirectPostPage(${
+                          post.post_id
+                        })">
                             <div class="likes-number"></div>
                             <div class="comment-number">
-                               <a href="/community/post/${post.post_id}"> <span>${comments.filter(c => c.post_id === post.post_id).length} Comments</span> </a> 
+                               <a href="/community/post/${
+                                 post.post_id
+                               }"> <span>${
+              comments.filter((c) => c.post_id === post.post_id).length
+            } Comments</span> </a> 
                             </div>
                         </div>
                         <hr>
                         <div class="like-share-comment">
                             <div>
-                                <i class="fa-solid fa-thumbs-up like-bigger like-button ${post.user_liked ? 'like-active' : ''}" 
+                                <i class="fa-solid fa-thumbs-up like-bigger like-button ${
+                                  post.user_liked ? "like-active" : ""
+                                }" 
                                    data-user-id="${post.userId}" 
                                    data-post-id="${post.post_id}"></i>
-                                <span id="likes-${post.post_id}">${post.like_count} Likes</span>
+                                <span id="likes-${post.post_id}">${
+              post.like_count
+            } Likes</span>
                             </div>
-                            <div class="comment" onclick="redirectPostPage(${post.post_id})" data-post-id="${post.post_id}">
+                            <div class="comment" onclick="redirectPostPage(${
+                              post.post_id
+                            })" data-post-id="${post.post_id}">
                                 <i class="fa-solid fa-comment"></i>
                                 <span>Comment</span>
                             </div>
-                            <div class="share">
+                            <div class="share" onclick="handleShareContainer(${
+                              post.post_id
+                            })">
                                 <i class="fa-solid fa-paper-plane"></i>
                                 <span>Share</span>
                             </div>
+                            <div
+                            id="share-container-${post.post_id}"
+                        class="share-suggestion-container share-container-${
+                          post.post_id
+                        } followed-by-list"
+                      >
+                        <div class="share-s-heading">
+                          <div class="share-followers-text">
+                            <span>Following</span>
+                            <div class="share-cancel-form" onclick="closeShareContainer(${
+                              post.post_id
+                            })">
+                              <i
+                                class="fa-solid fa-xmark"
+                                id="cancel-followed-by"
+                              ></i>
+                            </div>
+                          </div>
+                          <hr />
+                          <div class="share-search-box-container">
+                            <div class="share-search-box">
+                              <form action="" method="get">
+                                <input
+                                  type="search"
+                                  name="followingSearch"
+                                  placeholder="Search"
+                                  id="followingSearch-${post.post_id}"
+                                  oninput="fetchFollowingResults(${userId}, ${
+              post.post_id
+            })"
+                                />
+                                <button class="share-ipc-submit" type="submit">
+                                  <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="share-s-content-${
+                          post.post_id
+                        }" class="share-s-content">
+                          ${following
+                            .map(
+                              (account) => `
+  <div class="share-suggestion-account">
+    <div class="share-profile-name">
+      <div class="share-profile-container">
+        <div class="share-profile-image">
+          <a href="/community/user-profile?id=${account.following_id}">
+            <img src="${account.lawyer_profile_image}" alt="" />
+          </a>
+        </div>
+      </div>
+      <div class="share-user-name-day">
+        <a href="/community/user-profile?id=${account.following_id}">
+          <div class="share-user-name">
+            ${account.following_name}
+          </div>
+        </a>
+      </div>
+      <div class="share-follow-container">
+        <div id="send-button-${post.post_id}-${account.following_id}" onclick="handleSendPost(${post.post_id}, ${account.following_id})" class="share-follow-btn">send</div>
+      </div>
+    </div>
+  </div>
+`
+                            )
+                            .join("")}
+                        </div>
+                      </div>
+                            
                         </div>
                     </div>
                     <div class="post-comments">
                         <div class="post-comments-container">
-                            ${comments.filter(c => c.post_id === post.post_id).map(comment => `
+                            ${comments
+                              .filter((c) => c.post_id === post.post_id)
+                              .map(
+                                (comment) => `
                             <div class="reveiew-container">
                                 <div class="reveiew-name-rating">
-                                    <div class="reveiew-name">${comment.username}</div>
-                                    <div class="review-date">${formatDate(new Date(comment.created_at))}</div>
+                                    <div class="reveiew-name">${
+                                      comment.username
+                                    }</div>
+                                    <div class="review-date">${formatDate(
+                                      new Date(comment.created_at)
+                                    )}</div>
                                 </div>
                                 <div class="reveiew-para">
                                     <p>${comment.content}</p>
                                 </div>
                                 <div class="lawyer-reply">
-                                    ${replies.filter(r => r.comment_id === comment.id).map(reply => `
+                                    ${replies
+                                      .filter(
+                                        (r) => r.comment_id === comment.id
+                                      )
+                                      .map(
+                                        (reply) => `
                                     <div class="lawyer-previous-reply">
-                                        <div class="p-reply-name">${reply.username}</div>
-                                        <div class="p-reply-date">${formatDate(new Date(reply.created_at))}</div>
+                                        <div class="p-reply-name">${
+                                          reply.username
+                                        }</div>
+                                        <div class="p-reply-date">${formatDate(
+                                          new Date(reply.created_at)
+                                        )}</div>
                                         <p>${reply.content}</p>
-                                    </div>`).join('')}
+                                    </div>`
+                                      )
+                                      .join("")}
                                 </div>
-                            </div>`).join('')}
+                            </div>`
+                              )
+                              .join("")}
                         </div>
                     </div>
                 </div>
             `;
-            container.insertAdjacentHTML('beforeend', postHTML);
-        });
+            container.insertAdjacentHTML("beforeend", postHTML);
+          });
 
-        isScrollingFinished = true;  // Make sure this is reset
-       // Reattach event listeners to new posts
-    
-    };
+          isScrollingFinished = true; // Make sure this is reset
+          // Reattach event listeners to new posts
+        };
 
-   
-
-    // Handle the scroll event to trigger fetching posts when scrolled to the bottom
-    const handleScroll = () => {
-        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
+        // Handle the scroll event to trigger fetching posts when scrolled to the bottom
+        const handleScroll = () => {
+          if (
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 100
+          ) {
             if (isScrollingFinished) {
-                fetchPosts();
-                isScrollingFinished = false; // Prevent fetching again until posts are loaded
+              fetchPosts();
+              isScrollingFinished = false; // Prevent fetching again until posts are loaded
             }
-        }
-    };
+          }
+        };
 
-    // Attach the scroll event listener
-    window.addEventListener('scroll', handleScroll);
+        // Attach the scroll event listener
+        window.addEventListener("scroll", handleScroll);
 
-    // Initial call to fetch posts
-    fetchPosts();
-});
+        // Initial call to fetch posts
+        fetchPosts();
+      });
 
-const form = document.getElementById('communityForm');
-  const submitButton = document.getElementById('submitButton');
+      const form = document.getElementById("communityForm");
+      const submitButton = document.getElementById("submitButton");
 
-  form.addEventListener('submit', function(event) {
-    submitButton.disabled = true; // Disable the button to prevent multiple clicks
-  });
+      form.addEventListener("submit", function (event) {
+        submitButton.disabled = true; // Disable the button to prevent multiple clicks
+      });
 
-
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    const postContainer = document.getElementById("posts-container");
-    if (postContainer) {
-        postContainer.addEventListener('click', async(event) => {
-            console.log('yes');
-            if (event.target.classList.contains('.like-btn')) {
-                console.log('Excluded element clicked. Ignoring.');
-                return; 
+      document.addEventListener("DOMContentLoaded", () => {
+        const postContainer = document.getElementById("posts-container");
+        if (postContainer) {
+          postContainer.addEventListener("click", async (event) => {
+            console.log("yes");
+            if (event.target.classList.contains(".like-btn")) {
+              console.log("Excluded element clicked. Ignoring.");
+              return;
             }
-            let userPost = event.target.closest('.post-para');
+            let userPost = event.target.closest(".post-para");
             if (userPost) {
-                const postId = userPost.getAttribute('data-post-id');
-                console.log(postId);
-                window.location.href = `/community/post/${postId}`;
+              const postId = userPost.getAttribute("data-post-id");
+              console.log(postId);
+              window.location.href = `/community/post/${postId}`;
             }
             // let commentArea = event.target.closest('.post-stat');
             // if (commentArea) {
@@ -1043,121 +1554,115 @@ document.addEventListener('DOMContentLoaded', () => {
             //     console.log(postId);
             //     window.location.href = `/community/post/${postId}`;
             // }
-            let commentArea = event.target.closest('.comment');
+            let commentArea = event.target.closest(".comment");
             if (commentArea) {
-                const postId = commentArea.getAttribute('data-post-id');
-                console.log(postId);
-                window.location.href = `/community/post/${postId}`;
+              const postId = commentArea.getAttribute("data-post-id");
+              console.log(postId);
+              window.location.href = `/community/post/${postId}`;
             }
-            
-        });
-    } else {
-        console.error('Error: posts-container element not found!');
-    }
-});
+          });
+        } else {
+          console.error("Error: posts-container element not found!");
+        }
+      });
 
+      // document.addEventListener('DOMContentLoaded', () => {
+      //     const postContainer = document.getElementById("posts-container");
+      //     if (postContainer) {
+      //         postContainer.addEventListener('click', (event) => {
+      //             console.log('Clicked element:', event.target);
 
+      //             // Check if the clicked element or its closest parent is the like button
+      //             const likeButton = event.target.closest('.like-button');
+      //             if (likeButton) {
+      //                 // Retrieve postId from the data attribute
+      //                 const postId = likeButton.getAttribute('data-post-id');
+      //                 if (postId) {
+      //                     console.log('Post ID:', postId);
 
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     const postContainer = document.getElementById("posts-container");
-//     if (postContainer) {
-//         postContainer.addEventListener('click', (event) => {
-//             console.log('Clicked element:', event.target);
-
-//             // Check if the clicked element or its closest parent is the like button
-//             const likeButton = event.target.closest('.like-button'); 
-//             if (likeButton) {
-//                 // Retrieve postId from the data attribute
-//                 const postId = likeButton.getAttribute('data-post-id');
-//                 if (postId) {
-//                     console.log('Post ID:', postId);
-
-//                     // Send the post impression using `navigator.sendBeacon`
-//                     navigator.sendBeacon(
-//                         '/community/post-impressions',
-//                         JSON.stringify({ postId: postId })
-//                     );
-//                 } else {
-//                     console.error('Error: Post ID not found on the clicked element.');
-//                 }
-//             }
-//         });
-//     } else {
-//         console.error('Error: posts-container element not found!');
-//     }
-// });
-document.addEventListener('DOMContentLoaded', () => {
-const form1 = document.getElementById('communityForm');
-    form1.addEventListener('submit',async(event)=>{
-        event.preventDefault();
-        const formData = new FormData(form1);
-        const json = Object.fromEntries(formData.entries());
-        console.log(json);
-        try{
-            const response = await fetch('/community',{
-                method: 'POST',
-                headers: {
-                  'Content-Type':'application/json'
-                },
-                body: JSON.stringify(json)
+      //                     // Send the post impression using `navigator.sendBeacon`
+      //                     navigator.sendBeacon(
+      //                         '/community/post-impressions',
+      //                         JSON.stringify({ postId: postId })
+      //                     );
+      //                 } else {
+      //                     console.error('Error: Post ID not found on the clicked element.');
+      //                 }
+      //             }
+      //         });
+      //     } else {
+      //         console.error('Error: posts-container element not found!');
+      //     }
+      // });
+      document.addEventListener("DOMContentLoaded", () => {
+        const form1 = document.getElementById("communityForm");
+        form1.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const formData = new FormData(form1);
+          const json = Object.fromEntries(formData.entries());
+          console.log(json);
+          try {
+            const response = await fetch("/community", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(json),
             });
 
-          if (response.status === 401){
-          Toastify({
-          text: 'Please sign in to add a review.',
-          duration: 3000,
-          close: true,
-          gravity: "top",
-          position: "center",
-          backgroundColor: "#FF0000",
-        }).showToast();
-        return;
-        }
+            if (response.status === 401) {
+              Toastify({
+                text: "Please sign in to add a review.",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#FF0000",
+              }).showToast();
+              return;
+            }
 
-        const data = await response.json();
-        Toastify({
-            text: data.message,
-            duration: 3000,
-            close: true,
-            gravity: "top",
-            position: "center",
-            backgroundColor: data.success? "#4CAF50":"FF0000",
-        }).showToast();
-
-        // if(data.success){
-        //     setTimeout(()=>{
-        //         window.location.href=`/community/user-profile?id=${data.userId}`;
-        //     },1000);
-        // }
-        } catch(error){
-            console.error('Error:', error);
+            const data = await response.json();
             Toastify({
-            text: "An error occurred. Please try again.",
-            duration: 3000, 
-            close: true, 
-            gravity: "top", 
-            position: "center", 
-            backgroundColor: "#FF0000", 
-          }).showToast();
-        }
-    })
-});
+              text: data.message,
+              duration: 3000,
+              close: true,
+              gravity: "top",
+              position: "center",
+              backgroundColor: data.success ? "#4CAF50" : "FF0000",
+            }).showToast();
 
-//Redirect suggestion account
-const redirectSuggestionAccount = (lawyerId) => {
-    window.location.href = `/community/user-profile?id=${lawyerId}`
-}
+            // if(data.success){
+            //     setTimeout(()=>{
+            //         window.location.href=`/community/user-profile?id=${data.userId}`;
+            //     },1000);
+            // }
+          } catch (error) {
+            console.error("Error:", error);
+            Toastify({
+              text: "An error occurred. Please try again.",
+              duration: 3000,
+              close: true,
+              gravity: "top",
+              position: "center",
+              backgroundColor: "#FF0000",
+            }).showToast();
+          }
+        });
+      });
 
+      // const share=document.querySelector('.share');
+      // const shareList =document.querySelector('.share-suggestion-container');
+      // const cancelShare = document.querySelector('#cancel-followed-by');
 
-
-
-
-
-
-
-
-        </script>
-</body>
-
+      // share.onclick = () => {
+      //     shareList.classList.toggle("share-active")
+      //     document.body.classList.toggle("body-active")
+      // }
+      // cancelShare.onclick = ()=>{
+      //     share.classList.remove("share-active")
+      //     document.body.classList.remove("body-active")
+      // }
+    </script>
+  </body>
 </html>
