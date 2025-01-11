@@ -689,53 +689,53 @@
                         
           </div>
           <div id="paginationContainer" data-current-page="<%= currentPage %>" class="pagination slide-menu">
-           <% if(totalPages>1) { %>
-            <% if(currentPage > 1) { %>
-              <div class="btn-box prev">
-                <button class="prev-btn" onclick="window.location.href='?page=<%= currentPage - 1 %>&limit=<%= limit %>&law=<%= law %>&city=<%= city %>&cityHome=<%=cityFilter%>&state=<%=stateFilter%>&areaofpractice=<%=aopFilter%>&experience=<%=experienceFilter%>&language=<%=languageFilter%>&gender=<%=genderFilter%>&rating=<%=ratingFilter%>&homeLanguage=<%=language%>&search=<%=search%>'">
-                  <span><i class="fa-solid fa-angles-left"></i></span>
-                </button>
+            <% if (totalPages > 1) { %>
+              <!-- Show "Previous" button -->
+              <% if(currentPage > 1) { %>
+                <div class="btn-box prev">
+                  <button class="prev-btn" onclick="window.location.href='?page=<%= currentPage - 1 %>&limit=<%= limit %>&law=<%= law %>&city=<%= city %>&cityHome=<%=cityFilter%>&state=<%=stateFilter%>&areaofpractice=<%=aopFilter%>&experience=<%=experienceFilter%>&language=<%=languageFilter%>&gender=<%=genderFilter%>&rating=<%=ratingFilter%>&homeLanguage=<%=language%>&search=<%=search%>'">
+                    <span><i class="fa-solid fa-angles-right"></i></span>
+                  </button>
+                </div>
+              <% } %>
+          
+              <!-- Always show the first page -->
+              <div class="btn-box <%= currentPage === 1 ? 'active' : '' %>" onclick="window.location.href='?page=1&limit=<%= limit %>&law=<%= law %>&city=<%= city %>&cityHome=<%= cityFilter %>&state=<%= stateFilter %>&areaofpractice=<%= aopFilter %>&experience=<%= experienceFilter %>&language=<%= languageFilter %>&gender=<%= genderFilter %>&rating=<%= ratingFilter %>&homeLanguage=<%= language %>&search=<%= search %>'">
+                1
               </div>
-            <% } %>
           
-            <!-- Always show the first page -->
-            <div class="btn-box <%= currentPage === 1 ? 'active' : '' %>" onclick="window.location.href='?page=1&limit=<%= limit %>&law=<%= law %>&city=<%= city %>&cityHome=<%=cityFilter%>&state=<%=stateFilter%>&areaofpractice=<%=aopFilter%>&experience=<%=experienceFilter%>&language=<%=languageFilter%>&gender=<%=genderFilter%>&rating=<%=ratingFilter%>&homeLanguage=<%=language%>&search=<%=search%>'">
-              1
-            </div>
+              <!-- Show ellipsis if needed before current page -->
+              <% if (currentPage > 3) { %>
+                <span>...</span>
+              <% } %>
           
-            <!-- Show ellipsis if we're more than 2 pages away from the first page -->
-            <% if (currentPage > 3) { %>
-              <span>...</span>
-            <% } %>
+              <!-- Show current page -->
+              <% if (currentPage > 1 && currentPage < totalPages) { %>
+                <div class="btn-box active" onclick="window.location.href='?page=<%= currentPage %>&limit=<%= limit %>&law=<%= law %>&city=<%= city %>&cityHome=<%= cityFilter %>&state=<%= stateFilter %>&areaofpractice=<%= aopFilter %>&experience=<%= experienceFilter %>&language=<%= languageFilter %>&gender=<%= genderFilter %>&rating=<%= ratingFilter %>&homeLanguage=<%= language %>&search=<%= search %>'">
+                  <%= currentPage %>
+                </div>
+              <% } %>
           
-            <!-- Show pages around the current page -->
-            <% for(let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) { %>
-              <div class="btn-box <%= i === currentPage ? 'active' : '' %>" onclick="window.location.href='?page=<%= i %>&limit=<%= limit %>&law=<%= law %>&city=<%= city %>&cityHome=<%=cityFilter%>&state=<%=stateFilter%>&areaofpractice=<%=aopFilter%>&experience=<%=experienceFilter%>&language=<%=languageFilter%>&gender=<%=genderFilter%>&rating=<%=ratingFilter%>&homeLanguage=<%=language%>&search=<%=search%>'">
-                <%= i %>
+              <!-- Show ellipsis if needed after current page -->
+              <% if (currentPage < totalPages - 2) { %>
+                <span>...</span>
+              <% } %>
+          
+              <!-- Always show the last page -->
+              <div class="btn-box <%= currentPage === totalPages ? 'active' : '' %>" onclick="window.location.href='?page=<%= totalPages %>&limit=<%= limit %>&law=<%= law %>&city=<%= city %>&cityHome=<%= cityFilter %>&state=<%= stateFilter %>&areaofpractice=<%= aopFilter %>&experience=<%= experienceFilter %>&language=<%= languageFilter %>&gender=<%= genderFilter %>&rating=<%= ratingFilter %>&homeLanguage=<%= language %>&search=<%= search %>'">
+                <%= totalPages %>
               </div>
-            <% } %>
           
-            <!-- Show ellipsis if we're more than 2 pages away from the last page -->
-            <% if (currentPage < totalPages - 2) { %>
-              <span>...</span>
-            <% } %>
-          
-            <!-- Always show the last page -->
-            <div class="btn-box <%= currentPage === totalPages ? 'active' : '' %>" onclick="window.location.href='?page=<%= totalPages %>&limit=<%= limit %>&law=<%= law %>&city=<%= city %>&cityHome=<%=cityFilter%>&state=<%=stateFilter%>&areaofpractice=<%=aopFilter%>&experience=<%=experienceFilter%>&language=<%=languageFilter%>&gender=<%=genderFilter%>&rating=<%=ratingFilter%>&homeLanguage=<%=language%>&search=<%=search%>'">
-              <%= totalPages %>
-            </div>
-          
-            <!-- Show "Next" button -->
-            <% if(currentPage < totalPages) { %>
-              <div class="btn-box next">
-                <button class="next-btn" onclick="window.location.href='?page=<%= currentPage + 1 %>&limit=<%= limit %>&law=<%= law %>&city=<%= city %>&state=<%=stateFilter%>&areaofpractice=<%=aopFilter%>&experience=<%=experienceFilter%>&language=<%=languageFilter%>&cityHome=<%=cityFilter%>&gender=<%=genderFilter%>&rating=<%=ratingFilter%>&homeLanguage=<%=language%>&search=<%=search%>'">
-                  <span><i class="fa-solid fa-angles-right"></i></span>
-                </button>
-              </div>
-            <% } %>
+              <!-- Show "Next" button -->
+              <% if (currentPage < totalPages) { %>
+                <div class="btn-box next">
+                  <button class="next-btn" onclick="window.location.href='?page=<%= currentPage + 1 %>&limit=<%= limit %>&law=<%= law %>&city=<%= city %>&cityHome=<%= cityFilter %>&state=<%= stateFilter %>&areaofpractice=<%= aopFilter %>&experience=<%= experienceFilter %>&language=<%= languageFilter %>&gender=<%= genderFilter %>&rating=<%= ratingFilter %>&homeLanguage=<%= language %>&search=<%= search %>'">
+                    <span><i class="fa-solid fa-angles-right"></i></span>
+                  </button>
+                </div>
+              <% } %>
             <% } %>
           </div>
-          
           
   
         </div>
