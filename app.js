@@ -3882,8 +3882,8 @@ const sendEmailWithRetry = async (mailOptions, transporter, retries = 3) => {
 };
 
 // Route to handle email open tracking
-app.get('/track-pixel', async (req, res) => {
-  const { lawyerId, emailId, name, cno, phone } = req.query;
+app.get("/track-pixel", async (req, res) => {
+  const { lawyerId, emailId, name, cno } = req.query;
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -3904,26 +3904,23 @@ app.get('/track-pixel', async (req, res) => {
     Contact No: ${cno}
     Email id: ${phone}`,
   };
-  const lawyerResult = await sendEmailWithRetry(
-    lawyerMailOptions,
-    transporter
-  );
+  const lawyerResult = await sendEmailWithRetry(lawyerMailOptions, transporter);
   if (!lawyerResult.success) {
     throw new Error(lawyerResult.error);
   }
 
-
-const insertQuery = `
+  const insertQuery = `
   INSERT INTO lawyer_requests (lawyer_id, user_name, user_email, user_phone)
   VALUES ($1, $2, $3, $4)
 `;
-await pool.query(insertQuery, [lawyerId, name, email, cno]);
+  await pool.query(insertQuery, [lawyerId, name, email, cno]);
 
   // Log the emailId
-  console.log('Tracking email opened for emailId:', emailId);
+  console.log("Tracking email opened for emailId:", emailId);
 
   // Cloudinary image URL
-  const cloudImageURL = 'https://res.cloudinary.com/dabla3fwm/image/upload/v1736586889/cicvx3yayjqvkdcsom0g.png';
+  const cloudImageURL =
+    "https://res.cloudinary.com/dabla3fwm/image/upload/v1736586889/cicvx3yayjqvkdcsom0g.png";
 
   // Redirect to the Cloudinary image
   res.redirect(cloudImageURL);
@@ -3978,7 +3975,7 @@ app.post("/lawyersprofile", async (req, res) => {
 <p>If you open this email, we will track it.</p>
 
 
-<img src="https://www.ilegaladvice.com/track-pixel?lawyerId=${lawyerId}&emailId=${lawyer.email}&name=${name}&cno=${c_no}&phone=${phone}" alt="Tracking Pixel" />
+<img src="https://www.ilegaladvice.com/track-pixel?lawyerId=${lawyerId}&emailId=${lawyer.email}&name=${name}&cno=${phone}" alt="Tracking Pixel" />
 `,
     };
 
@@ -3993,7 +3990,6 @@ app.post("/lawyersprofile", async (req, res) => {
       res.json(responseMessage);
       return;
     }
-
 
     responseMessage = { success: true, message: "Email sent successfully!" };
   } catch (error) {
