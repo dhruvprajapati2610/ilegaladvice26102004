@@ -3881,10 +3881,9 @@ const sendEmailWithRetry = async (mailOptions, transporter, retries = 3) => {
   }
 };
 
-// Route to handle email open tracking
 app.get("/track-pixel", async (req, res) => {
-  const { lawyerId, emailId, name, cno } = req.query;
-
+  const { lawyerId, emailId, name, phone } = req.query;
+  
   const transporter = nodemailer.createTransport({
     service: "gmail",
     port: 465,
@@ -3901,8 +3900,8 @@ app.get("/track-pixel", async (req, res) => {
     subject: "Client Details",
     text: `Greetings from iLegalAdvice. The following user has been trying to contact you:
     Name: ${name}
-    Contact No: ${cno}
-    Email id: ${phone}`,
+    Contact No: ${phone}
+    Email id: ${emailId}`,
   };
   const lawyerResult = await sendEmailWithRetry(lawyerMailOptions, transporter);
   if (!lawyerResult.success) {
@@ -3925,6 +3924,7 @@ app.get("/track-pixel", async (req, res) => {
   // Redirect to the Cloudinary image
   res.redirect(cloudImageURL);
 });
+;
 
 app.post("/lawyersprofile", async (req, res) => {
   let responseMessage = {
@@ -3975,7 +3975,7 @@ app.post("/lawyersprofile", async (req, res) => {
 <p>If you open this email, we will track it.</p>
 
 
-<img src="https://www.ilegaladvice.com/track-pixel?lawyerId=${lawyerId}&emailId=${lawyer.email}&name=${name}&cno=${phone}" alt="Tracking Pixel" />
+<img src="https://www.ilegaladvice.com/track-pixel?lawyerId=${lawyerId}&emailId=${lawyer.email}&name=${name}&phone=${phone}" alt="Tracking Pixel" />
 `,
     };
 
