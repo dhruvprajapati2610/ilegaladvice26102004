@@ -3898,10 +3898,11 @@ app.get("/track-pixel", async (req, res) => {
     from: "ilegaladvice26@gmail.com",
     to: emailId,
     subject: "Client Details",
-    text: `Greetings from iLegalAdvice. The following user has been trying to contact you:
-    Name: ${name}
-    Contact No: ${phone}
-    Email id: ${emailId}`,
+    html: `<p>Greetings from iLegalAdvice. Following User has been trying to contact you:</p>
+<p><strong>Name:</strong> ${name}</p>
+<p><strong>Contact No:</strong> ${phone}</p>
+<p><strong>Email id:</strong> ${emailId}</p>
+`,
   };
   const lawyerResult = await sendEmailWithRetry(lawyerMailOptions, transporter);
   if (!lawyerResult.success) {
@@ -3912,7 +3913,7 @@ app.get("/track-pixel", async (req, res) => {
   INSERT INTO lawyer_requests (lawyer_id, user_name, user_email, user_phone)
   VALUES ($1, $2, $3, $4)
 `;
-  await pool.query(insertQuery, [lawyerId, name, email, cno]);
+  await pool.query(insertQuery, [lawyerId, name, emailId , phone]);
 
   // Log the emailId
   console.log("Tracking email opened for emailId:", emailId);
@@ -3924,7 +3925,6 @@ app.get("/track-pixel", async (req, res) => {
   // Redirect to the Cloudinary image
   res.redirect(cloudImageURL);
 });
-;
 
 app.post("/lawyersprofile", async (req, res) => {
   let responseMessage = {
