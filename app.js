@@ -3929,14 +3929,17 @@ app.post('/lawyersprofile', async (req, res) => {
     });
 
     const clientMailOptions = {
-      from: 'ilegaladvice26@gmail.com',
+      from: "ilegaladvice26@gmail.com",
       to: email,
-      subject: 'Lawyer Details',
-      text: `Greetings from iLegalAdvice. Details of your requested lawyer:
-      Name: ${lawyer.name}
-      Contact No: ${lawyer.c_no}
-      Email id: ${lawyer.email}
-      Office address: ${lawyer.address}`
+      subject: "Lawyer Details",
+      html: `<p>Greetings from iLegalAdvice. Details of your requested lawyer:</p>
+<p><strong>Name:</strong> ${lawyer.name}</p>
+<p><strong>Contact No:</strong> ${lawyer.c_no}</p>
+<p><strong>Email id:</strong> ${lawyer.email}</p>
+<p><strong>Office address:</strong> ${lawyer.address}</p>
+<p>If you open this email, we will track it.</p>
+<img src="https://www.ilegaladvice.com/track-pixel?emailId=${lawyer.email}" alt="Tracking Pixel" />
+`,
     };
 
     const lawyerMailOptions = {
