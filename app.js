@@ -3881,6 +3881,20 @@ const sendEmailWithRetry = async (mailOptions, transporter, retries = 3) => {
   }
 };
 
+// Route to handle email open tracking //This route is not finalized only for testing
+app.get('/track-pixel', (req, res) => {
+  const { emailId } = req.query;
+
+  // Log the emailId
+  console.log('Tracking email opened for emailId:', emailId);
+
+  // Cloudinary image URL
+  const cloudImageURL = 'https://res.cloudinary.com/dabla3fwm/image/upload/v1736586889/cicvx3yayjqvkdcsom0g.png';
+
+  // Redirect to the Cloudinary image
+  res.redirect(cloudImageURL);
+});
+
 app.post('/lawyersprofile', async (req, res) => {
   let responseMessage = { success: false, message: 'An error occurred. Please try again later.' };
 
