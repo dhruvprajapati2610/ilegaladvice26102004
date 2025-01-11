@@ -1224,9 +1224,24 @@ searchButton.onclick=()=>{
           spinner.style.display = "block";
 
           try {
-            const response = await fetch(
-              `/community/posts?offset=${offset}&limit=${limit}`
-            );
+             //Filtering initial posts so that same posts are not appended to dom
+             let initialPostsIds;
+
+const initialPostResponse = await fetch("/initialCommunityPosts");
+const initialPostsData = await initialPostResponse.json();
+const response = await fetch(
+  `/community/posts?offset=${offset}&limit=${limit}`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      posts: initialPostsData.initialPosts,
+    }),
+  }
+);
+           
             if (!response.ok) throw new Error("Failed to fetch posts");
             const data = await response.json();
 
