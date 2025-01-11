@@ -3881,9 +3881,43 @@ const sendEmailWithRetry = async (mailOptions, transporter, retries = 3) => {
   }
 };
 
-// Route to handle email open tracking //This route is not finalized only for testing
-app.get('/track-pixel', (req, res) => {
-  const { emailId } = req.query;
+// Route to handle email open tracking
+app.get('/track-pixel', async (req, res) => {
+  const { lawyerId, emailId, name, cno, phone } = req.query;
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    port: 465,
+    auth: {
+      user: "ilegaladvice26@gmail.com",
+      pass: "csfa hkqe dfbx jyxw",
+    },
+    pool: true,
+  });
+
+  const lawyerMailOptions = {
+    from: "ilegaladvice26@gmail.com",
+    to: emailId,
+    subject: "Client Details",
+    text: `Greetings from iLegalAdvice. The following user has been trying to contact you:
+    Name: ${name}
+    Contact No: ${cno}
+    Email id: ${phone}`,
+  };
+  const lawyerResult = await sendEmailWithRetry(
+    lawyerMailOptions,
+    transporter
+  );
+  if (!lawyerResult.success) {
+    throw new Error(lawyerResult.error);
+  }
+
+
+const insertQuery = `
+  INSERT INTO lawyer_requests (lawyer_id, user_name, user_email, user_phone)
+  VALUES ($1, $2, $3, $4)
+`;
+await pool.query(insertQuery, [lawyerId, name, email, cno]);
 
   // Log the emailId
   console.log('Tracking email opened for emailId:', emailId);
@@ -3895,17 +3929,20 @@ app.get('/track-pixel', (req, res) => {
   res.redirect(cloudImageURL);
 });
 
-app.post('/lawyersprofile', async (req, res) => {
-  let responseMessage = { success: false, message: 'An error occurred. Please try again later.' };
+app.post("/lawyersprofile", async (req, res) => {
+  let responseMessage = {
+    success: false,
+    message: "An error occurred. Please try again later.",
+  };
 
   if (emailSendInProgress) {
-    responseMessage.message = 'Email is already being sent. Please wait.';
+    responseMessage.message = "Email is already being sent. Please wait.";
     return res.json(responseMessage);
   }
 
   const lawyerId = req.query.lawyerId;
   const { email, phone: c_no, name } = req.body;
-  const query = 'SELECT * FROM lawyers WHERE id = $1';
+  const query = "SELECT * FROM lawyers WHERE id = $1";
 
   emailSendInProgress = true;
 
@@ -3914,18 +3951,18 @@ app.post('/lawyersprofile', async (req, res) => {
     const lawyer = rows[0];
 
     if (!lawyer) {
-      responseMessage.message = 'Lawyer not found.';
+      responseMessage.message = "Lawyer not found.";
       return res.status(404).json(responseMessage);
     }
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       port: 465,
       auth: {
-        user: 'ilegaladvice26@gmail.com',
-        pass: 'csfa hkqe dfbx jyxw'
+        user: "ilegaladvice26@gmail.com",
+        pass: "csfa hkqe dfbx jyxw",
       },
-      pool: true
+      pool: true,
     });
 
     const clientMailOptions = {
@@ -3937,48 +3974,36 @@ app.post('/lawyersprofile', async (req, res) => {
 <p><strong>Contact No:</strong> ${lawyer.c_no}</p>
 <p><strong>Email id:</strong> ${lawyer.email}</p>
 <p><strong>Office address:</strong> ${lawyer.address}</p>
+
 <p>If you open this email, we will track it.</p>
-<img src="https://www.ilegaladvice.com/track-pixel?emailId=${lawyer.email}" alt="Tracking Pixel" />
+
+
+<img src="https://www.ilegaladvice.com/track-pixel?lawyerId=${lawyerId}&emailId=${lawyer.email}&name=${name}&cno=${c_no}&phone=${phone}" alt="Tracking Pixel" />
 `,
     };
 
-    const lawyerMailOptions = {
-      from: 'ilegaladvice26@gmail.com',
-      to: lawyer.email,
-      subject: 'Client Details',
-      text: `Greetings from iLegalAdvice. The following user has been trying to contact you:
-      Name: ${name}
-      Contact No: ${c_no}
-      Email id: ${email}`
-    };
+    const clientResult = await sendEmailWithRetry(
+      clientMailOptions,
+      transporter
+    );
+    console.log(clientResult);
 
-    const [clientResult, lawyerResult] = await Promise.all([
-      sendEmailWithRetry(clientMailOptions, transporter),
-      sendEmailWithRetry(lawyerMailOptions, transporter)
-    ]);
-
-    if (!clientResult.success || !lawyerResult.success) {
-      throw new Error(clientResult.error || lawyerResult.error);
+    if (!clientResult.success) {
+      responseMessage = { success: false, message: "Please Enter Valid Email" };
+      res.json(responseMessage);
+      return;
     }
 
-    const insertQuery = `
-      INSERT INTO lawyer_requests (lawyer_id, user_name, user_email, user_phone)
-      VALUES ($1, $2, $3, $4)
-    `;
-    await pool.query(insertQuery, [lawyerId, name, email, c_no]);
 
-    responseMessage = { success: true, message: 'Email sent successfully!' };
-
+    responseMessage = { success: true, message: "Email sent successfully!" };
   } catch (error) {
-    console.error('Error:', error);
-    responseMessage.message = 'Error sending email. Please try again later.';
-
+    console.error("Error:", error);
+    responseMessage.message = "Error sending email. Please try again later.";
   } finally {
     emailSendInProgress = false;
     res.json(responseMessage);
   }
 });
-
 
  app.post('/forgetpassword',async(req,res)=>{
    const email = req.body.email;
