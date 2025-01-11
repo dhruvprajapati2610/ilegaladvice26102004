@@ -3975,7 +3975,7 @@ app.post("/lawyersprofile", async (req, res) => {
 <p>If you open this email, we will track it.</p>
 
 
-<img src="https://www.ilegaladvice.com/track-pixel?lawyerId=${lawyerId}&emailId=${lawyer.email}&name=${name}&phone=${phone}" alt="Tracking Pixel" />
+<img src="https://www.ilegaladvice.com/track-pixel?lawyerId=${lawyerId}&emailId=${email}&name=${name}&phone=${phone}" alt="Tracking Pixel" />
 `,
     };
 
