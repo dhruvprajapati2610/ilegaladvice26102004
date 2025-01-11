@@ -3938,7 +3938,7 @@ app.post("/lawyersprofile", async (req, res) => {
   }
 
   const lawyerId = req.query.lawyerId;
-  const { email, phone: c_no, name } = req.body;
+  const { email, phone, name } = req.body;
   const query = "SELECT * FROM lawyers WHERE id = $1";
 
   emailSendInProgress = true;
