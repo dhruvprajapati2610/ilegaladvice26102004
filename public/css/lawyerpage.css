@@ -1976,6 +1976,15 @@ background-color: rgba(0, 0, 0, 0.1);
     .lawyer-info {
         margin-left: -30%;
     }
+     .btn-box{
+        padding: 8px 18px;
+    }
+    .next{
+        padding: 8px 15px !important;
+    }
+    .prev{
+        padding: 8px 15px!important;
+    }
 }
 @media screen and (max-width:390px) {
     .lawyer-box {
