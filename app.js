@@ -2152,13 +2152,194 @@ app.post('/followersSearch',async(req,res)=>{
      res.json({followers:followersResults.rows});
 })
 
-app.get('/community/posts',isuAuthenticated, async (req, res) => {
+app.get("/initialCommunityPosts", async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const postsResult = await pool.query(
+      `
+    WITH followed_posts AS (
+    SELECT 
+        cp.id AS post_id,
+        cp.image_path,
+        cp.content,
+        cp.lawyer_name,
+        cp.lawyer_id,
+        cp.created_at,
+        COALESCE(like_counts.like_count, 0) AS like_count,
+        EXISTS (
+            SELECT 1 
+            FROM community_likes cl
+            WHERE cl.user_id = $1 AND cl.post_id = cp.id
+        ) AS user_liked,
+        COALESCE(impression_counts.impression_count, 0) AS impression_count,
+        EXISTS (
+            SELECT 1
+            FROM follow
+            WHERE follower_id = $1 AND followed_id = cp.lawyer_id
+        ) AS user_follows_post_owner,
+        l.image AS lawyer_profile_image,  -- Added lawyer's profile image
+        1 AS priority  -- Highest priority
+    FROM 
+        community_posts cp
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS like_count
+        FROM community_likes
+        GROUP BY post_id
+    ) AS like_counts 
+        ON cp.id = like_counts.post_id
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS impression_count
+        FROM impressions
+        GROUP BY post_id
+    ) AS impression_counts
+        ON cp.id = impression_counts.post_id
+    INNER JOIN follow f
+        ON f.followed_id = cp.lawyer_id
+    INNER JOIN lawyers l  -- Join lawyers table to get the profile image
+        ON l.id = cp.lawyer_id
+    WHERE f.follower_id = $1
+      AND cp.lawyer_id != $1 -- Exclude current user's posts
+    ORDER BY cp.created_at DESC
+    LIMIT 3
+),
+mutual_posts AS (
+    SELECT 
+        cp.id AS post_id,
+        cp.image_path,
+        cp.content,
+        cp.lawyer_name,
+        cp.lawyer_id,
+        cp.created_at,
+        COALESCE(like_counts.like_count, 0) AS like_count,
+        EXISTS (
+            SELECT 1 
+            FROM community_likes cl
+            WHERE cl.user_id = $1 AND cl.post_id = cp.id
+        ) AS user_liked,
+        COALESCE(impression_counts.impression_count, 0) AS impression_count,
+        EXISTS (
+            SELECT 1
+            FROM follow
+            WHERE follower_id = $1 AND followed_id = cp.lawyer_id
+        ) AS user_follows_post_owner,
+        l.image AS lawyer_profile_image,  -- Added lawyer's profile image
+        2 AS priority  -- Medium priority
+    FROM 
+        community_posts cp
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS like_count
+        FROM community_likes
+        GROUP BY post_id
+    ) AS like_counts 
+        ON cp.id = like_counts.post_id
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS impression_count
+        FROM impressions
+        GROUP BY post_id
+    ) AS impression_counts
+        ON cp.id = impression_counts.post_id
+    INNER JOIN follow f1
+        ON f1.followed_id = cp.lawyer_id
+    INNER JOIN follow f2
+        ON f1.follower_id = f2.follower_id
+    INNER JOIN lawyers l  -- Join lawyers table to get the profile image
+        ON l.id = cp.lawyer_id
+    WHERE 
+        f2.followed_id = $1
+        AND cp.lawyer_id != $1 -- Exclude current user's posts
+        AND cp.lawyer_id NOT IN (
+            SELECT followed_id
+            FROM follow
+            WHERE follower_id = $1 -- Exclude lawyers the current user follows
+        )
+    ORDER BY cp.created_at DESC
+    LIMIT 3
+),
+impression_posts AS (
+    SELECT 
+        cp.id AS post_id,
+        cp.image_path,
+        cp.content,
+        cp.lawyer_name,
+        cp.lawyer_id,
+        cp.created_at,
+        COALESCE(like_counts.like_count, 0) AS like_count,
+        EXISTS (
+            SELECT 1 
+            FROM community_likes cl
+            WHERE cl.user_id = $1 AND cl.post_id = cp.id
+        ) AS user_liked,
+        COALESCE(impression_counts.impression_count, 0) AS impression_count,
+        EXISTS (
+            SELECT 1
+            FROM follow
+            WHERE follower_id = $1 AND followed_id = cp.lawyer_id
+        ) AS user_follows_post_owner,
+        l.image AS lawyer_profile_image,  -- Added lawyer's profile image
+        3 AS priority  -- Lowest priority
+    FROM 
+        community_posts cp
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS like_count
+        FROM community_likes
+        GROUP BY post_id
+    ) AS like_counts 
+        ON cp.id = like_counts.post_id
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS impression_count
+        FROM impressions
+        GROUP BY post_id
+    ) AS impression_counts
+        ON cp.id = impression_counts.post_id
+    INNER JOIN lawyers l  -- Join lawyers table to get the profile image
+        ON l.id = cp.lawyer_id
+    WHERE cp.lawyer_id != $1 -- Exclude current user's posts
+    ORDER BY impression_counts.impression_count DESC NULLS LAST
+    LIMIT 4
+)
+SELECT 
+    post_id,
+    image_path,
+    content,
+    lawyer_name,
+    lawyer_id,
+    created_at,
+    like_count,
+    user_liked,
+    impression_count,
+    user_follows_post_owner,
+    lawyer_profile_image
+FROM (
+    SELECT * FROM followed_posts
+    UNION
+    SELECT * FROM mutual_posts
+    UNION
+    SELECT * FROM impression_posts
+) AS combined_posts
+ORDER BY priority, created_at DESC  -- Prioritize by CTE and recency
+LIMIT 10;
+
+      `,
+      [userId]
+    );
+
+    const posts = postsResult.rows;
+    res.json({ success: true, initialPosts: posts });
+  } catch (error) {
+    console.error("Error Loading Initial Community Posts", error);
+    res
+      .status(500)
+      .send({ success: false, message: "Error fetching initial Posts" });
+  }
+});
+
+app.post('/community/posts',isuAuthenticated, async (req, res) => {
   const client = await pool.connect();
 
   try {
     const userId = req.user.id;
     const { offset, limit } = req.query;
-    console.log(offset);
+    const previousPosts = req.body.posts;
     const offset1 = (offset / 10) * 3;
     const offset2 = (offset / 10) * 4;
 
@@ -2328,6 +2509,14 @@ app.get('/community/posts',isuAuthenticated, async (req, res) => {
 
     const posts = postsResult.rows;
 
+    //Filter posts exluding the previous posts
+    for (let i = posts.length - 1; i >= 0; i--) {
+      if (
+        previousPosts.some((prevPost) => prevPost.post_id === posts[i].post_id)
+      ) {
+        posts.splice(i, 1);
+      }
+    }
     const postIds = posts.map(post => post.post_id);
 
     const commentsResult = await client.query(`
