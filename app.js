@@ -1015,7 +1015,7 @@ app.get("/lawyerspage", async (req, res) => {
     // console.log(page)
     const limit = 10;
     const offset = (page - 1) * limit;
-
+    
     let result;
 
     if (userLat && userLon) {
@@ -1202,7 +1202,6 @@ app.get("/filter-lawyers", async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const limit = 10;
   const offset = (page - 1) * limit;
-
   let countQuery = `SELECT count(DISTINCT l.id) as total_count FROM lawyers l LEFT JOIN reviews r ON l.id = r.lawyer_id WHERE 1=1 AND  l.admin_verified = TRUE AND l.lead_community = TRUE`;
 
   let query = `
@@ -1223,9 +1222,9 @@ app.get("/filter-lawyers", async (req, res) => {
     countQuery += ` AND l.states = $${countParams.length}`;
   }
 
-  if (cityFilter) {
-    queryParams.push(cityFilter);
-    countParams.push(cityFilter);
+  if (city) {
+    queryParams.push(city);
+    countParams.push(city);
     query += ` AND l.city = $${queryParams.length}`;
     countQuery += ` AND l.city = $${countParams.length}`;
   }
@@ -4196,7 +4195,7 @@ const sendEmailWithRetry = async (mailOptions, transporter, retries = 3) => {
 };
 
 app.get("/track-pixel", async (req, res) => {
-  const { lawyerId, emailId, name, phone } = req.query;
+  const { lawyerEmail, clientEmail, name, phone } = req.query;
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -4210,12 +4209,12 @@ app.get("/track-pixel", async (req, res) => {
 
   const lawyerMailOptions = {
     from: "ilegaladvice26@gmail.com",
-    to: emailId,
+    to: lawyerEmail,
     subject: "Client Details",
     html: `<p>Greetings from iLegalAdvice. Following User has been trying to contact you:</p>
 <p><strong>Name:</strong> ${name}</p>
 <p><strong>Contact No:</strong> ${phone}</p>
-<p><strong>Email id:</strong> ${emailId}</p>
+<p><strong>Email id:</strong> ${clientEmail}</p>
 `,
   };
   const lawyerResult = await sendEmailWithRetry(lawyerMailOptions, transporter);
@@ -4245,7 +4244,6 @@ app.post("/lawyersprofile", async (req, res) => {
     success: false,
     message: "An error occurred. Please try again later.",
   };
-
   if (emailSendInProgress) {
     responseMessage.message = "Email is already being sent. Please wait.";
     return res.json(responseMessage);
@@ -4289,7 +4287,7 @@ app.post("/lawyersprofile", async (req, res) => {
 <p>If you open this email, we will track it.</p>
 
 
-<img src="https://www.ilegaladvice.com/track-pixel?lawyerId=${lawyerId}&emailId=${email}&name=${name}&phone=${phone}" alt="Tracking Pixel" />
+<img src="https://www.ilegaladvice.com/track-pixel?lawyerEmail=${lawyer.email}&clientEmail=${email}&name=${name}&phone=${phone}" alt="" />
 `,
     };
 
