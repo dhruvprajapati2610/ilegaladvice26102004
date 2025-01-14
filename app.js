@@ -1,38 +1,38 @@
-const express= require('express');
+const express = require("express");
 const cron = require("node-cron");
-const bodyParser= require('body-parser');
-const {Pool}= require('pg');
-const axios = require('axios');
-const multer= require('multer');
-const bcrypt= require('bcrypt');
-const saltRounds= 10;
-const crypto=require('crypto');
-const util= require('util');
-const uuid = require('uuid');
-const nodemailer = require('nodemailer');
-const randomstring = require('randomstring');
-const flash = require('connect-flash');
-const cloudinary = require('cloudinary').v2;
-const app= express();
-const fs = require('fs');
-const port= process.env.PORT||3000; 
-const path = require('path');
-const session = require('express-session');
-const PgSession = require('connect-pg-simple')(session);
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const methodOverride = require('method-override');
-const e = require('connect-flash');
-const { type, userInfo } = require('os');
-const { fileLoader } = require('ejs');
-const { language } = require('googleapis/build/src/apis/language');
-const { cloudidentity } = require('googleapis/build/src/apis/cloudidentity');
-app.use(methodOverride('_method'));
+const bodyParser = require("body-parser");
+const { Pool } = require("pg");
+const axios = require("axios");
+const multer = require("multer");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+const crypto = require("crypto");
+const util = require("util");
+const uuid = require("uuid");
+const nodemailer = require("nodemailer");
+const randomstring = require("randomstring");
+const flash = require("connect-flash");
+const cloudinary = require("cloudinary").v2;
+const app = express();
+const fs = require("fs");
+const port = process.env.PORT || 3000;
+const path = require("path");
+const session = require("express-session");
+const PgSession = require("connect-pg-simple")(session);
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const methodOverride = require("method-override");
+const e = require("connect-flash");
+const { type, userInfo } = require("os");
+const { fileLoader } = require("ejs");
+const { language } = require("googleapis/build/src/apis/language");
+const { cloudidentity } = require("googleapis/build/src/apis/cloudidentity");
+app.use(methodOverride("_method"));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname,'public')));
-app.use(express.static(path.join(__dirname,'uploads')));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "uploads")));
 // app.use(express.static(path.join(__dirname,'images')));
-app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // app.use('/uploads/:id',(req,res,next)=>{
 //   const lawyerId = req.params.id;
 //   const uploadDir = path.join(__dirname,'uploads',lawyerId);
@@ -43,25 +43,27 @@ app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 // app.use('/lawyerspage',express.static(path.join(__dirname,'public')));
 // app.use('/lawyersprofile/:id',express.static(path.join(__dirname,'public')));
 // app.use('/lawyersprofile/:id',express.static(path.join(__dirname,'uploads')));
-app.use('/articles/:id',express.static(path.join(__dirname,'public')))
-app.use('/community/user-profile',express.static(path.join(__dirname,'public')))
-app.use('/lawyerspage',express.static(path.join(__dirname,'uploads')));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use("/articles/:id", express.static(path.join(__dirname, "public")));
+app.use(
+  "/community/user-profile",
+  express.static(path.join(__dirname, "public"))
+);
+app.use("/lawyerspage", express.static(path.join(__dirname, "uploads")));
+app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.static("public"));
 app.use(express.static("uploads"));
-const secretKey = crypto.randomBytes(32).toString('hex');
-const upload = multer({ dest: 'uploads/' });
+const secretKey = crypto.randomBytes(32).toString("hex");
+const upload = multer({ dest: "uploads/" });
 
-
-const pool= new Pool({ 
+const pool = new Pool({
   user: "postgres",
   host: "144.24.124.135",
   database: "ilegaladvice",
   password: "Pranav@2003",
   port: 5432,
-  max: 30,                 
-  idleTimeoutMillis: 60000,   
-  connectionTimeoutMillis: 3000
+  max: 30,
+  idleTimeoutMillis: 60000,
+  connectionTimeoutMillis: 3000,
 });
 
 cron.schedule("0 0 * * *", async () => {
@@ -72,79 +74,87 @@ cron.schedule("0 0 * * *", async () => {
       DELETE FROM notifications 
       WHERE created_at < NOW() - INTERVAL '7 days';
     `;
-    await pool.query(query); 
+    await pool.query(query);
     console.log("1-week-old notifications successfully deleted.");
   } catch (error) {
     console.error("Error running the scheduled task:", error);
   }
 });
 
-
-app.use(session({
-  store: new PgSession({
-    pool: pool
-  }),
-  secret: 'secretKey',
-  resave: false,
-  saveUninitialized: true,
-  // cookie: {
-  //   maxAge: 1000 * 60 * 60 * 24,
-  // }
-})  
+app.use(
+  session({
+    store: new PgSession({
+      pool: pool,
+    }),
+    secret: "secretKey",
+    resave: false,
+    saveUninitialized: true,
+    // cookie: {
+    //   maxAge: 1000 * 60 * 60 * 24,
+    // }
+  })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use((req,res,next)=>{
-  res.locals.successMessage = req.flash('successMessage');
-  res.locals.errorMessage = req.flash('errorMessage');
-  next(); 
+app.use((req, res, next) => {
+  res.locals.successMessage = req.flash("successMessage");
+  res.locals.errorMessage = req.flash("errorMessage");
+  next();
 });
 app.use((req, res, next) => {
   res.locals.userId = req.user ? req.user.id : false;
-  res.locals.role = req.user? req.user.role : false // Set userId or false
+  res.locals.role = req.user ? req.user.role : false; // Set userId or false
   next();
 });
 
-
-
-app.set('view engine','ejs');
-app.set('views',path.join(__dirname,'views'));
-app.set('partials',path.join(__dirname,'views/partials'));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.set("partials", path.join(__dirname, "views/partials"));
 
 app.locals.formatDate = (dateString) => {
   const date = new Date(dateString);
-  const options = {year: 'numeric',month: 'long', day: 'numeric', hour:'2-digit', minute:'2-digit', hour12:'false'};
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: "false",
+  };
   return date.toLocaleDateString(undefined, options);
+};
+
+function roundToOneDecimalPlace(num) {
+  return parseFloat(num).toFixed(1);
 }
 
-function roundToOneDecimalPlace(num){
-  return parseFloat(num).toFixed(1); 
-}
-
-const ensureAuthenticated = (req,res,next) => {
-  if(req.isAuthenticated()){
+const ensureAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
     return next();
   }
-  if(req.headers['content-type']==='application/json'){
-    return res.status(401).json({success: false,message:'Please sign in to like the article.'})
+  if (req.headers["content-type"] === "application/json") {
+    return res
+      .status(401)
+      .json({ success: false, message: "Please sign in to like the article." });
   }
-  res.redirect('/signup');
-}
+  res.redirect("/signup");
+};
 
-app.setMaxListeners(15); 
-const verifyAuthenticated = (req,res,next)=>{
-  if(req.isAuthenticated()){
+app.setMaxListeners(15);
+const verifyAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
     return next();
   }
-  if(req.headers['content-type']==='application/json'){
-    return res.status(401).json({success: false,message:'Please sign in to add a comment.'})
+  if (req.headers["content-type"] === "application/json") {
+    return res
+      .status(401)
+      .json({ success: false, message: "Please sign in to add a comment." });
   }
-}
+};
 
-
-// const storage = multer.diskStorage({ 
+// const storage = multer.diskStorage({
 //   destination: function(req, file, cb) {
 //     cb(null, 'uploads/');
 //   },
@@ -161,150 +171,148 @@ const fileFilter = (req, file, cb) => {
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb(new Error('Invalid file type, only images are allowed!'), false);
+    cb(new Error("Invalid file type, only images are allowed!"), false);
   }
 };
-
 
 // const upload = multer({
 //   storage: storage,
 //   fileFilter: fileFilter,
 // });
 
-
-
 pool.connect((err) => {
   if (err) {
-      console.error('Error connecting to PostgreSQL database:', {
-          message: err.message,
-          code: err.code,
-          stack: err.stack,
-          detail: err.detail || 'No additional details available'
-      });
-      return;
+    console.error("Error connecting to PostgreSQL database:", {
+      message: err.message,
+      code: err.code,
+      stack: err.stack,
+      detail: err.detail || "No additional details available",
+    });
+    return;
   }
-  console.log('Connected to PostgreSQL database');
+  console.log("Connected to PostgreSQL database");
 });
 
-
-function isuAuthenticated(req,res, next) {
-  if(req.isAuthenticated()){
+function isuAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
     return next();
-  } else {       
-    req.flash('error','You need to be logged in to to access this page.');
-    res.redirect('/signup');
+  } else {
+    req.flash("error", "You need to be logged in to to access this page.");
+    res.redirect("/signup");
   }
-} 
+}
 
 const API_KEY = process.env.API_KEY;
-const clientId = '8437309c-46c6-4516-aa33-69f508d96e49';
-const clientSecret = 'MzWOBwS5b5UPacsspQxkWxsNQAmG2EgP';
-const searchText = 'lawyers';
+const clientId = "8437309c-46c6-4516-aa33-69f508d96e49";
+const clientSecret = "MzWOBwS5b5UPacsspQxkWxsNQAmG2EgP";
+const searchText = "lawyers";
 
-cloudinary.config({ 
-  cloud_name: 'dabla3fwm', 
-  api_key: '228566377711835', 
-  api_secret: 'k89mMnD6IQi6a-s11wVNePGEH78' 
+cloudinary.config({
+  cloud_name: "dabla3fwm",
+  api_key: "228566377711835",
+  api_secret: "k89mMnD6IQi6a-s11wVNePGEH78",
 });
 
 let emailSendInProgress = false;
 
-async function getAccessToken(){
-  try{
-    const response = await axios.post('https://account.olamaps.io/realms/olamaps/protocol/openid-connect/token',
-      new URLSearchParams ({
-        grant_type: 'client_credentials',
-        client_id: '8437309c-46c6-4516-aa33-69f508d96e49',
-        client_secret: 'MzWOBwS5b5UPacsspQxkWxsNQAmG2EgP',
-        scope: 'openid',
-      
-    }),
-    {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
-    }
-  )
-    return response.data.access_token
-
-  } catch(error){
-    console.error('Error making API request:', error.message);
+async function getAccessToken() {
+  try {
+    const response = await axios.post(
+      "https://account.olamaps.io/realms/olamaps/protocol/openid-connect/token",
+      new URLSearchParams({
+        grant_type: "client_credentials",
+        client_id: "8437309c-46c6-4516-aa33-69f508d96e49",
+        client_secret: "MzWOBwS5b5UPacsspQxkWxsNQAmG2EgP",
+        scope: "openid",
+      }),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+    return response.data.access_token;
+  } catch (error) {
+    console.error("Error making API request:", error.message);
   }
 }
 
 async function geocodeAddress(address) {
   const token = await getAccessToken();
-  if(token){
-    try{
+  if (token) {
+    try {
       console.log("Access Token:", token);
-      const response = await axios.get(`https://api.olamaps.io/places/v1/geocode`, {
-        params: {
-          address: address
-        },
-        headers: {
-            Authorization: `Bearer ${token}`
+      const response = await axios.get(
+        `https://api.olamaps.io/places/v1/geocode`,
+        {
+          params: {
+            address: address,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
       const firstResult = response.data?.geocodingResults?.[0];
-      if(firstResult){
+      if (firstResult) {
         const location = firstResult.geometry.location;
         console.log(`Latitude: ${location.lat}, longitude: ${location.lng}`);
         return location;
-      } else{
+      } else {
         console.error("No location found for the given addresss");
         return null;
       }
-    } catch(error){
-      console.error('Error making API request:', error.response ? error.response.data : error.message);
-      console.error('Full error object:', error);
+    } catch (error) {
+      console.error(
+        "Error making API request:",
+        error.response ? error.response.data : error.message
+      );
+      console.error("Full error object:", error);
     }
   }
 }
 
 // geocodeAddress('Shop No.04, YourLawyer - Law Firm, Samanvay CHS Ltd, Plot No.13, beside Bank Of Maharashtra, Block G, Sector 11, Kharghar, Navi Mumbai, Maharashtra 410210 ');
 
-app.get('/about-us',(req,res)=>{
-  res.render('aboutus');
-})
+app.get("/about-us", (req, res) => {
+  res.render("aboutus");
+});
 
-app.get('/privacy-policy',(req,res)=>{
-  res.render('privacy_policy');
-})
+app.get("/privacy-policy", (req, res) => {
+  res.render("privacy_policy");
+});
 
-app.get('/terms-of-use',(req,res)=>{
-  
-  res.render('terms-of-use');
-})
+app.get("/terms-of-use", (req, res) => {
+  res.render("terms-of-use");
+});
 
-app.get('/contact-us',(req,res)=>{
-  res.render('contact-us');
-})
+app.get("/contact-us", (req, res) => {
+  res.render("contact-us");
+});
 
-app.get('/crpclist',(req,res)=>{
+app.get("/crpclist", (req, res) => {
+  res.render("crpclist.ejs");
+});
 
-  res.render('crpclist.ejs');
-})
-
-app.get('/crpc',async(req,res)=>{
+app.get("/crpc", async (req, res) => {
   const chapter = req.query.chapter;
-  try{
-    var sql = 'select * from crpc_chapters where chapter_number=$1'
-    var crpc = await pool.query(sql,[chapter]);
+  try {
+    var sql = "select * from crpc_chapters where chapter_number=$1";
+    var crpc = await pool.query(sql, [chapter]);
     console.log(crpc.rows);
-    res.render('crpcDrop.ejs',{data: crpc.rows});
+    res.render("crpcDrop.ejs", { data: crpc.rows });
   } catch (err) {
-    console.error('Error retrieving data from the database:',err);
-    res.status(500).send('Internal server error');
+    console.error("Error retrieving data from the database:", err);
+    res.status(500).send("Internal server error");
   }
-})
+});
 
-app.get('/bns',(req,res)=>{
-  res.render('bnschapters.ejs');
-})
+app.get("/bns", (req, res) => {
+  res.render("bnschapters.ejs");
+});
 
-
-app.get('/',async(req,res)=>{
-  try{
+app.get("/", async (req, res) => {
+  try {
     const result = await pool.query(`
       WITH review_aggregates AS (
       SELECT lawyer_id, AVG(rating) AS average_rating, COUNT(client_id) AS client_count
@@ -317,32 +325,40 @@ app.get('/',async(req,res)=>{
    ORDER BY coalesce(ra.average_rating, 0) DESC, coalesce(ra.client_count,0) DESC
    LIMIT 9
       `);
-    const lawyers=result.rows.map(row=>({
-        name: row.name,
-        yrs_exp: row.yrs_exp,
-        image: row.image,
-        area_of_prac: row.area_of_prac ? row.area_of_prac.replace(/[{"}]/g, '').split(' , ') : [],
-        id: row.id,
-        average_rating: row.average_rating || 0,
-        client_count: row.client_count || 0,
-        city: row.city,
-        state: row.states
-    }))
-    res.render('homepage.ejs',{lawyers,roundToOneDecimalPlace: roundToOneDecimalPlace});
-  } catch(error){
+    const lawyers = result.rows.map((row) => ({
+      name: row.name,
+      yrs_exp: row.yrs_exp,
+      image: row.image,
+      area_of_prac: row.area_of_prac
+        ? row.area_of_prac.replace(/[{"}]/g, "").split(" , ")
+        : [],
+      id: row.id,
+      average_rating: row.average_rating || 0,
+      client_count: row.client_count || 0,
+      city: row.city,
+      state: row.states,
+    }));
+    res.render("homepage.ejs", {
+      lawyers,
+      roundToOneDecimalPlace: roundToOneDecimalPlace,
+    });
+  } catch (error) {
     console.log(error);
-  } 
-});
-
-app.get('/signup', async (req, res) => {
-  // Check if req.user exists and has an id
-  if (req.user && req.user.id) {
-    res.render('home3.ejs', { userId: req.user.id, message: '', success: false });
-  } else {
-    res.render('home3.ejs', { userId: false, message: '', success: false });
   }
 });
 
+app.get("/signup", async (req, res) => {
+  // Check if req.user exists and has an id
+  if (req.user && req.user.id) {
+    res.render("home3.ejs", {
+      userId: req.user.id,
+      message: "",
+      success: false,
+    });
+  } else {
+    res.render("home3.ejs", { userId: false, message: "", success: false });
+  }
+});
 
 // app.get('/api',(req,res)=>{
 //   res.render('api.ejs');
@@ -359,273 +375,275 @@ app.get('/signup', async (req, res) => {
 //  }
 // });
 
-
-
-app.get('/admin',isuAuthenticated, async (req, res) => {
+app.get("/admin", isuAuthenticated, async (req, res) => {
   const userId = req.user.id;
   const isAdminQuery = `select * from clientsignup where id = $1`;
   const isAdmin = await pool.query(isAdminQuery, [userId]);
   if (isAdmin.rows.length === 0) {
-    res.redirect('/');
+    res.redirect("/");
     return;
   }
-  if(isAdmin.rows[0].is_admin === false){
-    res.redirect('/');
+  if (isAdmin.rows[0].is_admin === false) {
+    res.redirect("/");
     return;
   }
-  res.render('admin-page', {userId});
-})
+  res.render("admin-page", { userId });
+});
 
-
-
-
-
-
-
-
-
-app.get('/notVerifiedLawyers', async (req, res) => {
-  const notVerifiedLawyersQuery = await pool.query("select * from lawyers where admin_verified = false");
+app.get("/notVerifiedLawyers", async (req, res) => {
+  const notVerifiedLawyersQuery = await pool.query(
+    "select * from lawyers where admin_verified = false"
+  );
   const notVerifiedLawyers = notVerifiedLawyersQuery.rows;
-  if(notVerifiedLawyers.length > 0){
-    res.json({success: true, notVerifiedLawyers});
-  }else{
-    res.json({successs: false, message:"No unverified available."})
+  if (notVerifiedLawyers.length > 0) {
+    res.json({ success: true, notVerifiedLawyers });
+  } else {
+    res.json({ successs: false, message: "No unverified available." });
   }
- 
-})
+});
 
-app.post('/approveLawyer/:id', async (req, res) => {
+app.post("/approveLawyer/:id", async (req, res) => {
   const lawyerId = req.params.id;
   try {
-      await pool.query("UPDATE lawyers SET admin_verified = true WHERE id = $1", [lawyerId]);
-      res.json({ success: true, message: 'Lawyer approved successfully.' });
+    await pool.query("UPDATE lawyers SET admin_verified = true WHERE id = $1", [
+      lawyerId,
+    ]);
+    res.json({ success: true, message: "Lawyer approved successfully." });
   } catch (error) {
-      console.error('Error approving lawyer:', error);
-      res.status(500).json({ success: false, message: 'Failed to approve lawyer.' });
+    console.error("Error approving lawyer:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to approve lawyer." });
   }
 });
 
-app.post('/declineLawyer/:id', async (req, res) => {
+app.post("/declineLawyer/:id", async (req, res) => {
   const lawyerId = req.params.id;
   try {
-      await pool.query("DELETE FROM lawyers WHERE id = $1", [lawyerId]);
-      res.json({ success: true, message: 'Lawyer declined successfully.' });
+    await pool.query("DELETE FROM lawyers WHERE id = $1", [lawyerId]);
+    res.json({ success: true, message: "Lawyer declined successfully." });
   } catch (error) {
-      console.error('Error declining lawyer:', error);
-      res.status(500).json({ success: false, message: 'Failed to decline lawyer.' });
+    console.error("Error declining lawyer:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to decline lawyer." });
   }
 });
 
-
-
-app.get('/forgetpassword',(req,res)=>{
-  res.render('login.ejs');
+app.get("/forgetpassword", (req, res) => {
+  res.render("login.ejs");
 });
-      
-app.get('/upload',(req,res)=>{
-  res.render('image_upload.ejs');
-})
 
-app.post('/upload', upload.single('image'), async (req, res) => {
+app.get("/upload", (req, res) => {
+  res.render("image_upload.ejs");
+});
+
+app.post("/upload", upload.single("image"), async (req, res) => {
   try {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-          public_id: `uploaded_${Date.now()}`, // Optional: Add a unique name
-      });
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      public_id: `uploaded_${Date.now()}`, // Optional: Add a unique name
+    });
 
-      res.json({ message: 'Image uploaded successfully!', url: result.secure_url });
+    res.json({
+      message: "Image uploaded successfully!",
+      url: result.secure_url,
+    });
   } catch (error) {
-      res.status(500).json({ error: 'Image upload failed', details: error.message });
+    res
+      .status(500)
+      .json({ error: "Image upload failed", details: error.message });
   }
 });
 
-
-app.get('/reset-password',async(req,res)=>{
+app.get("/reset-password", async (req, res) => {
   const token = req.query.token;
-  try{ 
-    const query1 = 'SELECT email FROM lawyers WHERE token = $1';
-    const query2 = 'SELECT email FROM clientsignup WHERE token = $1';
-    const result1 = await pool.query(query1,[token]);
-    const result2 = await pool.query(query2,[token]);
-    if(result1.rowCount>0){
-      res.render('reset-password',{token});
-     }
-    else if(result2.rowCount>0){
-      res.render('reset-password',{token});
-     }
-    else{
-      return res.status(400).send('Invalid or expired token');
+  try {
+    const query1 = "SELECT email FROM lawyers WHERE token = $1";
+    const query2 = "SELECT email FROM clientsignup WHERE token = $1";
+    const result1 = await pool.query(query1, [token]);
+    const result2 = await pool.query(query2, [token]);
+    if (result1.rowCount > 0) {
+      res.render("reset-password", { token });
+    } else if (result2.rowCount > 0) {
+      res.render("reset-password", { token });
+    } else {
+      return res.status(400).send("Invalid or expired token");
     }
-  } catch(error) {
-    console.error('Error:', error);
-    res.status(500).send('Internal server error');
-}
-})
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal server error");
+  }
+});
 
 // app.get('/re6act',(req,res)=>{
 //   res.render('react');
 // })
 
-  app.get('/allipc', async (req, res) => {
-    try {
-      const { rows: ipcSections } = await pool.query(`SELECT id,case when offence='nan' then null else '- ' || offence end as offence, substring(ipc_section from 5) as ipc_section FROM ipc_sections`);
-      
-    
-      const noResults = ipcSections.length === 0
-    
-      res.render('ipclist', { ipc: ipcSections, noResults });
-      
-    } catch (error) {
-      console.error('Error fetching IPC sections:', error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
+app.get("/allipc", async (req, res) => {
+  try {
+    const { rows: ipcSections } = await pool.query(
+      `SELECT id,case when offence='nan' then null else '- ' || offence end as offence, substring(ipc_section from 5) as ipc_section FROM ipc_sections`
+    );
 
+    const noResults = ipcSections.length === 0;
 
+    res.render("ipclist", { ipc: ipcSections, noResults });
+  } catch (error) {
+    console.error("Error fetching IPC sections:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
-
-app.get('/ipc',async(req,res)=>{
-  try{
+app.get("/ipc", async (req, res) => {
+  try {
     id = req.query.id;
     const query = `select * from ipc_sections where id=$1`;
-    const results = await pool.query(query,[id])
-    const ipc = results.rows.map(row=>({
-       id: row.id,
-       triable: row.triable,
-       bail: row.bail,
-       cognizance: row.cognizance,
-       conclusion: row.conclusion,
-       importance: row.importance,
-       practical_application: row.practical_application,
-       punishment_detailed: row.punishment_detailed,
-       offence_detailed: row.offence_detailed,
-       ipc_section: row.ipc_section.substring(4),
-       punishment: row.punishment,
-       offence: row.offence,
-       description_split: row.description_split,
-       ipc_in_simple_words: row.ipc_in_simple_words
-    }))
-    res.render('ipc',{ipc})
-  } catch{
+    const results = await pool.query(query, [id]);
+    const ipc = results.rows.map((row) => ({
+      id: row.id,
+      triable: row.triable,
+      bail: row.bail,
+      cognizance: row.cognizance,
+      conclusion: row.conclusion,
+      importance: row.importance,
+      practical_application: row.practical_application,
+      punishment_detailed: row.punishment_detailed,
+      offence_detailed: row.offence_detailed,
+      ipc_section: row.ipc_section.substring(4),
+      punishment: row.punishment,
+      offence: row.offence,
+      description_split: row.description_split,
+      ipc_in_simple_words: row.ipc_in_simple_words,
+    }));
+    res.render("ipc", { ipc });
+  } catch {
     console.log(error);
   }
+});
 
-})
-
-app.get('/bns_sections', async (req, res) => {
-  const chapter = parseInt(req.query.chapter); 
+app.get("/bns_sections", async (req, res) => {
+  const chapter = parseInt(req.query.chapter);
   if (isNaN(chapter)) {
-      return res.status(400).send('Invalid chapter number');
+    return res.status(400).send("Invalid chapter number");
   }
-  const query = 'SELECT * FROM bns_sections WHERE chapter_number = $1';
+  const query = "SELECT * FROM bns_sections WHERE chapter_number = $1";
   try {
-      const { rows } = await pool.query(query, [chapter]); 
-      res.render('BNSsectionlist.ejs', { data: rows });
+    const { rows } = await pool.query(query, [chapter]);
+    res.render("BNSsectionlist.ejs", { data: rows });
   } catch (err) {
-      console.error('Error executing query:', err);
-      res.status(500).send('Server error');
+    console.error("Error executing query:", err);
+    res.status(500).send("Server error");
   }
 });
 
-app.get('/bns_section', async (req, res) => {
+app.get("/bns_section", async (req, res) => {
   const section_number = req.query.section_number;
-  const query = 'SELECT * FROM bns_sections WHERE section_number = $1';
-  
+  const query = "SELECT * FROM bns_sections WHERE section_number = $1";
+
   try {
-    const { rows } = await pool.query(query, [section_number]);  
+    const { rows } = await pool.query(query, [section_number]);
     if (rows.length === 0) {
-      return res.status(404).send('Section not found');
+      return res.status(404).send("Section not found");
     }
-    res.render('BNSsection.ejs', { data: rows[0] });  
+    res.render("BNSsection.ejs", { data: rows[0] });
   } catch (err) {
-    console.error('Error executing query:', err);
-    res.status(500).send('Server error');
+    console.error("Error executing query:", err);
+    res.status(500).send("Server error");
   }
 });
 
-app.get('/bns_sections/search', async (req, res) => {
+app.get("/bns_sections/search", async (req, res) => {
   const searchTerm = req.query.search;
   if (!searchTerm) {
-      return res.status(400).json({
-          success: false,
-          message: 'Search term is required',
-          data: [],
-      });
-    }
+    return res.status(400).json({
+      success: false,
+      message: "Search term is required",
+      data: [],
+    });
+  }
   const query = `SELECT * FROM bns_sections WHERE section_name ILIKE $1 OR description ILIKE $1 OR section_number ILIKE $1 `;
   try {
-      const { rows } = await pool.query(query, [`%${searchTerm}%`]);
-      res.json({
-          success: true,
-          message: rows.length > 0 ? 'Search results fetched successfully' : 'No results found',
-          data: rows,
-      });
+    const { rows } = await pool.query(query, [`%${searchTerm}%`]);
+    res.json({
+      success: true,
+      message:
+        rows.length > 0
+          ? "Search results fetched successfully"
+          : "No results found",
+      data: rows,
+    });
   } catch (err) {
-      console.error('Error executing search query:', err);
-      res.status(500).json({
-          success: false,
-          message: 'An error occurred while fetching search results',
-          data: [],
-      });
+    console.error("Error executing search query:", err);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching search results",
+      data: [],
+    });
   }
 });
 
-app.get('/bns_sections/search/:chapterNumber', async (req, res) => {
+app.get("/bns_sections/search/:chapterNumber", async (req, res) => {
   const searchTerm = req.query.search;
   const chapterNumber = req.params.chapterNumber;
   if (!searchTerm) {
-      return res.status(400).json({
-          success: false,
-          message: 'Search term is required',
-          data: [],
-      });
-    }
+    return res.status(400).json({
+      success: false,
+      message: "Search term is required",
+      data: [],
+    });
+  }
   const query = `SELECT * FROM bns_sections WHERE (section_name ILIKE $1 OR description ILIKE $1 OR section_number ILIKE $1) 
                  AND chapter_number = $2
  `;
   try {
-      const { rows } = await pool.query(query, [`%${searchTerm}%`, chapterNumber]);
-      res.json({
-          success: true,
-          message: rows.length > 0 ? 'Search results fetched successfully' : 'No results found',
-          data: rows,
-      });
+    const { rows } = await pool.query(query, [
+      `%${searchTerm}%`,
+      chapterNumber,
+    ]);
+    res.json({
+      success: true,
+      message:
+        rows.length > 0
+          ? "Search results fetched successfully"
+          : "No results found",
+      data: rows,
+    });
   } catch (err) {
-      console.error('Error executing search query:', err);
-      res.status(500).json({
-          success: false,
-          message: 'An error occurred while fetching search results',
-          data: [],
-      });
+    console.error("Error executing search query:", err);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching search results",
+      data: [],
+    });
   }
 });
 
-app.get('/bns_sections/:chapterNumber', async(req, res) => {
+app.get("/bns_sections/:chapterNumber", async (req, res) => {
   const chapterNumber = req.params.chapterNumber;
   const query = `select * from bns_sections where chapter_number = $1`;
 
   try {
-    const {rows} = await pool.query(query, [chapterNumber]);
+    const { rows } = await pool.query(query, [chapterNumber]);
     res.json({
       success: true,
-      message : "Bns sections fetched",
+      message: "Bns sections fetched",
       data: rows,
-  });
+    });
   } catch (error) {
-    console.error('Error fetching bns_sections for a chapter', err);
-      res.status(500).json({
-          success: false,
-          message: 'An error occurred while fetching bns_sections results',
-          data: [],
-      });
+    console.error("Error fetching bns_sections for a chapter", err);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching bns_sections results",
+      data: [],
+    });
   }
-})
+});
 
-
-app.get('/search-ipc',async(req,res)=>{
-  try{
-   const searchQuery = req.query.search||'';
-   const {rows: ipcSections } = await pool.query(`
+app.get("/search-ipc", async (req, res) => {
+  try {
+    const searchQuery = req.query.search || "";
+    const { rows: ipcSections } = await pool.query(
+      `
     select id,
     substring(ipc_section from 5) as ipc_section,
     case when offence='nan' then null else '- '|| offence end as offence,
@@ -634,57 +652,65 @@ app.get('/search-ipc',async(req,res)=>{
     where ipc_section ilike $1
     or offence ilike $1
     or description ilike $1
-    `,[`%${searchQuery}%`]);
+    `,
+      [`%${searchQuery}%`]
+    );
 
-    const noResults = ipcSections.length === 0
-   
-    res.render('ipclist',{ipc: ipcSections, noResults});
-  } catch(error){
-    console.error('Error searching IPC sections:', error);
-    res.status(500).send('Internal server error');
+    const noResults = ipcSections.length === 0;
+
+    res.render("ipclist", { ipc: ipcSections, noResults });
+  } catch (error) {
+    console.error("Error searching IPC sections:", error);
+    res.status(500).send("Internal server error");
   }
-})
+});
 
-app.get('/articles',async(req,res)=>{
+app.get("/articles", async (req, res) => {
   const client = await pool.connect();
   const page = parseInt(req.query.page, 10) || 1;
-  const limit =  10;
-  const offset = (page-1)*limit;
-  try{
-    const result = await client.query('select a.id, a.title, a.content, a.author_id, l.name as author_name, coalesce(count(lk.article_id),0) as likes_count from articles a left join lawyers l on a.author_id=l.id left join likes lk on a.id = lk.article_id group by a.id,l.name order by likes_count desc limit $1 offset $2',[limit,offset]);
-    const countResult = await client.query('select count(*) from articles');
+  const limit = 10;
+  const offset = (page - 1) * limit;
+  try {
+    const result = await client.query(
+      "select a.id, a.title, a.content, a.author_id, l.name as author_name, coalesce(count(lk.article_id),0) as likes_count from articles a left join lawyers l on a.author_id=l.id left join likes lk on a.id = lk.article_id group by a.id,l.name order by likes_count desc limit $1 offset $2",
+      [limit, offset]
+    );
+    const countResult = await client.query("select count(*) from articles");
     const totalArticles = parseInt(countResult.rows[0].count, 10);
-    const totalPages = Math.ceil(totalArticles/limit);
-    const articles = result.rows.map(row=>({
+    const totalPages = Math.ceil(totalArticles / limit);
+    const articles = result.rows.map((row) => ({
       id: row.id,
       title: row.title,
       content: row.content,
       author_id: row.author_id,
       author_name: row.author_name,
-      likes: row.likes_count
-    }))
+      likes: row.likes_count,
+    }));
     const noResults = articles.length === 0;
-    res.render('articlespage',{articles, currentPage: page, totalPages: totalPages, limit: limit,noResults});
-    
-   
-  }
-  catch(error){
-    console.error('An error ocurred:',error.message);
-  } finally{
+    res.render("articlespage", {
+      articles,
+      currentPage: page,
+      totalPages: totalPages,
+      limit: limit,
+      noResults,
+    });
+  } catch (error) {
+    console.error("An error ocurred:", error.message);
+  } finally {
     client.release();
   }
-})
+});
 
-app.get('/fullarticle',async(req,res)=>{
-  
-    const client = await pool.connect();
-    try{
+app.get("/fullarticle", async (req, res) => {
+  const client = await pool.connect();
+  try {
     const articleId = req.query.articleId;
-    const currentUserId = req.user ? req.user.id:null;
+    const currentUserId = req.user ? req.user.id : null;
     const currentUser = req.user || null;
-    const user_role = req.user ? req.user.role: null;
-    await client.query('BEGIN');
-    const result = await client.query(`select a.*,coalesce(like_count.like_count,0) as like_count
+    const user_role = req.user ? req.user.role : null;
+    await client.query("BEGIN");
+    const result = await client.query(
+      `select a.*,coalesce(like_count.like_count,0) as like_count
       from articles a
       left join(
       select article_id, count(*) as like_count
@@ -692,20 +718,22 @@ app.get('/fullarticle',async(req,res)=>{
       where article_id=$1
       group by article_id
     ) as like_count on a.id=like_count.article_id
-     where a.id=$1;`,[articleId]);
-    const articles = result.rows.map(row=>({
+     where a.id=$1;`,
+      [articleId]
+    );
+    const articles = result.rows.map((row) => ({
       id: row.id,
       title: row.title,
       content: row.content,
       author_id: row.author_id,
       created_at: row.created_at,
-      like_count: row.like_count
-    }))
+      like_count: row.like_count,
+    }));
     const authorId = articles[0].author_id;
     const likeCount = articles[0].like_count;
-    
+
     const results = await client.query(
-    `WITH review_aggregates AS (
+      `WITH review_aggregates AS (
      SELECT 
       lawyer_id,
       AVG(rating) AS average_rating,
@@ -719,22 +747,28 @@ app.get('/fullarticle',async(req,res)=>{
     ra.client_count 
     FROM lawyers l
     LEFT JOIN review_aggregates ra ON l.id = ra.lawyer_id
-    WHERE l.id = $1`,[authorId]);
+    WHERE l.id = $1`,
+      [authorId]
+    );
 
     const lawyer = results.rows[0];
     let userLiked;
-    if(currentUserId){
-      const likeStatusResult = await client.query(`
+    if (currentUserId) {
+      const likeStatusResult = await client.query(
+        `
         select * from likes where user_id=$1 and article_id=$2 and user_role=$3
-        `,[currentUserId,articleId,user_role]);
-        if(likeStatusResult.rows.length>0){
-          userLiked = true;
-        } else{
-          userLiked = false;
-        }
+        `,
+        [currentUserId, articleId, user_role]
+      );
+      if (likeStatusResult.rows.length > 0) {
+        userLiked = true;
+      } else {
+        userLiked = false;
+      }
     }
 
-    const commentResult = await client.query(`
+    const commentResult = await client.query(
+      `
       select c.*,
       a.title as article_title,
       coalesce(cs.name,l.name) as username,
@@ -750,10 +784,13 @@ app.get('/fullarticle',async(req,res)=>{
        left join lawyers l on c.user_id = l.id and c.user_role = 'lawyer'
        where c.article_id = $1
        order by c.created_at desc 
-      `,[articleId]);
-      const comments = commentResult.rows;
+      `,
+      [articleId]
+    );
+    const comments = commentResult.rows;
 
-    const repliesResult = await client.query(`
+    const repliesResult = await client.query(
+      `
       select r.*,coalesce(cs.name,l.name) as username,
       coalesce(cs.id,l.id) as user_id,
       coalesce(cs.email,l.email) as user_email,
@@ -766,26 +803,38 @@ app.get('/fullarticle',async(req,res)=>{
       left join lawyers l on r.user_id = l.id and r.user_role='lawyer'
       where r.comment_id in (select id from comments where article_id=$1)
       order by r.created_at desc
-      `,[articleId]);
-      const replies = repliesResult.rows;
+      `,
+      [articleId]
+    );
+    const replies = repliesResult.rows;
 
-    await client.query('COMMIT');
-    res.render('fullarticle',{roundToOneDecimalPlace:roundToOneDecimalPlace,lawyer,likeCount,articles,articleId,currentUserId,currentUser,userLiked,comments,replies});
-  } catch(error){
-      await client.query('ROLLBACK');
-      console.error('An error ocurred:',error.message);
-  } finally{
+    await client.query("COMMIT");
+    res.render("fullarticle", {
+      roundToOneDecimalPlace: roundToOneDecimalPlace,
+      lawyer,
+      likeCount,
+      articles,
+      articleId,
+      currentUserId,
+      currentUser,
+      userLiked,
+      comments,
+      replies,
+    });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("An error ocurred:", error.message);
+  } finally {
     client.release();
   }
-})
+});
 
-
-app.get('/userAccount',isuAuthenticated,async(req,res)=>{
-  try{
-   
-    if(req.user.role==='lawyer'){
+app.get("/userAccount", isuAuthenticated, async (req, res) => {
+  try {
+    if (req.user.role === "lawyer") {
       const userId = req.user.id;
-      const reviewsResult= await pool.query(`
+      const reviewsResult = await pool.query(
+        `
       with review_aggregates as(
       select lawyer_id,
       avg(rating) as average_rating,
@@ -804,17 +853,20 @@ app.get('/userAccount',isuAuthenticated,async(req,res)=>{
       where r.lawyer_id = $1
       group by r.id, c.name, ra.average_rating, ra.client_count
       order by r.created_at desc
-     `,[userId]);
-     let reviews= [];
-     let averageRating = 0;
-     let clientCount = 0;
-   
-     if (reviewsResult.rowCount>0){
-       reviews = reviewsResult.rows;
-       averageRating = reviewsResult.rows[0].average_rating;
-       clientCount = reviewsResult.rows[0].client_count;
-     }
-     const articlesResult = await pool.query(`
+     `,
+        [userId]
+      );
+      let reviews = [];
+      let averageRating = 0;
+      let clientCount = 0;
+
+      if (reviewsResult.rowCount > 0) {
+        reviews = reviewsResult.rows;
+        averageRating = reviewsResult.rows[0].average_rating;
+        clientCount = reviewsResult.rows[0].client_count;
+      }
+      const articlesResult = await pool.query(
+        `
       select a.id,
       a.title,
       a.content,
@@ -825,58 +877,71 @@ app.get('/userAccount',isuAuthenticated,async(req,res)=>{
       left join likes l on a.id = l.article_id
       where a.author_id = $1 
       group by a.id 
-      order by a.created_at desc`,[userId]
-    );
+      order by a.created_at desc`,
+        [userId]
+      );
 
-    const articles = articlesResult.rows.map(article=>({
-      id: article.id,
-      title: article.title,
-      content: article.content,
-      created_at: article.created_at,
-      likes: parseInt(article.like_count,10)
-    }));
+      const articles = articlesResult.rows.map((article) => ({
+        id: article.id,
+        title: article.title,
+        content: article.content,
+        created_at: article.created_at,
+        likes: parseInt(article.like_count, 10),
+      }));
 
-      res.render('lawyeraccount',{user: req.user,userId, reviews, averageRating:parseFloat(averageRating)||0, clientCount:clientCount||0,articles});
+      res.render("lawyeraccount", {
+        user: req.user,
+        userId,
+        reviews,
+        averageRating: parseFloat(averageRating) || 0,
+        clientCount: clientCount || 0,
+        articles,
+      });
     } else {
       const userId = req.user.id;
-      res.render('clientaccount',{user: req.user, userId});
+      res.render("clientaccount", { user: req.user, userId });
     }
-  } catch(err){
+  } catch (err) {
     console.log(err);
-  }  
+  }
 });
 
-
-app.get('/lawyersprofile',async(req,res)=>{
-const client = await pool.connect();
-const lawyerId = req.query.lawyerId;
-console.log(lawyerId);
-const currentUser= req.user||null;
-try{
-  await client.query('BEGIN');
-  const query =  await client.query('SELECT * FROM lawyers WHERE id=$1',[lawyerId]);
-    const lawyers = query.rows.map(row=>{
+app.get("/lawyersprofile", async (req, res) => {
+  const client = await pool.connect();
+  const lawyerId = req.query.lawyerId;
+  console.log(lawyerId);
+  const currentUser = req.user || null;
+  try {
+    await client.query("BEGIN");
+    const query = await client.query("SELECT * FROM lawyers WHERE id=$1", [
+      lawyerId,
+    ]);
+    const lawyers = query.rows.map((row) => {
       let image = row.image;
-      if(image) {
-       image=image.substring(8);
+      if (image) {
+        image = image.substring(8);
       }
       // console.log(image);
       return {
         name: row.name,
         yrs_exp: row.yrs_exp,
         image: image,
-        area_of_prac: row.area_of_prac?row.area_of_prac.replace(/[{"}]/g,'').split(','): [],
+        area_of_prac: row.area_of_prac
+          ? row.area_of_prac.replace(/[{"}]/g, "").split(",")
+          : [],
         id: row.id,
         bio: row.bio,
-        language: row.language?row.language.replace(/[{"}]/g,'').split(','): [],
+        language: row.language
+          ? row.language.replace(/[{"}]/g, "").split(",")
+          : [],
         city: row.city,
         state: row.states,
-        courts: row.courts
-      }
-   
-}); 
-    
-  const reviewsResult= await client.query(`
+        courts: row.courts,
+      };
+    });
+
+    const reviewsResult = await client.query(
+      `
    with review_aggregates as(
     select lawyer_id,
    avg(rating) as average_rating,
@@ -895,57 +960,67 @@ try{
    where r.lawyer_id = $1
    group by r.id, c.name, ra.average_rating, ra.client_count
    order by r.created_at desc
-  `,[lawyerId]);
+  `,
+      [lawyerId]
+    );
 
-  let reviews= [];
-  let averageRating = 0;
-  let clientCount = 0;
+    let reviews = [];
+    let averageRating = 0;
+    let clientCount = 0;
 
-  if (reviewsResult.rowCount>0){
-    reviews = reviewsResult.rows;
-    averageRating = reviewsResult.rows[0].average_rating;
-    clientCount = reviewsResult.rows[0].client_count;
-  }
-  await client.query('COMMIT');
-  res.render('lawyerprofile',{lawyerId,lawyers,currentUser, reviews, averageRating:parseFloat(averageRating)||0, clientCount:clientCount||0, successMessage: req.flash('success'),errorMessage: req.flash('error')});
- 
- } catch (error){
-    await client.query('ROLLBACK');
-    console.error('Error fetching lawyers:', error);
-    res.status(500).send('Internal server error');
- } finally{
+    if (reviewsResult.rowCount > 0) {
+      reviews = reviewsResult.rows;
+      averageRating = reviewsResult.rows[0].average_rating;
+      clientCount = reviewsResult.rows[0].client_count;
+    }
+    await client.query("COMMIT");
+    res.render("lawyerprofile", {
+      lawyerId,
+      lawyers,
+      currentUser,
+      reviews,
+      averageRating: parseFloat(averageRating) || 0,
+      clientCount: clientCount || 0,
+      successMessage: req.flash("success"),
+      errorMessage: req.flash("error"),
+    });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error fetching lawyers:", error);
+    res.status(500).send("Internal server error");
+  } finally {
     client.release();
- }
-})
+  }
+});
 
-
-app.get('/lawyerspage', async(req, res) => {  
+app.get("/lawyerspage", async (req, res) => {
   const client = await pool.connect();
-try{
-  const userLat = req.query.latitude;
-  console.log(userLat);
-  const userLon = req.query.longitude;
-  const law = req.query.law;
-  console.log(userLon);
-  const cityFilter = req.query.cityFilter;
-  const stateFilter = req.query.state;
-  const aopFilter = req.query.areaofpractice;
-  const experienceFilter = req.query.experience;
-  const languageFilter = req.query.language;
-  const genderFilter = req.query.gender;
-  const ratingFilter = req.query.rating;
-  const city = req.query.city;
-  const language = req.query.language;
-  const search = req.query.search||'';
-  const page = parseInt(req.query.page, 10) || 1;
-  // console.log(page)
-  const limit = 10; 
-  const offset = (page-1) * limit;
-  
-  let result;
+  try {
+    const userLat = req.query.latitude;
+    console.log(userLat);
+    const userLon = req.query.longitude;
+    const law = req.query.law;
+    console.log(userLon);
+    const cityFilter = req.query.cityFilter;
+    const stateFilter = req.query.state;
+    const aopFilter = req.query.areaofpractice;
+    const experienceFilter = req.query.experience;
+    const languageFilter = req.query.language;
+    const genderFilter = req.query.gender;
+    const ratingFilter = req.query.rating;
+    const city = req.query.city;
+    const language = req.query.language;
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page, 10) || 1;
+    // console.log(page)
+    const limit = 10;
+    const offset = (page - 1) * limit;
 
-  if(userLat && userLon) {
-    const result = await client.query(`
+    let result;
+
+    if (userLat && userLon) {
+      const result = await client.query(
+        `
       with review_aggregates as (
     select 
         lawyer_id,
@@ -972,62 +1047,67 @@ where
     ) / 1000 <= 10
 order by distance ASC;
 
-    `,[userLon,userLat]);
-   
-     var lawyers = result.rows.map(row=>{
-   
-     let image = row.image;
-     if(image){
-       image=image.substring(8);
-     }
-     console.log(`Lawyer ID: ${row.id}, Name: ${row.name}, Distance from user: ${row.distance} Kilometers`);
-     return{
-       name: row.name,
-       yrs_exp: row.yrs_exp,
-       image: image,
-       area_of_prac: row.area_of_prac?row.area_of_prac.replace(/[{"}]/g,'').split(' , ') : [],
-       id: row.id,
-       average_rating: row.average_rating || 0,
-       client_count: row.client_count || 0,
-       city: row.city,
-       state: row.states,
-       distance: parseFloat(row.distance).toFixed(2)
-     }
-   });
-   console.log(lawyers);
-   // lawyers.sort((a, b) => a.distance - b.distance);  
-   res.render('lawyerspage.ejs',{
-     roundToOneDecimalPlace: roundToOneDecimalPlace,
-     lawyers: lawyers,
-     currentPage: 1,
-     totalPages: 1,
-     limit: limit,
-     noResults: lawyers.length === 0,
-     userLat,
-     userLon,
-     law,
-     city,
-     language,
-     cityFilter,
-     stateFilter,
-     aopFilter,
-     ratingFilter,
-     languageFilter,
-     genderFilter,
-     experienceFilter,
-     search,
-   })
-  }
-else{
-  const countResult = await client.query(`
+    `,
+        [userLon, userLat]
+      );
+
+      var lawyers = result.rows.map((row) => {
+        let image = row.image;
+        if (image) {
+          image = image.substring(8);
+        }
+        console.log(
+          `Lawyer ID: ${row.id}, Name: ${row.name}, Distance from user: ${row.distance} Kilometers`
+        );
+        return {
+          name: row.name,
+          yrs_exp: row.yrs_exp,
+          image: image,
+          area_of_prac: row.area_of_prac
+            ? row.area_of_prac.replace(/[{"}]/g, "").split(" , ")
+            : [],
+          id: row.id,
+          average_rating: row.average_rating || 0,
+          client_count: row.client_count || 0,
+          city: row.city,
+          state: row.states,
+          distance: parseFloat(row.distance).toFixed(2),
+        };
+      });
+      console.log(lawyers);
+      // lawyers.sort((a, b) => a.distance - b.distance);
+      res.render("lawyerspage.ejs", {
+        roundToOneDecimalPlace: roundToOneDecimalPlace,
+        lawyers: lawyers,
+        currentPage: 1,
+        totalPages: 1,
+        limit: limit,
+        noResults: lawyers.length === 0,
+        userLat,
+        userLon,
+        law,
+        city,
+        language,
+        cityFilter,
+        stateFilter,
+        aopFilter,
+        ratingFilter,
+        languageFilter,
+        genderFilter,
+        experienceFilter,
+        search,
+      });
+    } else {
+      const countResult = await client.query(`
    SELECT COUNT(*) AS total_lawyers
   FROM lawyers
   WHERE admin_verified = TRUE and lead_community = TRUE;
 
   `);
-  const totalLawyers = parseInt(countResult.rows[0].total_lawyers, 10);
-  const totalPages = Math.ceil(totalLawyers / limit);
-  result = await client.query(`
+      const totalLawyers = parseInt(countResult.rows[0].total_lawyers, 10);
+      const totalPages = Math.ceil(totalLawyers / limit);
+      result = await client.query(
+        `
         WITH review_aggregates AS (
     SELECT 
         lawyer_id, 
@@ -1046,67 +1126,66 @@ WHERE l.admin_verified = TRUE
 and l.lead_community = TRUE
 ORDER BY ra.average_rating ASC, ra.client_count ASC
 LIMIT $1 OFFSET $2;
-`, [limit, offset]
-  )
-  var lawyers  = result.rows.map(row=>{
-    let image = row.image ? row.image.substring(8) : null;
-    return {
-      name: row.name,
-      yrs_exp: row.yrs_exp,
-      image: image,
-      area_of_prac: row.area_of_prac ? row.area_of_prac.replace(/[{"}]/g, '').split(' , ') : [],
-      id: row.id,
-      average_rating: row.average_rating || 0,
-      client_count: row.client_count || 0,
-      city: row.city,
-      state: row.states,
+`,
+        [limit, offset]
+      );
+      var lawyers = result.rows.map((row) => {
+        let image = row.image ? row.image.substring(8) : null;
+        return {
+          name: row.name,
+          yrs_exp: row.yrs_exp,
+          image: image,
+          area_of_prac: row.area_of_prac
+            ? row.area_of_prac.replace(/[{"}]/g, "").split(" , ")
+            : [],
+          id: row.id,
+          average_rating: row.average_rating || 0,
+          client_count: row.client_count || 0,
+          city: row.city,
+          state: row.states,
+        };
+      });
+
+      res.render("lawyerspage.ejs", {
+        roundToOneDecimalPlace: roundToOneDecimalPlace,
+        lawyers: lawyers,
+        currentPage: page,
+        totalPages: totalPages,
+        limit: limit,
+        noResults: lawyers.length === 0,
+        userLat: null,
+        userLon: null,
+        law,
+        city,
+        language,
+        cityFilter,
+        stateFilter,
+        aopFilter,
+        ratingFilter,
+        languageFilter,
+        genderFilter,
+        experienceFilter,
+        search,
+      });
     }
-  })
+  } catch (error) {
+    // const paginatedLawyers = lawyers.slice(offset, offset+limit)
+    // console.log(paginatedLawyers);
+    // console.log(paginatedLawyers);
+    // let averageRating = 0;
+    // let clientCount = 0;
 
-  res.render('lawyerspage.ejs',{
-    roundToOneDecimalPlace:roundToOneDecimalPlace, 
-    lawyers: lawyers,
-    currentPage: page,
-    totalPages: totalPages,
-    limit: limit,
-    noResults: lawyers.length === 0,
-    userLat: null,
-    userLon: null,
-    law,
-    city,
-    language,
-    cityFilter,
-    stateFilter,
-    aopFilter,
-    ratingFilter,
-    languageFilter,
-    genderFilter,
-    experienceFilter,
-    search,
-    })
-}
-}
-// const paginatedLawyers = lawyers.slice(offset, offset+limit)
-// console.log(paginatedLawyers);
-// console.log(paginatedLawyers);
-// let averageRating = 0;
-// let clientCount = 0;
+    // console.log(lawyers);
+    // console.log(reviewsResult.rowCount);
 
-
-
-// console.log(lawyers);
-// console.log(reviewsResult.rowCount);
-
- catch(error) {
-    console.error('Error:', error);
-    res.status(500).send('Internal server error');
-  } finally{
+    console.error("Error:", error);
+    res.status(500).send("Internal server error");
+  } finally {
     client.release();
   }
-})
+});
 
-
-app.get('/filter-lawyers', async (req, res) => {
+app.get("/filter-lawyers", async (req, res) => {
   const userLat = 19.029364866883935;
   const userLon = 73.06286644778044;
   const cityFilter = req.query.cityFilter;
@@ -1119,13 +1198,13 @@ app.get('/filter-lawyers', async (req, res) => {
   const law = req.query.law;
   const city = req.query.city;
   const language = req.query.language;
-  const search = req.query.search||'';
+  const search = req.query.search || "";
   const page = parseInt(req.query.page, 10) || 1;
   const limit = 10;
   const offset = (page - 1) * limit;
 
   let countQuery = `SELECT count(DISTINCT l.id) as total_count FROM lawyers l LEFT JOIN reviews r ON l.id = r.lawyer_id WHERE 1=1 AND  l.admin_verified = TRUE AND l.lead_community = TRUE`;
-  
+
   let query = `
     SELECT l.id, l.name, l.yrs_exp, l.image, l.city, l.states, l.gender, l.language,
            l.area_of_prac, AVG(r.rating) AS average_rating, COUNT(r.client_id) AS client_count
@@ -1152,18 +1231,18 @@ app.get('/filter-lawyers', async (req, res) => {
   }
 
   if (experienceFilter) {
-    if (experienceFilter === 'Less than 5 Years') {
+    if (experienceFilter === "Less than 5 Years") {
       queryParams.push(5);
       countParams.push(5);
       query += ` AND l.yrs_exp < $${queryParams.length}`;
       countQuery += ` AND l.yrs_exp < $${countParams.length}`;
-    } else if (experienceFilter === 'Greater than 20 Years') {
+    } else if (experienceFilter === "Greater than 20 Years") {
       queryParams.push(20);
       countParams.push(20);
       query += ` AND l.yrs_exp >= $${queryParams.length}`;
       countQuery += ` AND l.yrs_exp >= $${countParams.length}`;
     } else {
-      const [minExp, maxExp] = experienceFilter.split('-').map(Number);
+      const [minExp, maxExp] = experienceFilter.split("-").map(Number);
       if (!isNaN(minExp) && !isNaN(maxExp)) {
         queryParams.push(minExp);
         countParams.push(minExp);
@@ -1175,7 +1254,10 @@ app.get('/filter-lawyers', async (req, res) => {
         query += ` AND l.yrs_exp <= $${queryParams.length}`;
         countQuery += ` AND l.yrs_exp <= $${queryParams.length}`;
       } else {
-        console.error('Invalid experience range format in experienceFilter:', experienceFilter);
+        console.error(
+          "Invalid experience range format in experienceFilter:",
+          experienceFilter
+        );
       }
     }
   }
@@ -1202,34 +1284,41 @@ app.get('/filter-lawyers', async (req, res) => {
     countQuery += ` AND l.language ILIKE $${countParams.length}`;
   }
 
- 
   query += ` GROUP BY l.id, l.name, l.yrs_exp, l.image, l.area_of_prac, l.city, l.states, l.gender, l.language`;
 
   if (ratingFilter) {
-    if (ratingFilter.includes('-')) {
-      const [minRating, maxRating] = ratingFilter.split('-').map(Number);
+    if (ratingFilter.includes("-")) {
+      const [minRating, maxRating] = ratingFilter.split("-").map(Number);
       if (!isNaN(minRating) && !isNaN(maxRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${queryParams.length + 1} AND $${queryParams.length + 2}`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${
+          queryParams.length + 1
+        } AND $${queryParams.length + 2}`;
         queryParams.push(minRating, maxRating);
       } else {
-        console.error('Invalid rating range format in ratingFilter:', ratingFilter);
+        console.error(
+          "Invalid rating range format in ratingFilter:",
+          ratingFilter
+        );
       }
     } else {
       const exactRating = Number(ratingFilter);
       if (!isNaN(exactRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${queryParams.length + 1}`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${
+          queryParams.length + 1
+        }`;
         queryParams.push(exactRating);
       } else {
-        console.error('Invalid rating value in ratingFilter:', ratingFilter);
+        console.error("Invalid rating value in ratingFilter:", ratingFilter);
       }
     }
   }
 
- 
-  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}`;
+  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${
+    queryParams.length + 2
+  }`;
   queryParams.push(limit, offset);
 
-  console.log('Query Params:', queryParams);
+  console.log("Query Params:", queryParams);
 
   try {
     const countResult = await pool.query(countQuery, countParams);
@@ -1238,7 +1327,7 @@ app.get('/filter-lawyers', async (req, res) => {
 
     const result = await pool.query(query, queryParams);
 
-    const lawyers = result.rows.map(row => {
+    const lawyers = result.rows.map((row) => {
       let image = row.image;
       if (image) {
         image = image.substring(8);
@@ -1248,7 +1337,9 @@ app.get('/filter-lawyers', async (req, res) => {
         name: row.name,
         yrs_exp: row.yrs_exp,
         image: image,
-        area_of_prac: row.area_of_prac ? row.area_of_prac.replace(/[{"}]/g, '').split(' , ') : [],
+        area_of_prac: row.area_of_prac
+          ? row.area_of_prac.replace(/[{"}]/g, "").split(" , ")
+          : [],
         id: row.id,
         average_rating: parseFloat(row.average_rating).toFixed(2) || 0,
         client_count: row.client_count || 0,
@@ -1259,7 +1350,7 @@ app.get('/filter-lawyers', async (req, res) => {
 
     const noResults = lawyers.length === 0;
 
-    res.render('lawyerspage', {
+    res.render("lawyerspage", {
       roundToOneDecimalPlace: roundToOneDecimalPlace,
       lawyers,
       currentPage: page,
@@ -1278,66 +1369,88 @@ app.get('/filter-lawyers', async (req, res) => {
       languageFilter,
       genderFilter,
       experienceFilter,
-      search
+      search,
     });
   } catch (err) {
-    console.error('Error executing query', err);
-    res.status(500).send('Internal Server error');
+    console.error("Error executing query", err);
+    res.status(500).send("Internal Server error");
   }
 });
 
-app.get('/verify-email', async(req,res)=>{
+app.get("/verify-email", async (req, res) => {
   const token = req.query.token;
-  console.log(token)
-  try{
-    result = await pool.query('select * from clientsignup where verification_token = $1',[token]);
+  console.log(token);
+  try {
+    result = await pool.query(
+      "select * from clientsignup where verification_token = $1",
+      [token]
+    );
     console.log(result);
-    if(result.rowCount === 0){
-      result = await pool.query('SELECT * FROM lawyers WHERE verification_token = $1', [token]);
+    if (result.rowCount === 0) {
+      result = await pool.query(
+        "SELECT * FROM lawyers WHERE verification_token = $1",
+        [token]
+      );
       if (result.rowCount === 0) {
-        return res.status(400).send('Invalid token or token has expired.');
+        return res.status(400).send("Invalid token or token has expired.");
       }
-      await pool.query('UPDATE lawyers SET is_verified = TRUE, verification_token = NULL WHERE verification_token = $1', [token]);
-      return res.render('home3', { message: 'Lawyer email verified successfully! Please login now.', success: true });
+      await pool.query(
+        "UPDATE lawyers SET is_verified = TRUE, verification_token = NULL WHERE verification_token = $1",
+        [token]
+      );
+      return res.render("home3", {
+        message: "Lawyer email verified successfully! Please login now.",
+        success: true,
+      });
     }
-    await pool.query('update clientsignup set is_verified = TRUE, verification_token = NULL where verification_token = $1',[token]);
-    res.render('home3',{message: 'Email verified successfully! Please wait for 24 hours while we verify your identity.', success: true});
-  } catch(error){
-    console.error('Error verifying email:', error);
-    res.status(500).send('Internal server error');
+    await pool.query(
+      "update clientsignup set is_verified = TRUE, verification_token = NULL where verification_token = $1",
+      [token]
+    );
+    res.render("home3", {
+      message:
+        "Email verified successfully! Please wait for 24 hours while we verify your identity.",
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error verifying email:", error);
+    res.status(500).send("Internal server error");
   }
-})
+});
 
-
-app.get('/search-lawyers', async(req, res) => {  
+app.get("/search-lawyers", async (req, res) => {
   const client = await pool.connect();
-try{
-  await client.query('BEGIN');
-  const cityFilter = req.query.cityFilter;
-  const stateFilter = req.query.state;
-  const aopFilter = req.query.areaofpractice;
-  const experienceFilter = req.query.experience;
-  const languageFilter = req.query.language;
-  const genderFilter = req.query.gender;
-  const ratingFilter = req.query.rating;
-  const law = req.query.law;
-  const city = req.query.city;
-  const language = req.query.language;
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = 10; 
-  const offset = (page-1) * limit;
-  const search = req.query.search||'';
-  const searchWords = search.split(' ').map(word => `%${word}%`);
-  const whereClauses = searchWords.map((_, index) => `(name ilike $${index+1} or area_of_prac ilike $${index+1})`);
-  const whereClause = whereClauses.join(' OR ');
+  try {
+    await client.query("BEGIN");
+    const cityFilter = req.query.cityFilter;
+    const stateFilter = req.query.state;
+    const aopFilter = req.query.areaofpractice;
+    const experienceFilter = req.query.experience;
+    const languageFilter = req.query.language;
+    const genderFilter = req.query.gender;
+    const ratingFilter = req.query.rating;
+    const law = req.query.law;
+    const city = req.query.city;
+    const language = req.query.language;
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = 10;
+    const offset = (page - 1) * limit;
+    const search = req.query.search || "";
+    const searchWords = search.split(" ").map((word) => `%${word}%`);
+    const whereClauses = searchWords.map(
+      (_, index) =>
+        `(name ilike $${index + 1} or area_of_prac ilike $${index + 1})`
+    );
+    const whereClause = whereClauses.join(" OR ");
 
-  const searchLawyersResult = `select count(*) from lawyers where ${whereClause} and admin_verified = TRUE and lead_community = TRUE`;
-  // const values =`%${searchWords}%`;
-  const result1 = await client.query(searchLawyersResult, searchWords);
-  const totalLawyers = parseInt(result1.rows[0].count, 10);
-  const totalPages = Math.ceil(totalLawyers/limit);
+    const searchLawyersResult = `select count(*) from lawyers where ${whereClause} and admin_verified = TRUE and lead_community = TRUE`;
+    // const values =`%${searchWords}%`;
+    const result1 = await client.query(searchLawyersResult, searchWords);
+    const totalLawyers = parseInt(result1.rows[0].count, 10);
+    const totalPages = Math.ceil(totalLawyers / limit);
 
-  const result = await client.query(`
+    const result = await client.query(
+      `
   with review_aggregates as(
    select lawyer_id,
    avg(rating) as average_rating,
@@ -1354,67 +1467,69 @@ try{
    where ${whereClause} and l.admin_verified = TRUE
    and l.lead_community = TRUE
    order by ra.average_rating desc nulls last
-   limit $${searchWords.length+1} offset $${searchWords.length+2}
- `,[...searchWords,limit,offset]);
+   limit $${searchWords.length + 1} offset $${searchWords.length + 2}
+ `,
+      [...searchWords, limit, offset]
+    );
 
-  const lawyers = result.rows.map(row=>{
+    const lawyers = result.rows.map((row) => {
+      let image = row.image;
+      if (image) {
+        image = image.substring(8);
+      }
+      return {
+        name: row.name,
+        yrs_exp: row.yrs_exp,
+        image: image,
+        area_of_prac: row.area_of_prac
+          ? row.area_of_prac.replace(/[{"}]/g, "").split(" , ")
+          : [],
+        id: row.id,
+        average_rating: row.average_rating || 0,
+        client_count: row.client_count || 0,
+        state: row.states,
+        city: row.city,
+      };
+    });
 
-  let image = row.image;
-  if(image){
-    image=image.substring(8);
-  }
-  return{
-    name: row.name,
-    yrs_exp: row.yrs_exp,
-    image: image,
-    area_of_prac: row.area_of_prac?row.area_of_prac.replace(/[{"}]/g,'').split(' , ') : [],
-    id: row.id,
-    average_rating: row.average_rating || 0,
-    client_count: row.client_count || 0,
-    state: row.states,
-    city: row.city
-  }
+    await client.query("COMMIT");
 
-});
-            
-await client.query('COMMIT');
+    const noResults = lawyers.length === 0;
 
-const noResults = lawyers.length === 0;
+    // let averageRating = 0;
+    // let clientCount = 0;
 
-// let averageRating = 0;
-// let clientCount = 0;
-
-// console.log(reviewsResult.rowCount);
-res.render('lawyerspage.ejs',{
-roundToOneDecimalPlace:roundToOneDecimalPlace, 
-lawyers,
-currentPage: page,
-totalPages,
-limit,
-offset,
-law,
-city,
-language,
-cityFilter,
-stateFilter,
-aopFilter,
-ratingFilter,
-languageFilter,
-genderFilter,
-experienceFilter,
-noResults,
-search
-})
-  }  catch(error) {
-    await client.query('ROLLBACK');
-    console.error('Error:', error);
-    res.status(500).send('Internal server error');
-  } finally{
+    // console.log(reviewsResult.rowCount);
+    res.render("lawyerspage.ejs", {
+      roundToOneDecimalPlace: roundToOneDecimalPlace,
+      lawyers,
+      currentPage: page,
+      totalPages,
+      limit,
+      offset,
+      law,
+      city,
+      language,
+      cityFilter,
+      stateFilter,
+      aopFilter,
+      ratingFilter,
+      languageFilter,
+      genderFilter,
+      experienceFilter,
+      noResults,
+      search,
+    });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error:", error);
+    res.status(500).send("Internal server error");
+  } finally {
     client.release();
   }
-})
+});
 
-app.get('/search-homepage-lawyers', async (req, res) => {
+app.get("/search-homepage-lawyers", async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const limit = 10;
   const offset = (page - 1) * limit;
@@ -1429,16 +1544,17 @@ app.get('/search-homepage-lawyers', async (req, res) => {
   const genderFilter = req.query.gender;
   const ratingFilter = req.query.rating;
   const stateFilter = req.query.state;
-  const search = req.query.search||'';
+  const search = req.query.search || "";
   const queryParams = [];
   let whereClause = [];
 
-  
   if (law) {
     const lawWords = law.split(/[-\s]+/);
     lawWords.forEach((word) => {
       queryParams.push(`%${word}%`);
-      whereClause.push(`l.area_of_prac ILIKE ANY(ARRAY[$${queryParams.length}])`);
+      whereClause.push(
+        `l.area_of_prac ILIKE ANY(ARRAY[$${queryParams.length}])`
+      );
     });
   }
 
@@ -1454,25 +1570,30 @@ app.get('/search-homepage-lawyers', async (req, res) => {
     whereClause.push(`l.language ILIKE $${queryParams.length}`);
   }
 
-  const whereClauseString = whereClause.length > 0 
-  ? `WHERE ${whereClause.join(' AND ')} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
-  : `WHERE l.admin_verified = TRUE AND l.lead_community = TRUE`;
-
-
+  const whereClauseString =
+    whereClause.length > 0
+      ? `WHERE ${whereClause.join(
+          " AND "
+        )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
+      : `WHERE l.admin_verified = TRUE AND l.lead_community = TRUE`;
 
   try {
     // 1. Query to count total number of lawyers matching the filters
-    const totalLawyersResult = await pool.query(`
+    const totalLawyersResult = await pool.query(
+      `
       SELECT COUNT(*) as total_count
       FROM lawyers l  
       ${whereClauseString}
-    `, queryParams);
-    
+    `,
+      queryParams
+    );
+
     const totalLawyers = parseInt(totalLawyersResult.rows[0].total_count, 10);
     const totalPages = Math.ceil(totalLawyers / limit);
 
     // 2. Query to fetch the current page of lawyers
-    const result = await pool.query(`
+    const result = await pool.query(
+      `
       WITH review_aggregates AS (
         SELECT 
           lawyer_id, 
@@ -1490,10 +1611,12 @@ app.get('/search-homepage-lawyers', async (req, res) => {
       ${whereClauseString}
       ORDER BY ra.average_rating DESC, ra.client_count DESC
       LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}
-    `, [...queryParams, limit, offset]);
+    `,
+      [...queryParams, limit, offset]
+    );
 
     // 3. Map result rows to appropriate format
-    const lawyers = result.rows.map(row => {
+    const lawyers = result.rows.map((row) => {
       let image = row.image;
       if (image) {
         image = image.substring(8);
@@ -1502,7 +1625,9 @@ app.get('/search-homepage-lawyers', async (req, res) => {
         name: row.name,
         yrs_exp: row.yrs_exp,
         image: image,
-        area_of_prac: row.area_of_prac ? row.area_of_prac.replace(/[{"}]/g, '').split(' , ') : [],
+        area_of_prac: row.area_of_prac
+          ? row.area_of_prac.replace(/[{"}]/g, "").split(" , ")
+          : [],
         id: row.id,
         average_rating: row.average_rating || 0,
         client_count: row.client_count || 0,
@@ -1513,8 +1638,7 @@ app.get('/search-homepage-lawyers', async (req, res) => {
 
     const noResults = lawyers.length === 0;
 
-   
-    res.render('lawyerspage', {
+    res.render("lawyerspage", {
       roundToOneDecimalPlace,
       lawyers,
       currentPage: page,
@@ -1531,28 +1655,29 @@ app.get('/search-homepage-lawyers', async (req, res) => {
       stateFilter,
       languageFilter,
       cityFilter,
-      search
+      search,
     });
-
   } catch (error) {
-    console.error('Error fetching lawyers:', error);
-    res.status(500).send('Internal Server Error');
+    console.error("Error fetching lawyers:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
-
-
-
-app.get('/search-articles',async(req,res)=>{
-  try{
-   const page = parseInt(req.query.page, 10) || 1;
-   const limit = 10;
-   const offset = (page -1)*limit;
-   const search = req.query.search || '';
-   const searchWords = search.split(' ').map(word => `%${word}%`);
-   const whereClauses = searchWords.map((_, index)=>`(a.title ilike $${index+1} or l.name ilike $${index+1})`);
-   const whereClause = whereClauses.length>0?`where ${whereClauses.join(' OR ')}` : '';
-   const result = await pool.query(`
+app.get("/search-articles", async (req, res) => {
+  try {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = 10;
+    const offset = (page - 1) * limit;
+    const search = req.query.search || "";
+    const searchWords = search.split(" ").map((word) => `%${word}%`);
+    const whereClauses = searchWords.map(
+      (_, index) =>
+        `(a.title ilike $${index + 1} or l.name ilike $${index + 1})`
+    );
+    const whereClause =
+      whereClauses.length > 0 ? `where ${whereClauses.join(" OR ")}` : "";
+    const result = await pool.query(
+      `
     select a.id, a.title, a.content, a.author_id, l.name as author_name,
     coalesce(count(lk.article_id), 0) as likes_count
     from articles a 
@@ -1561,50 +1686,55 @@ app.get('/search-articles',async(req,res)=>{
     ${whereClause}
     group by a.id, l.name
     order by likes_count desc
-    limit $${searchWords.length+1} offset $${searchWords.length+2}
-    `,[...searchWords, limit, offset]);
+    limit $${searchWords.length + 1} offset $${searchWords.length + 2}
+    `,
+      [...searchWords, limit, offset]
+    );
 
-    const countResult = await pool.query(`
+    const countResult = await pool.query(
+      `
       select count(*) from articles a
       left join lawyers l on a.author_id = l.id
       ${whereClause}
-      `,searchWords);
+      `,
+      searchWords
+    );
 
-      const totalArticles = parseInt(countResult.rows[0].count,10);
-      const totalPages = Math.ceil(totalArticles / limit);
+    const totalArticles = parseInt(countResult.rows[0].count, 10);
+    const totalPages = Math.ceil(totalArticles / limit);
 
-      const articles = result.rows.map(row => ({
-        id: row.id,
-        title: row.title,
-        content: row.content,
-        author_id: row.author_id,
-        author_name: row.author_name,
-        likes: parseInt(row.likes_count,10),
-      }))
+    const articles = result.rows.map((row) => ({
+      id: row.id,
+      title: row.title,
+      content: row.content,
+      author_id: row.author_id,
+      author_name: row.author_name,
+      likes: parseInt(row.likes_count, 10),
+    }));
 
-      const noResults = articles.length === 0;
-      
-      res.render('articlespage',{
-        articles,
-        currentPage: page,
-        totalPages: totalPages,
-        limit: limit,
-        search: search,
-        noResults,
-      })
-    }  catch(error) {
-      console.error('Error:', error);
-      res.status(500).send('Internal server error');
-    } 
-})
+    const noResults = articles.length === 0;
 
-app.get('/articlewriting',(req,res)=>{
-  res.render('articlewriting');
-})
+    res.render("articlespage", {
+      articles,
+      currentPage: page,
+      totalPages: totalPages,
+      limit: limit,
+      search: search,
+      noResults,
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+app.get("/articlewriting", (req, res) => {
+  res.render("articlewriting");
+});
 
 // app.get('/community', isuAuthenticated, async (req, res) => {
 //   const client = await pool.connect();
-  
+
 //   try {
 //     const userId = req.user.id;
 //     const currentUser = req.user || null;
@@ -1613,7 +1743,7 @@ app.get('/articlewriting',(req,res)=>{
 
 //       // Fetch community posts with like count
 //       const postsResult = await client.query(`
-//      SELECT 
+//      SELECT
 //     cp.id AS post_id,
 //     cp.image_path,
 //     cp.content,
@@ -1622,21 +1752,21 @@ app.get('/articlewriting',(req,res)=>{
 //     cp.created_at,
 //     COALESCE(like_counts.like_count, 0) AS like_count,
 //     EXISTS (
-//         SELECT 1 
+//         SELECT 1
 //         FROM community_likes cl
 //         WHERE cl.user_id = $1 AND cl.post_id = cp.id
 //     ) AS user_liked
-// FROM 
+// FROM
 //     community_posts cp
 // LEFT JOIN (
 //     SELECT post_id, COUNT(*) AS like_count
 //     FROM community_likes
 //     GROUP BY post_id
-// ) AS like_counts 
+// ) AS like_counts
 //     ON cp.id = like_counts.post_id
 // LEFT JOIN lawyers l
 //     ON cp.lawyer_id = l.id
-// ORDER BY 
+// ORDER BY
 //     cp.created_at DESC;
 
 //       `, [userId]);
@@ -1644,12 +1774,12 @@ app.get('/articlewriting',(req,res)=>{
 //       const likeCount = posts[0].like_count;
 //       // Fetch comments for all posts
 //       const commentsResult = await client.query(`
-//         SELECT 
+//         SELECT
 //           c.*,
 //           l.name AS username,
 //           l.id AS user_id,
 //           l.email AS user_email
-//         FROM 
+//         FROM
 //           community_comments c
 //         LEFT JOIN lawyers l ON c.user_id = l.id
 //         WHERE c.post_id IN (
@@ -1661,12 +1791,12 @@ app.get('/articlewriting',(req,res)=>{
 
 //       // Fetch replies for all comments
 //       const repliesResult = await client.query(`
-//         SELECT 
+//         SELECT
 //           r.*,
 //           l.name AS username,
 //           l.id AS user_id,
 //           l.email AS user_email
-//         FROM 
+//         FROM
 //           community_replies r
 //         LEFT JOIN lawyers l ON r.user_id = l.id
 //         WHERE r.comment_id IN (
@@ -1698,22 +1828,19 @@ app.get('/articlewriting',(req,res)=>{
 //   }
 // });
 
-
-app.get('/community', isuAuthenticated, async (req, res) => {
+app.get("/community", isuAuthenticated, async (req, res) => {
   const client = await pool.connect();
   try {
     const userId = req.user.id;
     const currentUser = req.user || null;
-   
 
-    if (req.user.role === 'lawyer') {
-   
-      const offset = 0 ;
+    if (req.user.role === "lawyer") {
+      const offset = 0;
       const limit = 10;
-      await client.query('BEGIN');
+      await client.query("BEGIN");
 
-
-      const postsResult = await client.query(`
+      const postsResult = await client.query(
+        `
     WITH followed_posts AS (
     SELECT 
         cp.id AS post_id,
@@ -1876,15 +2003,16 @@ FROM (
 ORDER BY priority, created_at DESC  -- Prioritize by CTE and recency
 LIMIT 10;
 
-      `, [userId]);
-      
+      `,
+        [userId]
+      );
 
       const posts = postsResult.rows;
 
-   
-      const postIds = posts.map(post => post.post_id); 
+      const postIds = posts.map((post) => post.post_id);
 
-      const commentsResult = await client.query(`
+      const commentsResult = await client.query(
+        `
         SELECT 
           c.*,
           l.name AS username,
@@ -1898,13 +2026,15 @@ LIMIT 10;
           c.post_id = ANY($1::int[])
         ORDER BY 
           c.created_at DESC;
-      `, [postIds]);
+      `,
+        [postIds]
+      );
 
       const comments = commentsResult.rows;
 
-  
-      const commentIds = comments.map(comment => comment.id); 
-      const repliesResult = await client.query(`
+      const commentIds = comments.map((comment) => comment.id);
+      const repliesResult = await client.query(
+        `
         SELECT 
           r.*,
           l.name AS username,
@@ -1918,11 +2048,14 @@ LIMIT 10;
           r.comment_id = ANY($1::int[])
         ORDER BY 
           r.created_at DESC;
-      `, [commentIds]);
+      `,
+        [commentIds]
+      );
 
       const replies = repliesResult.rows;
 
-      const followDataMutuals = await pool.query(`
+      const followDataMutuals = await pool.query(
+        `
            WITH mutuals AS (
     SELECT 
         l.id AS lawyer_id,
@@ -1993,34 +2126,40 @@ ORDER BY
     followers_following_count DESC
 LIMIT 6;
 
-`,[userId]);
+`,
+        [userId]
+      );
 
-const mutuals = followDataMutuals.rows;
-//Notification Count
-const notificationCountQuery = await pool.query(`SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`, [userId]);
-const notificationCount = notificationCountQuery.rows[0].count;
-console.log(notificationCount);
+      const mutuals = followDataMutuals.rows;
+      //Notification Count
+      const notificationCountQuery = await pool.query(
+        `SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`,
+        [userId]
+      );
+      const notificationCount = notificationCountQuery.rows[0].count;
+      console.log(notificationCount);
 
-for (let post of posts) {
-  const createdAt = new Date(post.created_at);
-  const now = new Date();
+      for (let post of posts) {
+        const createdAt = new Date(post.created_at);
+        const now = new Date();
 
-  const diffMs = now - createdAt;
+        const diffMs = now - createdAt;
 
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  const diffHours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
-  const diffMinutes = Math.floor((diffMs / (1000 * 60)) % 60);
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const diffHours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+        const diffMinutes = Math.floor((diffMs / (1000 * 60)) % 60);
 
-  if (diffDays >= 1) {
-      post.timeAgo = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-  } else if (diffHours >= 1) {
-      post.timeAgo = `${diffHours} hr${diffHours > 1 ? 's' : ''} ago`;
-  } else {
-      post.timeAgo = `${diffMinutes} min${diffMinutes > 1 ? 's' : ''} ago`;
-  }
-}
+        if (diffDays >= 1) {
+          post.timeAgo = `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+        } else if (diffHours >= 1) {
+          post.timeAgo = `${diffHours} hr${diffHours > 1 ? "s" : ""} ago`;
+        } else {
+          post.timeAgo = `${diffMinutes} min${diffMinutes > 1 ? "s" : ""} ago`;
+        }
+      }
 
-const followingResult = await pool.query(`
+      const followingResult = await pool.query(
+        `
   SELECT 
       l.image AS lawyer_profile_image,
       l.id AS following_id,
@@ -2031,15 +2170,15 @@ const followingResult = await pool.query(`
       lawyers l ON f.followed_id = l.id
   WHERE 
       f.follower_id = $1;
-`, [userId]);
+`,
+        [userId]
+      );
 
-const following = followingResult.rows;
+      const following = followingResult.rows;
 
+      await client.query("COMMIT");
 
-
-      await client.query('COMMIT');
-
-      res.render('community.ejs', {
+      res.render("community.ejs", {
         posts,
         userId,
         comments,
@@ -2047,18 +2186,20 @@ const following = followingResult.rows;
         currentUser,
         notificationCount,
         mutuals,
-        user:req.user,
+        user: req.user,
         following,
-        currentRoute: '/community',
-        likeCount: posts.length > 0 ? posts[0].like_count : 0 // Handle empty posts case
+        currentRoute: "/community",
+        likeCount: posts.length > 0 ? posts[0].like_count : 0, // Handle empty posts case
       });
     } else {
-      res.status(403).send('Access denied. This page is only accessible to lawyers.');
+      res
+        .status(403)
+        .send("Access denied. This page is only accessible to lawyers.");
     }
   } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('Error accessing community route:', error);
-    res.status(500).send('An error occurred. Please try again later.');
+    await client.query("ROLLBACK");
+    console.error("Error accessing community route:", error);
+    res.status(500).send("An error occurred. Please try again later.");
   } finally {
     client.release();
   }
@@ -2070,15 +2211,15 @@ const following = followingResult.rows;
 //   return notifcationCount.rows[0]
 // }
 
-app.get('/community/search', async (req, res) => {
+app.get("/community/search", async (req, res) => {
   try {
-      const { search } = req.query;
-      const userId = req.user.id;
+    const { search } = req.query;
+    const userId = req.user.id;
 
-      // Query the lawyers table
-     
-        
-    const results = await pool.query(`
+    // Query the lawyers table
+
+    const results = await pool.query(
+      `
  SELECT l.*, 
          l2.name AS mutual_follower_name,
          CASE 
@@ -2096,26 +2237,20 @@ app.get('/community/search', async (req, res) => {
     AND l.id != $2 -- Exclude the current user
   ORDER BY is_mutual_follower DESC, l.name ASC
   `,
-  [`%${search}%`, userId]
-);
+      [`%${search}%`, userId]
+    );
 
-console.log(results.rows);
+    console.log(results.rows);
 
-      
-
-
-     
-
-
-      res.json(results.rows); 
+    res.json(results.rows);
   } catch (err) {
-      console.error(err.message);
-      res.status(500).json({ error: 'Server error' });
+    console.error(err.message);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-app.post('/followingSearch',async(req,res)=>{
-  const search = req.body.followingSearch 
+app.post("/followingSearch", async (req, res) => {
+  const search = req.body.followingSearch;
   console.log("search query is", search);
   const currentUserId = req.body.id;
   console.log(currentUserId);
@@ -2129,12 +2264,15 @@ app.post('/followingSearch',async(req,res)=>{
                   WHERE follower_id = $2
               )
         `;
-        const followingResults = await pool.query(followingQuery, [search, currentUserId]);
-        console.log(followingResults.rows);
-     res.json({following:followingResults.rows});
+  const followingResults = await pool.query(followingQuery, [
+    search,
+    currentUserId,
+  ]);
+  console.log(followingResults.rows);
+  res.json({ following: followingResults.rows });
 });
 
-app.post('/followersSearch',async(req,res)=>{
+app.post("/followersSearch", async (req, res) => {
   const search = req.body.followersSearch;
   console.log("search query is", search);
   const currentUserId = req.body.id;
@@ -2148,9 +2286,12 @@ app.post('/followersSearch',async(req,res)=>{
                   WHERE followed_id = $2
               )
         `;
-        const followersResults = await pool.query(followersQuery, [search, currentUserId]);
-     res.json({followers:followersResults.rows});
-})
+  const followersResults = await pool.query(followersQuery, [
+    search,
+    currentUserId,
+  ]);
+  res.json({ followers: followersResults.rows });
+});
 
 app.get("/initialCommunityPosts", async (req, res) => {
   const userId = req.user.id;
@@ -2333,7 +2474,7 @@ LIMIT 10;
   }
 });
 
-app.post('/community/posts',isuAuthenticated, async (req, res) => {
+app.post("/community/posts", isuAuthenticated, async (req, res) => {
   const client = await pool.connect();
 
   try {
@@ -2343,10 +2484,10 @@ app.post('/community/posts',isuAuthenticated, async (req, res) => {
     const offset1 = (offset / 10) * 3;
     const offset2 = (offset / 10) * 4;
 
+    await client.query("BEGIN");
 
-    await client.query('BEGIN');
-
-    const postsResult = await client.query(`
+    const postsResult = await client.query(
+      `
       WITH followed_posts AS (
           SELECT 
               cp.id AS post_id,
@@ -2503,9 +2644,9 @@ app.post('/community/posts',isuAuthenticated, async (req, res) => {
       ) AS combined_posts
       ORDER BY priority, created_at DESC  -- Prioritize by category and recency
       LIMIT $2 OFFSET $3;
-    `, [userId, limit, offset]);
-    
-      
+    `,
+      [userId, limit, offset]
+    );
 
     const posts = postsResult.rows;
 
@@ -2517,9 +2658,10 @@ app.post('/community/posts',isuAuthenticated, async (req, res) => {
         posts.splice(i, 1);
       }
     }
-    const postIds = posts.map(post => post.post_id);
+    const postIds = posts.map((post) => post.post_id);
 
-    const commentsResult = await client.query(`
+    const commentsResult = await client.query(
+      `
       SELECT 
         c.*,
         l.name AS username,
@@ -2533,13 +2675,16 @@ app.post('/community/posts',isuAuthenticated, async (req, res) => {
         c.post_id = ANY($1::int[])
       ORDER BY 
         c.created_at DESC;
-    `, [postIds]);
+    `,
+      [postIds]
+    );
 
     const comments = commentsResult.rows;
 
-    const commentIds = comments.map(comment => comment.id);
+    const commentIds = comments.map((comment) => comment.id);
 
-    const repliesResult = await client.query(`
+    const repliesResult = await client.query(
+      `
       SELECT 
         r.*,
         l.name AS username,
@@ -2553,10 +2698,13 @@ app.post('/community/posts',isuAuthenticated, async (req, res) => {
         r.comment_id = ANY($1::int[])
       ORDER BY 
         r.created_at DESC;
-    `, [commentIds]);
+    `,
+      [commentIds]
+    );
 
     const replies = repliesResult.rows;
-    const followingResult = await pool.query(`
+    const followingResult = await pool.query(
+      `
       SELECT 
           l.image AS lawyer_profile_image,
           l.id AS following_id,
@@ -2567,17 +2715,19 @@ app.post('/community/posts',isuAuthenticated, async (req, res) => {
           lawyers l ON f.followed_id = l.id
       WHERE 
           f.follower_id = $1;
-    `, [userId]);
-    
+    `,
+      [userId]
+    );
+
     const following = followingResult.rows;
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
 
     res.json({ posts, comments, replies, userId, following });
   } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('Error loading more posts:', error);
-    res.status(500).send('An error occurred. Please try again later.');
+    await client.query("ROLLBACK");
+    console.error("Error loading more posts:", error);
+    res.status(500).send("An error occurred. Please try again later.");
   } finally {
     client.release();
   }
@@ -2597,12 +2747,15 @@ app.get("/community/post/:id", isuAuthenticated, async (req, res) => {
       return res.status(404).send("Post not found");
     }
     const post = result.rows[0];
-    const profileImagePath = await client.query(`select image from lawyers where id = $1`, [post.lawyer_id]);
+    const profileImagePath = await client.query(
+      `select image from lawyers where id = $1`,
+      [post.lawyer_id]
+    );
     const profileImage = profileImagePath.rows[0].image;
     console.log(profileImage);
     //Storing LAWYERID
     const lawyerId = post.lawyer_id;
-  
+
     const commentResult = await client.query(
       `
       SELECT 
@@ -2628,7 +2781,7 @@ app.get("/community/post/:id", isuAuthenticated, async (req, res) => {
     const comments = commentResult.rows;
     for (let comment of comments) {
       const replyResult = await client.query(
-      `  SELECT
+        `  SELECT
           r.*, 
           l.name AS lawyer_name 
         FROM 
@@ -2642,7 +2795,7 @@ app.get("/community/post/:id", isuAuthenticated, async (req, res) => {
         [comment.id]
       );
       comment.replies = replyResult.rows;
-      console.log(comments)
+      console.log(comments);
     }
     //Liked or not checking
     const likeResult = await client.query(
@@ -2666,12 +2819,16 @@ app.get("/community/post/:id", isuAuthenticated, async (req, res) => {
     const follow = followResult.rows.length > 0;
 
     //NOTIFICATION COUNT
-    const notificationCountQuery = await pool.query(`SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`, [userId]);
-   const notificationCount = notificationCountQuery.rows[0].count;
-    
-   //Following
-   
-const followingResult = await pool.query(`
+    const notificationCountQuery = await pool.query(
+      `SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`,
+      [userId]
+    );
+    const notificationCount = notificationCountQuery.rows[0].count;
+
+    //Following
+
+    const followingResult = await pool.query(
+      `
   SELECT 
       l.image AS lawyer_profile_image,
       l.id AS following_id,
@@ -2682,9 +2839,11 @@ const followingResult = await pool.query(`
       lawyers l ON f.followed_id = l.id
   WHERE 
       f.follower_id = $1;
-`, [userId]);
+`,
+      [userId]
+    );
 
-const following = followingResult.rows;
+    const following = followingResult.rows;
 
     res.render("community-post.ejs", {
       userId,
@@ -2694,12 +2853,12 @@ const following = followingResult.rows;
       commentCount,
       like,
       likeCount,
-      user:req.user,
-      currentRoute: '/community',
+      user: req.user,
+      currentRoute: "/community",
       notificationCount,
       follow,
       profileImage,
-      following
+      following,
     });
   } catch (error) {
     console.error("Error loading post", error);
@@ -2712,7 +2871,7 @@ const following = followingResult.rows;
 app.get("/sharePostNotification", async (req, res) => {
   try {
     const { postId, lawyerId } = req.query;
-    const userId = req.user.id; 
+    const userId = req.user.id;
 
     if (!postId || !lawyerId || !userId) {
       return res.status(400).json({ error: "Missing required parameters." });
@@ -2723,23 +2882,26 @@ app.get("/sharePostNotification", async (req, res) => {
     // Insert the notification into the database
     await pool.query(
       `INSERT INTO notifications (user_id, type, content, link, ref_id) VALUES ($1, $2, $3, $4, $5)`,
-      [lawyerId, 'share', content, link, userId]
+      [lawyerId, "share", content, link, userId]
     );
 
-    res.status(200).json({success: true, message: "Notification sent successfully." });
+    res
+      .status(200)
+      .json({ success: true, message: "Notification sent successfully." });
   } catch (error) {
     console.error("Error sending notification:", error);
-    res.status(500).json({ error: "An error occurred while sending the notification." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while sending the notification." });
   }
 });
 
-
-
-app.get('/community/user-profile', async (req, res) => {
-  const lawyerId = req.query.id; 
+app.get("/community/user-profile", async (req, res) => {
+  const lawyerId = req.query.id;
   const userId = req.user.id;
-  try{
-    const followersResult = await pool.query(`
+  try {
+    const followersResult = await pool.query(
+      `
       SELECT 
           l.image AS lawyer_profile_image,
           l.id AS follower_id,
@@ -2750,11 +2912,14 @@ app.get('/community/user-profile', async (req, res) => {
           lawyers l ON f.follower_id = l.id
       WHERE 
           f.followed_id = $1;
-    `, [lawyerId]);
+    `,
+      [lawyerId]
+    );
 
     const followers = followersResult.rows;
-  
-    const followingResult = await pool.query(`
+
+    const followingResult = await pool.query(
+      `
       SELECT 
           l.image AS lawyer_profile_image,
           l.id AS following_id,
@@ -2765,11 +2930,13 @@ app.get('/community/user-profile', async (req, res) => {
           lawyers l ON f.followed_id = l.id
       WHERE 
           f.follower_id = $1;
-    `, [lawyerId]);
+    `,
+      [lawyerId]
+    );
 
     const following = followingResult.rows;
 
-  const postsSql = `
+    const postsSql = `
   WITH post_details AS (
       SELECT 
           cp.id AS post_id,
@@ -2799,15 +2966,18 @@ app.get('/community/user-profile', async (req, res) => {
   FROM post_details
   ORDER BY post_details.created_at DESC;
 `;
-const postsResult = await pool.query(postsSql, [lawyerId]);
-const posts = postsResult.rows;
-//Attatch number of comments for each post object
-posts.forEach(async (post) => {
-  const commentCountQuery = await pool.query(`select count(*) as count from community_comments where post_id = $1`, [post.post_id]);
-  const commentCount = commentCountQuery.rows[0].count;
-  post.noOfComments = commentCount;
-})
-      const commentsSql = `
+    const postsResult = await pool.query(postsSql, [lawyerId]);
+    const posts = postsResult.rows;
+    //Attatch number of comments for each post object
+    posts.forEach(async (post) => {
+      const commentCountQuery = await pool.query(
+        `select count(*) as count from community_comments where post_id = $1`,
+        [post.post_id]
+      );
+      const commentCount = commentCountQuery.rows[0].count;
+      post.noOfComments = commentCount;
+    });
+    const commentsSql = `
           SELECT 
               c.*,
               l.name AS username,
@@ -2821,9 +2991,9 @@ posts.forEach(async (post) => {
           )
           ORDER BY c.created_at DESC;
       `;
-      const commentsResult = await pool.query(commentsSql, [lawyerId]);
-      const comments = commentsResult.rows;
-      const repliesSql = `
+    const commentsResult = await pool.query(commentsSql, [lawyerId]);
+    const comments = commentsResult.rows;
+    const repliesSql = `
           SELECT 
               r.*,
               l.name AS username,
@@ -2839,14 +3009,15 @@ posts.forEach(async (post) => {
           )
           ORDER BY r.created_at DESC;
       `;
-      const repliesResult = await pool.query(repliesSql, [lawyerId]);
-      const replies = repliesResult.rows;
- 
+    const repliesResult = await pool.query(repliesSql, [lawyerId]);
+    const replies = repliesResult.rows;
+
     const detailsql = `select * from lawyers where id = $1`;
-    const lawyerdetails = await pool.query(detailsql,[lawyerId]);
+    const lawyerdetails = await pool.query(detailsql, [lawyerId]);
     const lawyers = lawyerdetails.rows[0];
-    
-    const followData = await pool.query(`
+
+    const followData = await pool.query(
+      `
       SELECT 
         COUNT(CASE WHEN follower_id = $2 THEN 1 END) AS following_count,
         COUNT(CASE WHEN followed_id = $2 THEN 1 END) AS followers_count,
@@ -2856,11 +3027,14 @@ posts.forEach(async (post) => {
           WHERE follower_id = $1 AND followed_id = $2
         ) AS follow
       FROM follow;
-    `, [userId, lawyerId]);
-    
+    `,
+      [userId, lawyerId]
+    );
+
     const { followers_count, following_count, follow } = followData.rows[0];
 
-    const followDataMutuals = await pool.query(`
+    const followDataMutuals = await pool.query(
+      `
       WITH mutuals AS (
           SELECT 
               l.id AS mutual_lawyer_id,
@@ -2897,42 +3071,45 @@ posts.forEach(async (post) => {
           (SELECT COUNT(*) FROM mutuals) AS mutual_count
       FROM mutuals
       CROSS JOIN stats;
-  `, [userId, lawyerId]);
-  
-    
+  `,
+      [userId, lawyerId]
+    );
+
     var mutuals = followDataMutuals.rows;
 
     var mutualCount = mutuals.length > 0 ? mutuals[0].mutual_count : 0;
     const adjustedMutualCount = mutualCount > 2 ? mutualCount - 2 : mutualCount;
 
-    const notificationCountQuery = await pool.query(`SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`, [userId]);
+    const notificationCountQuery = await pool.query(
+      `SELECT COUNT(*) FROM notifications WHERE user_id = $1 and is_read = false`,
+      [userId]
+    );
     const notificationCount = notificationCountQuery.rows[0].count;
-    
 
-      res.render(
-          'community_user_profile.ejs',{
-           posts,
-           comments,
-           replies,
-           lawyers,
-           lawyerId,
-           userId,
-           follow,
-           following_count,
-           followers_count,
-           followers,
-           following,
-           mutuals,
-           mutualCount,
-           adjustedMutualCount,
-           notificationCount,
-           currentRoute: '/community/user-profile',
-           totalPostCount: posts.length > 0 ? posts[0].total_post_count : 0
-          }
-      );
+    res.render("community_user_profile.ejs", {
+      posts,
+      comments,
+      replies,
+      lawyers,
+      lawyerId,
+      userId,
+      follow,
+      following_count,
+      followers_count,
+      followers,
+      following,
+      mutuals,
+      mutualCount,
+      adjustedMutualCount,
+      notificationCount,
+      currentRoute: "/community/user-profile",
+      totalPostCount: posts.length > 0 ? posts[0].total_post_count : 0,
+    });
   } catch (error) {
-      console.error('Error fetching user profile:', error);
-      res.status(500).json({ success: false, message: 'Failed to fetch user profile' });
+    console.error("Error fetching user profile:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch user profile" });
   }
 });
 
@@ -2945,42 +3122,41 @@ posts.forEach(async (post) => {
 //     [userId]
 //   );
 //   const allnotifications = notifications.rows;
-//   const allLawyerIds = 
-  
+//   const allLawyerIds =
+
 //   res.render('community_notifications.ejs', { allnotifications });
 // });
 
-
-app.get('/notifications', async (req, res) => {
+app.get("/notifications", async (req, res) => {
   const userId = req.user.id;
 
   try {
-  
-
     // Fetch notifications for the user
     const notifications = await pool.query(
-      'SELECT * FROM notifications WHERE user_id = $1 ORDER BY created_at DESC',
+      "SELECT * FROM notifications WHERE user_id = $1 ORDER BY created_at DESC",
       [userId]
     );
     const allnotifications = notifications.rows;
 
     allnotifications.forEach(async (notification) => {
-        const lawyerProfileImage = await pool.query(`select id,image as lawyerImage from lawyers where id = $1`, [notification.ref_id]);
-        if (lawyerProfileImage.rows.length > 0) {
-          notification.lawyer_profile_image = lawyerProfileImage.rows[0].lawyerimage;
+      const lawyerProfileImage = await pool.query(
+        `select id,image as lawyerImage from lawyers where id = $1`,
+        [notification.ref_id]
+      );
+      if (lawyerProfileImage.rows.length > 0) {
+        notification.lawyer_profile_image =
+          lawyerProfileImage.rows[0].lawyerimage;
       }
-    })
-   
-    
+    });
 
     //mark the notifications as read
     await pool.query(
-      'UPDATE notifications SET is_read = true WHERE user_id = $1',
+      "UPDATE notifications SET is_read = true WHERE user_id = $1",
       [userId]
     );
 
     // Extract all ref_id values from notifications
-    const refIds = allnotifications.map(notification => notification.ref_id);
+    const refIds = allnotifications.map((notification) => notification.ref_id);
     // If there are ref_ids, retrieve lawyer names for them
     let lawyerNames = {};
     if (refIds.length > 0) {
@@ -2989,7 +3165,7 @@ app.get('/notifications', async (req, res) => {
         FROM lawyers 
         WHERE id = ANY($1);
       `;
-      
+
       const lawyerResults = await pool.query(lawyerQuery, [refIds]);
       // Create a mapping of ref_id to lawyer name
       lawyerNames = lawyerResults.rows.reduce((acc, row) => {
@@ -2999,176 +3175,185 @@ app.get('/notifications', async (req, res) => {
     }
 
     // Combine notifications with the corresponding lawyer names
-    const notificationsWithLawyerNames = allnotifications.map(notification => {
-      return {
-        ...notification,
-        lawyer_name: lawyerNames[notification.ref_id] || 'Unknown'
-      };
-    });
+    const notificationsWithLawyerNames = allnotifications.map(
+      (notification) => {
+        return {
+          ...notification,
+          lawyer_name: lawyerNames[notification.ref_id] || "Unknown",
+        };
+      }
+    );
 
-    
-    
     const notificationCount = 0;
-   
+
     // Render the page with the notifications including lawyer names
     console.log(notificationsWithLawyerNames);
-    res.render('community_notifications.ejs', { allnotifications: notificationsWithLawyerNames,notificationCount, userId, currentRoute: '/notifications'});
+    res.render("community_notifications.ejs", {
+      allnotifications: notificationsWithLawyerNames,
+      notificationCount,
+      userId,
+      currentRoute: "/notifications",
+    });
   } catch (error) {
-    console.error('Error fetching notifications:', error);
-    res.status(500).send('Server error');
+    console.error("Error fetching notifications:", error);
+    res.status(500).send("Server error");
   }
 });
 
-
-
-app.post('/notifications/mark-clicked', async (req, res) => {
+app.post("/notifications/mark-clicked", async (req, res) => {
   const userId = req.user.id;
   const notificationId = req.body.notificationId;
-  await pool.query('UPDATE notifications SET clicked = TRUE WHERE id = $1', [notificationId]);
+  await pool.query("UPDATE notifications SET clicked = TRUE WHERE id = $1", [
+    notificationId,
+  ]);
   res.sendStatus(200);
 });
 
-
 app.delete("/community/del-post/:postId", async (req, res) => {
   const postId = req.params.postId;
-  try{
-    await pool.query('delete from community_posts where id=$1',[postId]);
-    res.json({success: true, message: 'Post deleted successfully!'});
-  } catch{
-    console.error('Error deleting Post:',error);
-    res.json({success: false, message:'Failed to delete Post'});
-  }
-})
-
- 
-app.post('/community', isuAuthenticated, upload.single('image'), async (req, res) => {
   try {
-    if (req.user.role !== 'lawyer') {
-      return res.status(403).send('Access denied. Only lawyers can create posts.');
-    }
-    
-    const content = req.body.content;
-    const lawyerName = req.user.name;
-    const userId = req.user.id;
-    let imageUrl = null;
+    await pool.query("delete from community_posts where id=$1", [postId]);
+    res.json({ success: true, message: "Post deleted successfully!" });
+  } catch {
+    console.error("Error deleting Post:", error);
+    res.json({ success: false, message: "Failed to delete Post" });
+  }
+});
 
-    if (!content) {
-      return res.status(400).send('Content cannot be empty.');
-    }
-
-    console.log('Uploaded file:', req.body.image);
-
-    if (req.file) {
-      try {
-        // Upload to Cloudinary
-        console.log('Uploading to Cloudinary...');
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          public_id: `community_post_${Date.now()}`,
-        });
-        console.log('Cloudinary upload result:', result);
-        imageUrl = result.secure_url;
-      } catch (uploadError) {
-        console.error('Error uploading to Cloudinary:', uploadError);
-        return res.status(500).json({ success: false, message: 'Error uploading image!' });
+app.post(
+  "/community",
+  isuAuthenticated,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      if (req.user.role !== "lawyer") {
+        return res
+          .status(403)
+          .send("Access denied. Only lawyers can create posts.");
       }
-    }
 
-    // Debugging: Log the SQL parameters
-    console.log('SQL Parameters:', [imageUrl, content, lawyerName, userId]);
+      const content = req.body.content;
+      const lawyerName = req.user.name;
+      const userId = req.user.id;
+      let imageUrl = null;
 
-    // Insert the post into the database
-    const sql = `
+      if (!content) {
+        return res.status(400).send("Content cannot be empty.");
+      }
+
+      console.log("Uploaded file:", req.body.image);
+
+      if (req.file) {
+        try {
+          // Upload to Cloudinary
+          console.log("Uploading to Cloudinary...");
+          const result = await cloudinary.uploader.upload(req.file.path, {
+            public_id: `community_post_${Date.now()}`,
+          });
+          console.log("Cloudinary upload result:", result);
+          imageUrl = result.secure_url;
+        } catch (uploadError) {
+          console.error("Error uploading to Cloudinary:", uploadError);
+          return res
+            .status(500)
+            .json({ success: false, message: "Error uploading image!" });
+        }
+      }
+
+      // Debugging: Log the SQL parameters
+      console.log("SQL Parameters:", [imageUrl, content, lawyerName, userId]);
+
+      // Insert the post into the database
+      const sql = `
       INSERT INTO community_posts (image_path, content, lawyer_name, lawyer_id, created_at)
       VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
     `;
-    await pool.query(sql, [imageUrl, content, lawyerName, userId]);
+      await pool.query(sql, [imageUrl, content, lawyerName, userId]);
 
-    res.redirect(`/community/user-profile?id=${userId}`);
-  } catch (error) {
-    console.error('Error creating community post:', error);
-    res.json({ success: false, message: 'Error uploading post!' });
+      res.redirect(`/community/user-profile?id=${userId}`);
+    } catch (error) {
+      console.error("Error creating community post:", error);
+      res.json({ success: false, message: "Error uploading post!" });
+    }
   }
-});
+);
 
+app.post(
+  "/community/community-toggle-like",
+  isuAuthenticated,
+  async (req, res) => {
+    const userId = req.user.id;
+    const post_id = req.body.postId;
+    const client = await pool.connect();
+    try {
+      const query = `select * from impressions where user_id=$1 and post_id=$2`;
+      checkQuery = await pool.query(query, [userId, post_id]);
 
-
-
-
-
-
-
-app.post('/community/community-toggle-like', isuAuthenticated, async (req, res) => {
-  const userId = req.user.id;
-  const post_id = req.body.postId;
-  const client = await pool.connect();
-  try {
-    const query = `select * from impressions where user_id=$1 and post_id=$2`;
-    checkQuery = await pool.query(query,[userId,post_id]);
-
-    if (checkQuery.rows.length === 0){
-      await client.query('BEGIN');
-      const insertQuery = 'insert into impressions (user_id,post_id) values ($1,$2)';
-      impresssionsInsertQuery = await pool.query(insertQuery,[userId,post_id]);
-      
-  }
-  const likeResult = await client.query(
-    `SELECT * FROM community_likes WHERE user_id=$1 AND post_id=$2`,
-    [userId, post_id]
-  );
-
-  let liked;
-  if (likeResult.rows.length > 0) {
-    // Unlike
-    await client.query(
-      `DELETE FROM community_likes WHERE user_id=$1 AND post_id=$2`,
-      [userId, post_id]
-    );
-    liked = false;
-  } else {
-    // Like
-    await client.query(
-      `INSERT INTO community_likes (user_id, post_id) VALUES ($1, $2)`,
-      [userId, post_id]
-    );
-    liked = true;
-
-    // Add notification for post owner
-    const postOwnerResult = await client.query(
-      `SELECT lawyer_id FROM community_posts WHERE id=$1`,
-      [post_id]
-    );
-    
-
-    const postOwnerId = postOwnerResult.rows[0]?.lawyer_id;
-    console.log(postOwnerResult.rows);
-    if (postOwnerId && postOwnerId !== userId) {
-      const content = `liked your post.`;
-      const link = `/community/post/${post_id}`;
-      await client.query(
-        `INSERT INTO notifications (user_id, type, content, link,ref_id) VALUES ($1, $2, $3, $4,$5)`,
-        [postOwnerId, 'like', content, link,userId]
+      if (checkQuery.rows.length === 0) {
+        await client.query("BEGIN");
+        const insertQuery =
+          "insert into impressions (user_id,post_id) values ($1,$2)";
+        impresssionsInsertQuery = await pool.query(insertQuery, [
+          userId,
+          post_id,
+        ]);
+      }
+      const likeResult = await client.query(
+        `SELECT * FROM community_likes WHERE user_id=$1 AND post_id=$2`,
+        [userId, post_id]
       );
+
+      let liked;
+      if (likeResult.rows.length > 0) {
+        // Unlike
+        await client.query(
+          `DELETE FROM community_likes WHERE user_id=$1 AND post_id=$2`,
+          [userId, post_id]
+        );
+        liked = false;
+      } else {
+        // Like
+        await client.query(
+          `INSERT INTO community_likes (user_id, post_id) VALUES ($1, $2)`,
+          [userId, post_id]
+        );
+        liked = true;
+
+        // Add notification for post owner
+        const postOwnerResult = await client.query(
+          `SELECT lawyer_id FROM community_posts WHERE id=$1`,
+          [post_id]
+        );
+
+        const postOwnerId = postOwnerResult.rows[0]?.lawyer_id;
+        console.log(postOwnerResult.rows);
+        if (postOwnerId && postOwnerId !== userId) {
+          const content = `liked your post.`;
+          const link = `/community/post/${post_id}`;
+          await client.query(
+            `INSERT INTO notifications (user_id, type, content, link,ref_id) VALUES ($1, $2, $3, $4,$5)`,
+            [postOwnerId, "like", content, link, userId]
+          );
+        }
+      }
+
+      const countQuery = `SELECT COUNT(*) AS like_count FROM community_likes WHERE post_id=$1`;
+      const countResult = await client.query(countQuery, [post_id]);
+      const likeCount = countResult.rows[0].like_count;
+
+      await client.query("COMMIT");
+      res.json({ success: true, likeCount, liked });
+    } catch (error) {
+      if (client) {
+        await client.query("ROLLBACK");
+      }
+      console.error("Error toggling like:", error);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    } finally {
+      client.release();
     }
   }
-
-  const countQuery = `SELECT COUNT(*) AS like_count FROM community_likes WHERE post_id=$1`;
-  const countResult = await client.query(countQuery, [post_id]);
-  const likeCount = countResult.rows[0].like_count;
-
-  await client.query('COMMIT');
-  res.json({ success: true, likeCount, liked });
-}
-   catch (error) {
-    if(client){
-      await client.query('ROLLBACK');
-    }
-    console.error('Error toggling like:', error);
-    res.status(500).json({ success: false, error: 'Internal server error' });
-  } finally {
-    client.release();
-  }
-});
-
+);
 
 app.post("/community/review", isuAuthenticated, async (req, res) => {
   const postId = req.body.postId;
@@ -3196,7 +3381,6 @@ app.post("/community/review", isuAuthenticated, async (req, res) => {
         RETURNING id, content, created_at`,
       [postId, user_id, comment]
     );
-  
 
     // Add notification for post owner
     const postOwnerResult = await client.query(
@@ -3233,7 +3417,7 @@ app.post("/community/review", isuAuthenticated, async (req, res) => {
         lawyer_name: userName,
         replies: [],
       },
-      userId : user_id,
+      userId: user_id,
     });
   } catch (error) {
     await client.query("ROLLBACK");
@@ -3246,7 +3430,6 @@ app.post("/community/review", isuAuthenticated, async (req, res) => {
     client.release();
   }
 });
-
 
 app.post("/community-add-reply", isuAuthenticated, async (req, res) => {
   const commentId = req.body.commentId;
@@ -3267,10 +3450,7 @@ app.post("/community-add-reply", isuAuthenticated, async (req, res) => {
       await client.query("BEGIN");
       const insertQuery =
         "insert into impressions (user_id,post_id) values ($1,$2)";
-      impresssionsInsertQuery = await pool.query(insertQuery, [
-        userId,
-        postId,
-      ]);
+      impresssionsInsertQuery = await pool.query(insertQuery, [userId, postId]);
     }
     const queryText = `
       INSERT INTO community_replies (comment_id, user_id, content)
@@ -3310,11 +3490,18 @@ app.post("/community-add-reply", isuAuthenticated, async (req, res) => {
       WHERE cr.id = $1
       ORDER BY cr.created_at ASC
     `;
-    const repliesResult = await client.query(fetchRepliesQuery, [insertedReplyId]);
+    const repliesResult = await client.query(fetchRepliesQuery, [
+      insertedReplyId,
+    ]);
     console.log("fetched reply", repliesResult.rows);
 
     await client.query("COMMIT");
-    res.json({ success: true, message: "Reply submitted successfully!", reply:repliesResult.rows[0] , userId });
+    res.json({
+      success: true,
+      message: "Reply submitted successfully!",
+      reply: repliesResult.rows[0],
+      userId,
+    });
   } catch (error) {
     await client.query("ROLLBACK");
     console.error("Error adding reply:", error);
@@ -3327,8 +3514,7 @@ app.post("/community-add-reply", isuAuthenticated, async (req, res) => {
   }
 });
 
-
-app.post('/community/follow',isuAuthenticated, async (req, res) => {
+app.post("/community/follow", isuAuthenticated, async (req, res) => {
   const userId = req.user.id;
 
   const lawyerId = req.body.lawyerId;
@@ -3336,18 +3522,17 @@ app.post('/community/follow',isuAuthenticated, async (req, res) => {
   const client = await pool.connect();
 
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
     const query = `select * from impressions where user_id=$1 and post_id=$2`;
-    checkQuery = await pool.query(query,[userId,postId]);
+    checkQuery = await pool.query(query, [userId, postId]);
 
-    if (checkQuery.rows.length === 0){
-      await client.query('BEGIN');
-      const insertQuery = 'insert into impressions (user_id,post_id) values ($1,$2)';
-      impresssionsInsertQuery = await pool.query(insertQuery,[userId,postId]);
-      
-  }
-    
+    if (checkQuery.rows.length === 0) {
+      await client.query("BEGIN");
+      const insertQuery =
+        "insert into impressions (user_id,post_id) values ($1,$2)";
+      impresssionsInsertQuery = await pool.query(insertQuery, [userId, postId]);
+    }
 
     let follow;
     const followResult = await client.query(
@@ -3375,183 +3560,230 @@ app.post('/community/follow',isuAuthenticated, async (req, res) => {
       const link = `community/user-profile?id=${userId}`;
       await client.query(
         `INSERT INTO notifications (user_id, type, content, link,ref_id) VALUES ($1, $2, $3, $4,$5)`,
-        [lawyerId, 'follow', notificationContent, link,userId]
+        [lawyerId, "follow", notificationContent, link, userId]
       );
     }
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
     res.json({ success: true, userId, follow });
   } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('Error following:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-  } finally {
-    client.release();
-  }
-});
-
-app.post('/community/post-impressions',async(req,res)=>{
-  console.log(req.body);
-  const postId = req.body.postId;
-  console.log(postId);
-})
-
-app.post("/lawyerAccount", isuAuthenticated, upload.single("image"), async function (req, res) {
-  const client = await pool.connect();
-  try {
-    await client.query("BEGIN");
-    const userId = req.user.id;
-    const bio = req.body.bio;
-    let imageUrl = null;
-
-    // If an image is uploaded, upload it to Cloudinary
-    if (req.file) {
-      // Check if the image has already been uploaded in the current request session
-      if (!req.session.uploadedImageUrl) {
-        // Upload the image to Cloudinary without transformations
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          public_id: `lawyer_profile_${Date.now()}`, // Optionally, add a unique name
-        });
-
-        // Save the secure URL of the uploaded image
-        imageUrl = result.secure_url;
-
-        // Store the image URL in the session to prevent multiple uploads
-        req.session.uploadedImageUrl = imageUrl;
-      } else {
-        // Use the stored image URL if already uploaded
-        imageUrl = req.session.uploadedImageUrl;
-      }
-    }
-
-    let updateFields = [];
-    let updateParams = [];
-    let paramIndex = 1;
-
-    // Update the bio if provided
-    if (bio) {
-      updateFields.push(`community_bio=$${paramIndex++}`);
-      updateParams.push(bio);
-    }
-
-    // Update the image URL if provided
-    if (imageUrl) {
-      updateFields.push(`image=$${paramIndex++}`);
-      updateParams.push(imageUrl);
-    }
-
-    // If there are fields to update, construct and execute the query
-    if (updateFields.length > 0) {
-      const updateQuery = `UPDATE lawyers SET ${updateFields.join(
-        ", "
-      )} WHERE id=$${paramIndex}`;
-      updateParams.push(userId);
-      await client.query(updateQuery, updateParams);
-    }
-
-    await client.query("COMMIT");
-
-    // Redirect to the user's profile
-    res.redirect(`/community/user-profile?id=${userId}`);
-  } catch (error) {
     await client.query("ROLLBACK");
-    console.error("Error updating profile:", error);
+    console.error("Error following:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   } finally {
     client.release();
   }
 });
 
+app.post("/community/post-impressions", async (req, res) => {
+  console.log(req.body);
+  const postId = req.body.postId;
+  console.log(postId);
+});
 
+app.post(
+  "/lawyerAccount",
+  isuAuthenticated,
+  upload.single("image"),
+  async function (req, res) {
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      const userId = req.user.id;
+      const bio = req.body.bio;
+      let imageUrl = null;
 
-app.delete('/community/del-reply/:replyId',async(req,res)=>{
+      // If an image is uploaded, upload it to Cloudinary
+      if (req.file) {
+        // Check if the image has already been uploaded in the current request session
+        if (!req.session.uploadedImageUrl) {
+          // Upload the image to Cloudinary without transformations
+          const result = await cloudinary.uploader.upload(req.file.path, {
+            public_id: `lawyer_profile_${Date.now()}`, // Optionally, add a unique name
+          });
+
+          // Save the secure URL of the uploaded image
+          imageUrl = result.secure_url;
+
+          // Store the image URL in the session to prevent multiple uploads
+          req.session.uploadedImageUrl = imageUrl;
+        } else {
+          // Use the stored image URL if already uploaded
+          imageUrl = req.session.uploadedImageUrl;
+        }
+      }
+
+      let updateFields = [];
+      let updateParams = [];
+      let paramIndex = 1;
+
+      // Update the bio if provided
+      if (bio) {
+        updateFields.push(`community_bio=$${paramIndex++}`);
+        updateParams.push(bio);
+      }
+
+      // Update the image URL if provided
+      if (imageUrl) {
+        updateFields.push(`image=$${paramIndex++}`);
+        updateParams.push(imageUrl);
+      }
+
+      // If there are fields to update, construct and execute the query
+      if (updateFields.length > 0) {
+        const updateQuery = `UPDATE lawyers SET ${updateFields.join(
+          ", "
+        )} WHERE id=$${paramIndex}`;
+        updateParams.push(userId);
+        await client.query(updateQuery, updateParams);
+      }
+
+      await client.query("COMMIT");
+
+      // Redirect to the user's profile
+      res.redirect(`/community/user-profile?id=${userId}`);
+    } catch (error) {
+      await client.query("ROLLBACK");
+      console.error("Error updating profile:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    } finally {
+      client.release();
+    }
+  }
+);
+
+app.delete("/community/del-reply/:replyId", async (req, res) => {
   const replyId = req.params.replyId;
-  try{
-    await pool.query('delete from community_replies where id=$1',[replyId]);
-    res.json({success: true, message: 'Reply deleted successfully!'});
-  } catch{
-    console.error('Error deleting review:',error);
-    res.json({success: false, message:'Failed to delete review'});
+  try {
+    await pool.query("delete from community_replies where id=$1", [replyId]);
+    res.json({ success: true, message: "Reply deleted successfully!" });
+  } catch {
+    console.error("Error deleting review:", error);
+    res.json({ success: false, message: "Failed to delete review" });
   }
-})
+});
 
-app.delete('/community/comment/:commentId',async(req,res)=>{
+app.delete("/community/comment/:commentId", async (req, res) => {
   const commentId = req.params.commentId;
-  try{
-    await pool.query('delete from community_comments where id=$1',[commentId]);
-    res.json({success: true, message: 'Comment deleted successfully!'});
-  } catch{
-    console.error('Error deleting review:',error);
-    res.json({success: false, message:'Failed to delete review'});
+  try {
+    await pool.query("delete from community_comments where id=$1", [commentId]);
+    res.json({ success: true, message: "Comment deleted successfully!" });
+  } catch {
+    console.error("Error deleting review:", error);
+    res.json({ success: false, message: "Failed to delete review" });
   }
-})
+});
 
-
-
-app.post('/signup', upload.single('image'), async (req, res) => {
+app.post("/signup", upload.single("image"), async (req, res) => {
   if (emailSendInProgress) {
-    return res.render('home3', { message: 'Kindly check your email to verify your account', success: false });
+    return res.render("home3", {
+      message: "Kindly check your email to verify your account",
+      success: false,
+    });
   }
 
   emailSendInProgress = true;
-  let responseMessage = { message: 'An error occurred. Please try again.', success: false };
+  let responseMessage = {
+    message: "An error occurred. Please try again.",
+    success: false,
+  };
   const formType = req.query.formType;
-  const saltRounds = 10; 
+  const saltRounds = 10;
   try {
-  
-    if (formType === 'form1') {
+    if (formType === "form1") {
       const { passw, cpassw, name, email, phone: c_no } = req.body;
-      
+
       if (passw !== cpassw) {
-        responseMessage = { message: 'Password and confirm password do not match, please try again.', success: false };
+        responseMessage = {
+          message:
+            "Password and confirm password do not match, please try again.",
+          success: false,
+        };
       } else {
         const hash = await bcrypt.hash(passw, saltRounds);
-        const result = await pool.query('SELECT email FROM clientsignup WHERE email = $1', [email]);
-        const result1 = await pool.query('SELECT email FROM lawyers WHERE email = $1', [email]);
+        const result = await pool.query(
+          "SELECT email FROM clientsignup WHERE email = $1",
+          [email]
+        );
+        const result1 = await pool.query(
+          "SELECT email FROM lawyers WHERE email = $1",
+          [email]
+        );
 
         if (result.rowCount > 0 || result1.rowCount > 0) {
-          responseMessage = { message: 'User already exists, please use a different email id.', success: false };
+          responseMessage = {
+            message: "User already exists, please use a different email id.",
+            success: false,
+          };
         } else {
-          const token = crypto.randomBytes(32).toString('hex');
+          const token = crypto.randomBytes(32).toString("hex");
           const verificationLink = `https://www.ilegaladvice.com/verify-email?token=${token}`;
 
           const mailOptions = {
-            from: 'ilegaladvice26@gmail.com',
+            from: "ilegaladvice26@gmail.com",
             to: email,
-            subject: 'Email Verification',
+            subject: "Email Verification",
             text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
           };
 
           const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            service: "gmail",
             port: 465,
             auth: {
-              user: 'ilegaladvice26@gmail.com',
-              pass: 'csfa hkqe dfbx jyxw',
+              user: "ilegaladvice26@gmail.com",
+              pass: "csfa hkqe dfbx jyxw",
             },
             pool: true,
           });
 
           await transporter.sendMail(mailOptions);
-          const sql = "INSERT INTO clientsignup (name, email, passw, cpassw, c_no, verification_token, is_verified) VALUES($1, $2, $3, $4, $5, $6, $7)";
+          const sql =
+            "INSERT INTO clientsignup (name, email, passw, cpassw, c_no, verification_token, is_verified) VALUES($1, $2, $3, $4, $5, $6, $7)";
           await pool.query(sql, [name, email, hash, hash, c_no, token, false]);
 
-          responseMessage = { message: 'User registered! Please verify your email to complete registration.', success: true };
+          responseMessage = {
+            message:
+              "User registered! Please verify your email to complete registration.",
+            success: true,
+          };
         }
       }
-    }
-
-    else if (formType === 'form2') {
+    } else if (formType === "form2") {
       if (!req.file) {
-        responseMessage = { message: 'Invalid file type, only images are allowed!', success: false };
+        responseMessage = {
+          message: "Invalid file type, only images are allowed!",
+          success: false,
+        };
       } else {
-        const { l_password, l_c_password, l_name: name, l_email: email, phone: c_no, areaofpractice: area_of_prac, state, city, experience: yrs_exp, bio, gender, language, courts, address, lic_no } = req.body;
+        const {
+          l_password,
+          l_c_password,
+          l_name: name,
+          l_email: email,
+          phone: c_no,
+          areaofpractice: area_of_prac,
+          state,
+          city,
+          experience: yrs_exp,
+          bio,
+          gender,
+          language,
+          courts,
+          address,
+          lic_no,
+        } = req.body;
 
-        const leadAccountChecked = req.body.leadAccount === 'on';
+        const leadAccountChecked = req.body.leadAccount === "on";
         const lead_community = leadAccountChecked ? false : true;
-       
+
         if (l_password !== l_c_password) {
-          responseMessage = { message: 'Password and confirm password do not match, please try again.', success: false };
+          responseMessage = {
+            message:
+              "Password and confirm password do not match, please try again.",
+            success: false,
+          };
         } else {
           const passw = await bcrypt.hash(l_password, saltRounds);
           const imageBuffer = req.file.path;
@@ -3560,68 +3792,106 @@ app.post('/signup', upload.single('image'), async (req, res) => {
           });
           const imageUrl = resultImage.secure_url;
 
-          const result = await pool.query('SELECT email FROM lawyers WHERE email = $1', [email]);
-          const result1 = await pool.query('SELECT email FROM clientsignup WHERE email = $1', [email]);
+          const result = await pool.query(
+            "SELECT email FROM lawyers WHERE email = $1",
+            [email]
+          );
+          const result1 = await pool.query(
+            "SELECT email FROM clientsignup WHERE email = $1",
+            [email]
+          );
 
           if (result.rowCount > 0 || result1.rowCount > 0) {
-            responseMessage = { message: 'User already exists, please use a different email id.', success: false };
+            responseMessage = {
+              message: "User already exists, please use a different email id.",
+              success: false,
+            };
           } else {
             let location;
             try {
               location = await geocodeAddress(address);
             } catch (error) {
-              console.error('Geocoding failed:', error);
+              console.error("Geocoding failed:", error);
             }
 
             const latitude = location ? location.lat : null;
             const longitude = location ? location.lng : null;
 
-            const token = crypto.randomBytes(32).toString('hex');
+            const token = crypto.randomBytes(32).toString("hex");
             const verificationLink = `https://www.ilegaladvice.com/verify-email?token=${token}`;
 
             const mailOptions = {
-              from: 'ilegaladvice26@gmail.com',
+              from: "ilegaladvice26@gmail.com",
               to: email,
-              subject: 'Email Verification',
+              subject: "Email Verification",
               text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
             };
 
             const transporter = nodemailer.createTransport({
-              service: 'gmail',
+              service: "gmail",
               port: 465,
               auth: {
-                user: 'ilegaladvice26@gmail.com',
-                pass: 'csfa hkqe dfbx jyxw',
+                user: "ilegaladvice26@gmail.com",
+                pass: "csfa hkqe dfbx jyxw",
               },
               pool: true,
             });
 
             await transporter.sendMail(mailOptions);
 
-            const sql1 = 'INSERT INTO lawyers (name, email, passw, cpassw, c_no, area_of_prac, states, city, yrs_exp, bio, image, gender, language, courts, verification_token, is_verified, latitude, longitude, address, lic_no, lead_community) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)';
-            await pool.query(sql1, [name, email, passw, passw, c_no, area_of_prac, state, city, yrs_exp, bio, imageUrl, gender, language, courts, token, false, latitude, longitude, address, lic_no, lead_community]);
+            const sql1 =
+              "INSERT INTO lawyers (name, email, passw, cpassw, c_no, area_of_prac, states, city, yrs_exp, bio, image, gender, language, courts, verification_token, is_verified, latitude, longitude, address, lic_no, lead_community) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)";
+            await pool.query(sql1, [
+              name,
+              email,
+              passw,
+              passw,
+              c_no,
+              area_of_prac,
+              state,
+              city,
+              yrs_exp,
+              bio,
+              imageUrl,
+              gender,
+              language,
+              courts,
+              token,
+              false,
+              latitude,
+              longitude,
+              address,
+              lic_no,
+              lead_community,
+            ]);
 
-            responseMessage = { message: 'User registered! Please verify your email to complete registration.', success: true };
+            responseMessage = {
+              message:
+                "User registered! Please verify your email to complete registration.",
+              success: true,
+            };
           }
         }
       }
     } else {
-      responseMessage = { message: 'Invalid form type', success: false };
+      responseMessage = { message: "Invalid form type", success: false };
     }
   } catch (error) {
-    console.error('Internal error:', error);
-    responseMessage = { message: 'Internal server error. Please try again later.', success: false };
+    console.error("Internal error:", error);
+    responseMessage = {
+      message: "Internal server error. Please try again later.",
+      success: false,
+    };
   } finally {
     emailSendInProgress = false;
-    res.render('home3', responseMessage); 
+    res.render("home3", responseMessage);
   }
 });
 
- 
 // app.post('/login',passport.authenticate('client-login',{
 //   successRedirect: '/lawyerspage',
 //   failureRedirect: '/signup',
-  
+
 // }));
 
 // app.post('/upload',upload.single('upload'),(req,res)=>{
@@ -3630,51 +3900,64 @@ app.post('/signup', upload.single('image'), async (req, res) => {
 //   })
 // })
 
+app.post("/fullarticle/review", verifyAuthenticated, async (req, res) => {
+  try {
+    const articleId = req.body.articleId;
+    const user_id = req.user.id;
+    const user_role = req.user.role;
+    const comment = req.body.comment;
+    await pool.query(
+      "insert into comments(article_id,user_id,content,user_role) values ($1,$2,$3,$4)",
+      [articleId, user_id, comment, user_role]
+    );
+    res.json({ success: true, message: "Comment submitted successfully!" });
+  } catch (error) {
+    console.error("error submitting review:", error);
+    res.json({
+      success: false,
+      message: "Error submitting review. Please try again later.",
+    });
+  }
+});
 
-
-app.post('/fullarticle/review',verifyAuthenticated,async(req,res)=>{
- try {
-  const articleId = req.body.articleId;
-  const user_id = req.user.id;
-  const user_role = req.user.role;
-  const comment = req.body.comment;
-  await pool.query('insert into comments(article_id,user_id,content,user_role) values ($1,$2,$3,$4)',[articleId,user_id,comment,user_role]);
-  res.json({success: true, message: 'Comment submitted successfully!'});
- } catch(error) {
-   console.error('error submitting review:',error);
-   res.json({success:false,message:'Error submitting review. Please try again later.'})
- }
-})
-
-app.post('/toggle-like',ensureAuthenticated,async(req,res)=>{
+app.post("/toggle-like", ensureAuthenticated, async (req, res) => {
   const userId = req.user.id;
   const user_role = req.user.role;
   const articleId = req.body.articleId;
   const client = await pool.connect();
-try {
-  await client.query('BEGIN');
-   const likeResult = await client.query(`select * from likes where user_id=$1 and article_id=$2 and user_role=$3`,[userId,articleId,user_role]);
-   let liked;
-   if(likeResult.rows.length>0){
-     await client.query(`delete from likes where user_id=$1 and article_id=$2 and user_role=$3`,[userId,articleId,user_role]);
-     liked= false;
-   } else{
-    await client.query(`insert into likes (user_id,article_id,user_role) values ($1,$2,$3)`,[userId,articleId,user_role]);
-    liked = true;
-   }
-   const countQuery = `select count(*) as like_count from likes where article_id=$1`;
-   const countResult = await client.query(countQuery,[articleId]);
-   const likeCount = countResult.rows[0].like_count;
-    await client.query('COMMIT');
-   res.json({success: true,likeCount,liked});
-} catch(error){
-  await pool.query('ROLLBACK');
-  console.error('Error toggling like:',error);
-  res.status(500).json({success:false,error:'internal server error'});
-} finally{
-  client.release();
-}
-})
+  try {
+    await client.query("BEGIN");
+    const likeResult = await client.query(
+      `select * from likes where user_id=$1 and article_id=$2 and user_role=$3`,
+      [userId, articleId, user_role]
+    );
+    let liked;
+    if (likeResult.rows.length > 0) {
+      await client.query(
+        `delete from likes where user_id=$1 and article_id=$2 and user_role=$3`,
+        [userId, articleId, user_role]
+      );
+      liked = false;
+    } else {
+      await client.query(
+        `insert into likes (user_id,article_id,user_role) values ($1,$2,$3)`,
+        [userId, articleId, user_role]
+      );
+      liked = true;
+    }
+    const countQuery = `select count(*) as like_count from likes where article_id=$1`;
+    const countResult = await client.query(countQuery, [articleId]);
+    const likeCount = countResult.rows[0].like_count;
+    await client.query("COMMIT");
+    res.json({ success: true, likeCount, liked });
+  } catch (error) {
+    await pool.query("ROLLBACK");
+    console.error("Error toggling like:", error);
+    res.status(500).json({ success: false, error: "internal server error" });
+  } finally {
+    client.release();
+  }
+});
 
 // app.post('/fullarticle/review/:reviewid',async(req,res)=>{
 //   const reviewId = req.params.reviewid;
@@ -3687,83 +3970,91 @@ try {
 //   }
 // })
 
-app.post('/add-reply',verifyAuthenticated,async(req,res)=>{
+app.post("/add-reply", verifyAuthenticated, async (req, res) => {
   const commentId = req.body.commentId;
   const content = req.body.content;
   const userId = req.user.id;
   const userRole = req.user.role;
   const client = await pool.connect();
-  try{
-    
-    await client.query('BEGIN');
-    const queryText=`
+  try {
+    await client.query("BEGIN");
+    const queryText = `
     insert into replies (comment_id,user_id,user_role,content)
     values ($1,$2,$3,$4)
     `;
     const values = [commentId, userId, userRole, content];
     const result = await client.query(queryText, values);
-    await client.query('COMMIT');
-    res.json({success:true, message:'Reply submitted sucessfully!'});
-  } catch(error){
-    await client.query('ROLLBACK');
-    console.error('Error addding reply:',error);
-    res.status(500).json({success: false, message: 'Error sumbitting reply, please try again later.'});
-  } finally{
+    await client.query("COMMIT");
+    res.json({ success: true, message: "Reply submitted sucessfully!" });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error addding reply:", error);
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Error sumbitting reply, please try again later.",
+      });
+  } finally {
     client.release();
   }
-})
+});
 
-app.post('/lawyersprofile/review',verifyAuthenticated,async(req,res)=>{
-  try{ 
+app.post("/lawyersprofile/review", verifyAuthenticated, async (req, res) => {
+  try {
     const lawyerId = req.body.lawyerId;
-    const {rating, comment} = req.body;
+    const { rating, comment } = req.body;
     const userId = req.user.id;
-    const userName= req.user.name;
+    const userName = req.user.name;
     // console.log(userName);
     // const result = await pool.query('select name from lawyers where id=$1',[lawyerId]);
     // const lawyerName = result.rows[0].name;
-    await pool.query('insert into reviews (client_id, lawyer_id, rating, comment, name) values ($1,$2,$3,$4,$5)',[userId, lawyerId, rating, comment,userName]);
-    res.json({success: true, message: 'Review submitted successfully!'});
-  } catch(error) {
-    console.error('error submitting review:',error);
-    res.json({success: false, message:'Error submitting review. Please try again later.'});
+    await pool.query(
+      "insert into reviews (client_id, lawyer_id, rating, comment, name) values ($1,$2,$3,$4,$5)",
+      [userId, lawyerId, rating, comment, userName]
+    );
+    res.json({ success: true, message: "Review submitted successfully!" });
+  } catch (error) {
+    console.error("error submitting review:", error);
+    res.json({
+      success: false,
+      message: "Error submitting review. Please try again later.",
+    });
   }
-})
+});
 
-app.delete('/lawyersprofile/reviews/:reviewid',async(req,res)=>{
+app.delete("/lawyersprofile/reviews/:reviewid", async (req, res) => {
   const reviewId = req.params.reviewid;
-  try{
-    await pool.query('delete from reviews where id=$1',[reviewId]);
-    res.json({success: true, message: 'Review deleted successfully!'});
-  } catch{
-    console.error('Error deleting review:',error);
-    res.json({success: false, message:'Failed to delete review'});
+  try {
+    await pool.query("delete from reviews where id=$1", [reviewId]);
+    res.json({ success: true, message: "Review deleted successfully!" });
+  } catch {
+    console.error("Error deleting review:", error);
+    res.json({ success: false, message: "Failed to delete review" });
   }
-})
+});
 
-app.delete('/fullarticle/del-reply/:replyId',async(req,res)=>{
+app.delete("/fullarticle/del-reply/:replyId", async (req, res) => {
   const replyId = req.params.replyId;
-  try{
-    await pool.query('delete from replies where id=$1',[replyId]);
-    res.json({success: true, message: 'Reply deleted successfully!'});
-  } catch{
-    console.error('Error deleting review:',error);
-    res.json({success: false, message:'Failed to delete review'});
+  try {
+    await pool.query("delete from replies where id=$1", [replyId]);
+    res.json({ success: true, message: "Reply deleted successfully!" });
+  } catch {
+    console.error("Error deleting review:", error);
+    res.json({ success: false, message: "Failed to delete review" });
   }
-})
+});
 
-app.delete('/fullarticle/comment/:commentId',async(req,res)=>{
+app.delete("/fullarticle/comment/:commentId", async (req, res) => {
   const commentId = req.params.commentId;
-  try{
-    await pool.query('delete from comments where id=$1',[commentId]);
-    res.json({success: true, message: 'Comment deleted successfully!'});
-  } catch{
-    console.error('Error deleting review:',error);
-    res.json({success: false, message:'Failed to delete review'});
+  try {
+    await pool.query("delete from comments where id=$1", [commentId]);
+    res.json({ success: true, message: "Comment deleted successfully!" });
+  } catch {
+    console.error("Error deleting review:", error);
+    res.json({ success: false, message: "Failed to delete review" });
   }
-})
-
-
+});
 
 // app.post('/lawyers/:lawyerId/review/:reviewId/reply',isuAuthenticated, async(req,res) => {
 //   const {lawyerId,reviewId} = req.params;
@@ -3788,86 +4079,108 @@ app.delete('/fullarticle/comment/:commentId',async(req,res)=>{
 //   }
 // })
 
-app.post('/login',(req,res,next)=>{
-  passport.authenticate('client-login',async(err,user,info)=>{
-    if(err){
+app.post("/login", (req, res, next) => {
+  passport.authenticate("client-login", async (err, user, info) => {
+    if (err) {
       return next(err);
     }
-    if(!user){
-      return res.json({ success: false, message: 'Invalid login credentials. Please try again' });
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "Invalid login credentials. Please try again",
+      });
     }
-    try{
+    try {
       let result;
       let userData;
+      let userType = "";
       // console.log(user.email)
-       result = await pool.query('select * from clientsignup where email = $1',[user.email]);
+      result = await pool.query("select * from clientsignup where email = $1", [
+        user.email,
+      ]);
       if (result.rowCount > 0) {
         userData = result.rows[0];
-         if (!userData.is_verified) {
-          return res.json({ success: false, message: 'Please verify your email before logging in(client).' });
-        } 
-      } else{
-        result = await pool.query('SELECT * FROM lawyers WHERE email = $1', [user.email]);
+        userType = "client";
+        if (!userData.is_verified) {
+          return res.json({
+            success: false,
+            message: "Please verify your email before logging in(client).",
+          });
+        }
+      } else {
+        result = await pool.query("SELECT * FROM lawyers WHERE email = $1", [
+          user.email,
+        ]);
         if (result.rowCount > 0) {
           userData = result.rows[0];
+          userType = "lawyer";
           if (!userData.is_verified) {
-            return res.json({ success: false, message: 'Please verify your email before logging in(lawyer).' });
+            return res.json({
+              success: false,
+              message: "Please verify your email before logging in(lawyer).",
+            });
+          } else if (!userData.admin_verified) {
+            return res.json({
+              success: false,
+              message: "Please wait for 24 hours while we verify your account.",
+            });
           }
-          else if(!userData.admin_verified){
-         return res.json({success: false, message: 'Please wait for 24 hours while we verify your account.'})
-          }
-      } 
-      else{
-        return res.json({ success: false, message: 'Invalid login credentials.' });
+        } else {
+          return res.json({
+            success: false,
+            message: "Invalid login credentials.",
+          });
+        }
       }
-    }  
-    req.login(user,(err)=>{
-      if(err) {
-        console.error('Error during login:',err);
-        return next(err);
-      }
-      // req.flash('successMessage','Login successful!');
-      return res.json({ success: true, message: 'User logged in successfully!' });
-    });
-  } catch(error){
-    console.error('Error during login:', error);
-    return res.status(500).send('Internal server error');
-  }
-}) (req,res,next);
-})
+      req.login(user, (err) => {
+        if (err) {
+          console.error("Error during login:", err);
+          return next(err);
+        }
+        // req.flash('successMessage','Login successful!');
+        return res.json({
+          success: true,
+          message: "User logged in successfully!",
+          userType,
+        });
+      });
+    } catch (error) {
+      console.error("Error during login:", error);
+      return res.status(500).send("Internal server error");
+    }
+  })(req, res, next);
+});
 
-
-
-app.post('/admin-login', async (req, res) => {
+app.post("/admin-login", async (req, res) => {
   const email = req.body.email;
   const password = req.body.passw;
-  const query = 'SELECT * FROM clientsignup WHERE email = $1';
+  const query = "SELECT * FROM clientsignup WHERE email = $1";
 
   try {
     const result = await pool.query(query, [email]);
 
     if (result.rows.length === 0) {
-      return res.status(401).json({ success: false, message: 'Invalid email or password' });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid email or password" });
     }
 
-    const user = result.rows[0]; 
-    const hashedPassword = user.passw; 
+    const user = result.rows[0];
+    const hashedPassword = user.passw;
     const isMatch = await bcrypt.compare(password, hashedPassword);
 
     if (isMatch) {
-      return res.redirect('/admin');
+      return res.redirect("/admin");
     } else {
-      return res.status(401).json({ success: false, message: 'Invalid email or password' });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid email or password" });
     }
   } catch (error) {
-    console.error('Error during admin login:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    console.error("Error during admin login:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
-
-
-
-
 
 const sendEmailWithRetry = async (mailOptions, transporter, retries = 3) => {
   for (let attempt = 0; attempt < retries; attempt++) {
@@ -3876,14 +4189,15 @@ const sendEmailWithRetry = async (mailOptions, transporter, retries = 3) => {
       return { success: true };
     } catch (error) {
       console.error(`Attempt ${attempt + 1} failed:`, error);
-      if (attempt === retries - 1) return { success: false, error: 'Email sending failed after retries' };
+      if (attempt === retries - 1)
+        return { success: false, error: "Email sending failed after retries" };
     }
   }
 };
 
 app.get("/track-pixel", async (req, res) => {
   const { lawyerId, emailId, name, phone } = req.query;
-  
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     port: 465,
@@ -3913,7 +4227,7 @@ app.get("/track-pixel", async (req, res) => {
   INSERT INTO lawyer_requests (lawyer_id, user_name, user_email, user_phone)
   VALUES ($1, $2, $3, $4)
 `;
-  await pool.query(insertQuery, [lawyerId, name, emailId , phone]);
+  await pool.query(insertQuery, [lawyerId, name, emailId, phone]);
 
   // Log the emailId
   console.log("Tracking email opened for emailId:", emailId);
@@ -4001,367 +4315,413 @@ app.post("/lawyersprofile", async (req, res) => {
   }
 });
 
- app.post('/forgetpassword',async(req,res)=>{
-   const email = req.body.email;
-   if(emailSendInProgress){
+app.post("/forgetpassword", async (req, res) => {
+  const email = req.body.email;
+  if (emailSendInProgress) {
     return res.json({
       success: false,
-      message: 'Reset link is already being sent, please check your mail.'
-    })
-   }
-   emailSendInProgress = true;
-   let responseMessage = {
-    success: false,
-    message: 'An error occurred while sending the reset link. Please try again later.'
+      message: "Reset link is already being sent, please check your mail.",
+    });
   }
-   
-   try{
-    const result1 = await pool.query('SELECT FROM lawyers where email = $1',[email]);
-    const result2 = await pool.query('SELECT FROM clientsignup where email = $1',[email]);
+  emailSendInProgress = true;
+  let responseMessage = {
+    success: false,
+    message:
+      "An error occurred while sending the reset link. Please try again later.",
+  };
 
-    if(result1.rows.length>0){
-      const token = crypto.randomBytes(20).toString('hex');
-      const query = 'UPDATE lawyers SET token = $2, expires_at = NOW() + INTERVAL \'1 hour\' WHERE email = $1'
-      await pool.query( query,[email,token]);
+  try {
+    const result1 = await pool.query("SELECT FROM lawyers where email = $1", [
+      email,
+    ]);
+    const result2 = await pool.query(
+      "SELECT FROM clientsignup where email = $1",
+      [email]
+    );
+
+    if (result1.rows.length > 0) {
+      const token = crypto.randomBytes(20).toString("hex");
+      const query =
+        "UPDATE lawyers SET token = $2, expires_at = NOW() + INTERVAL '1 hour' WHERE email = $1";
+      await pool.query(query, [email, token]);
       await sendPasswordResetEmail(email, token);
       responseMessage = {
         success: true,
-        message: 'Password reset link sent to your email, please check your email.',
+        message:
+          "Password reset link sent to your email, please check your email.",
       };
-   } 
-    else if (result2.rows.length>0){
-      const token = crypto.randomBytes(20).toString('hex');
-      const query = 'UPDATE clientsignup SET token = $2, expires_at = NOW() + INTERVAL \'1 hour\' WHERE email = $1'
-      await  pool.query(query,[email,token])
-      await sendPasswordResetEmail(email, token)
+    } else if (result2.rows.length > 0) {
+      const token = crypto.randomBytes(20).toString("hex");
+      const query =
+        "UPDATE clientsignup SET token = $2, expires_at = NOW() + INTERVAL '1 hour' WHERE email = $1";
+      await pool.query(query, [email, token]);
+      await sendPasswordResetEmail(email, token);
       responseMessage = {
         success: true,
-        message: 'Password reset link sent to your email, please check your email.',
+        message:
+          "Password reset link sent to your email, please check your email.",
       };
-      }
-    else{
+    } else {
       responseMessage = {
         success: false,
-        message: 'Account not found, please verify your email.',
+        message: "Account not found, please verify your email.",
       };
     }
-   }
-   
-   catch(error){
-    console.error('Error sending email:', error.message);
-   } finally{
+  } catch (error) {
+    console.error("Error sending email:", error.message);
+  } finally {
     emailSendInProgress = false;
-    res.json(responseMessage); 
-   }
- });
-   
- function sendPasswordResetEmail(email,token){
-  return new Promise((resolve,reject)=>{
+    res.json(responseMessage);
+  }
+});
+
+function sendPasswordResetEmail(email, token) {
+  return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
-      service: 'gmail', 
+      service: "gmail",
       port: 465,
       auth: {
-        user: 'ilegaladvice26@gmail.com', 
-        pass: 'csfa hkqe dfbx jyxw' 
+        user: "ilegaladvice26@gmail.com",
+        pass: "csfa hkqe dfbx jyxw",
       },
-      pool: true
+      pool: true,
     });
 
     const resetLink = `https://www.ilegaladvice.com/reset-password?token=${token}`;
-   const mailOptions= {
-    from: 'ilegaladvice26@gmail.com',
-    to: email, 
-    subject: 'Password Reset',
-    text: `Click the following link to reset your password: https://www.ilegaladvice.com/reset-password?token=${token}`
-   };
+    const mailOptions = {
+      from: "ilegaladvice26@gmail.com",
+      to: email,
+      subject: "Password Reset",
+      text: `Click the following link to reset your password: https://www.ilegaladvice.com/reset-password?token=${token}`,
+    };
 
-   
-  transporter.sendMail(mailOptions,(error,info)=>{
-    if(error) {
-       console.error('Error sending email:',error);
-       reject(error); 
-    }  else {
-       console.log('Email sent: ', info.response);
-       resolve();
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+        reject(error);
+      } else {
+        console.log("Email sent: ", info.response);
+        resolve();
+      }
+    });
+  });
+}
+
+app.post("/reset-password/:token", async (req, res) => {
+  try {
+    bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
+      const { token } = req.params;
+      const password = hash;
+      const query2 = "SELECT email FROM clientsignup WHERE token = $1";
+      const query1 = "SELECT email FROM lawyers WHERE token = $1";
+      const result2 = await pool.query(query2, [token]);
+      const result1 = await pool.query(query1, [token]);
+
+      if (result1.rowCount > 0) {
+        const query =
+          "UPDATE lawyers SET passw = $1,cpassw = $1 WHERE token = $2 AND expires_at> NOW()";
+        const result = await pool.query(query, [password, token]);
+        if (result.rowCount === 0) {
+          return res.redirect(
+            "/signup?toast=error&message=Invalid or expired token"
+          );
+        }
+        res.redirect("/signup");
+      } else if (result2.rowCount > 0) {
+        const query =
+          "UPDATE clientsignup SET passw = $1, cpassw = $1 WHERE token = $2 AND expires_at> NOW()";
+        const result = await pool.query(query, [password, token]);
+        if (result.rowCount === 0) {
+          return res.redirect(
+            "/signup?toast=error&message=Invalid or expired token"
+          );
+        }
+        return res.redirect(
+          "/signup?toast=success&message=Password reset successfully"
+        );
+      } else {
+        return res.redirect("/signup?toast=error&message=Invalid token");
+      }
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    return res.redirect("/signup?toast=error&message=Failed to reset password");
+  }
+});
+
+app.post("/submit-article", isuAuthenticated, async (req, res) => {
+  const { title, content } = req.body;
+  const userId = req.user.id;
+  try {
+    const result = await pool.query(
+      "insert into articles (title, content, author_id) values($1, $2, $3)",
+      [title, content, userId]
+    );
+  } catch (error) {
+    console.error("Error inserting article:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+app.post("/logOut", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.redirect("/userAccount");
     }
+    res.json({ success: true, message: "User logged out successfully!" });
   });
 });
-}  
 
+app.post(
+  "/userAccount",
+  isuAuthenticated,
+  upload.single("image"),
+  async function (req, res) {
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
 
+      const name = req.body.name;
+      const email = req.body.email;
+      const passw = req.body.passw;
+      const c_no = req.body.c_no;
+      const yrs_exp = req.body.yrs_exp;
+      const area_of_prac = req.body.areaofpractice;
+      const courts = req.body.courts;
+      const state = req.body.state;
+      const city = req.body.city;
+      const cpassw = req.body.cpassw;
+      const language = req.body.language;
+      const bio = req.body.bio;
+      const userId = req.user.id;
+      const address = req.body.address;
+      const { title, content } = req.body;
+      let updateFields = [];
+      let updateParams = [];
+      let paramIndex = 1;
 
-app.post('/reset-password/:token',async(req,res)=>{
-  try{
-    bcrypt.hash(req.body.password,saltRounds,async function (err, hash) {
-        const { token } = req.params;
-        const password = hash;
-        const query2 = 'SELECT email FROM clientsignup WHERE token = $1';
-        const query1 = 'SELECT email FROM lawyers WHERE token = $1';
-        const result2 = await pool.query(query2, [token]);
-        const result1 = await pool.query(query1, [token]);
+      if (name) {
+        updateFields.push(`name=$${paramIndex++}`);
+        updateParams.push(name);
+      }
+      if (email) {
+        updateFields.push(`email=$${paramIndex++}`);
+        updateParams.push(email);
+      }
+      if (yrs_exp) {
+        updateFields.push(`yrs_exp=$${paramIndex++}`);
+        updateParams.push(yrs_exp);
+      }
+      if (c_no) {
+        updateFields.push(`c_no=$${paramIndex++}`);
+        updateParams.push(c_no);
+      }
+      if (courts) {
+        updateFields.push(`courts=$${paramIndex++}`);
+        updateParams.push(courts);
+      }
+      if (city) {
+        updateFields.push(`city=$${paramIndex++}`);
+        updateParams.push(city);
+      }
+      if (area_of_prac) {
+        updateFields.push(`area_of_prac=$${paramIndex++}`);
+        updateParams.push(area_of_prac);
+      }
+      if (state) {
+        updateFields.push(`states=$${paramIndex++}`);
+        updateParams.push(state);
+      }
+      if (language) {
+        updateFields.push(`language=$${paramIndex++}`);
+        updateParams.push(language);
+      }
+      if (bio) {
+        updateFields.push(`bio=$${paramIndex++}`);
+        updateParams.push(bio);
+      }
 
-        if (result1.rowCount > 0) {
-          const query = 'UPDATE lawyers SET passw = $1,cpassw = $1 WHERE token = $2 AND expires_at> NOW()';
-          const result = await pool.query(query, [password, token]);
-          if (result.rowCount === 0) {
-            return res.redirect('/signup?toast=error&message=Invalid or expired token');
-          }
-          res.redirect('/signup');
+      if (req.file) {
+        // Upload the image to Cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          public_id: `user_profile_${Date.now()}`,
+        });
+        updateFields.push(`image=$${paramIndex++}`);
+        updateParams.push(result.secure_url);
+      }
+
+      if (passw && cpassw) {
+        if (passw !== cpassw) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+              message: "Password and confirm password do not match!",
+            });
         }
-        else if (result2.rowCount > 0) {
-          const query = 'UPDATE clientsignup SET passw = $1, cpassw = $1 WHERE token = $2 AND expires_at> NOW()';
-          const result = await pool.query(query, [password, token]);
-          if (result.rowCount === 0) {
-            return res.redirect('/signup?toast=error&message=Invalid or expired token');
-          }
-          return res.redirect('/signup?toast=success&message=Password reset successfully');
+        const hashedPassword = await bcrypt.hash(passw, saltRounds);
+        updateFields.push(`passw=$${paramIndex++}`);
+        updateParams.push(hashedPassword);
+      } else if (passw || cpassw) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Both password and confirm password are required!",
+          });
+      }
+
+      if (address) {
+        let location;
+        try {
+          location = await geocodeAddress(address);
+          const latitude = location ? location.lat : null;
+          const longitude = location ? location.lng : null;
+          updateFields.push(`address=$${paramIndex++}`);
+          updateFields.push(`latitude=$${paramIndex++}`);
+          updateFields.push(`longitude=$${paramIndex++}`);
+          updateParams.push(address, latitude, longitude);
+        } catch (error) {
+          console.error("Geocoding failed:", error);
+          updateFields.push(`address=$${paramIndex++}`);
+          updateFields.push(`latitude = NULL`);
+          updateFields.push(`longitude = NULL`);
+          updateParams.push(address);
         }
-        else {
-          return res.redirect('/signup?toast=error&message=Invalid token');
+      }
+
+      if (updateFields.length > 0) {
+        let updateQuery;
+        if (req.user.role === "lawyer") {
+          updateQuery = `UPDATE lawyers SET ${updateFields.join(
+            ", "
+          )} WHERE id=$${paramIndex}`;
+        } else if (req.user.role === "client") {
+          updateQuery = `UPDATE clientsignup SET ${updateFields.join(
+            ", "
+          )} WHERE id=$${paramIndex}`;
         }
-      })
-  } catch (error) {
-    console.error('Error:', error);
-    return res.redirect('/signup?toast=error&message=Failed to reset password');
-  }
-})
+        updateParams.push(userId);
+        await client.query(updateQuery, updateParams);
+      }
 
-app.post('/submit-article',isuAuthenticated,async(req,res)=>{
-  const {title, content} = req.body;
-  const userId = req.user.id;
-  try{
-    const result = await pool.query('insert into articles (title, content, author_id) values($1, $2, $3)',[title, content, userId])
-  } catch(error){
-     console.error('Error inserting article:',error);
-     res.status(500).send('Internal server error');
-  }
-})
+      if (title && content) {
+        await client.query(
+          "INSERT INTO articles (title, content, author_id) VALUES($1, $2, $3)",
+          [title, content, userId]
+        );
+        await client.query("COMMIT");
+        return res.json({
+          success: true,
+          message: "Article Uploaded successfully!",
+        });
+      }
 
-
-
-
-
-
-app.post('/logOut',(req,res)=>{
-  req.session.destroy((err)=>{
-    if(err) {
-      return res.redirect('/userAccount');
+      await client.query("COMMIT");
+      res.json({ success: true, message: "Profile updated successfully!" });
+    } catch (error) {
+      await client.query("ROLLBACK");
+      console.error("Error updating profile:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    } finally {
+      client.release();
     }
-    res.json({success: true, message: "User logged out successfully!"})
-  })
-})
+  }
+);
 
-app.post('/userAccount', isuAuthenticated, upload.single('image'), async function(req, res) {
-  const client = await pool.connect();
+app.post("/delArticle", async (req, res) => {
   try {
-    await client.query('BEGIN');
-
-    const name = req.body.name;
-    const email = req.body.email;
-    const passw = req.body.passw;
-    const c_no = req.body.c_no;
-    const yrs_exp = req.body.yrs_exp;
-    const area_of_prac = req.body.areaofpractice;
-    const courts = req.body.courts;
-    const state = req.body.state;
-    const city = req.body.city;
-    const cpassw = req.body.cpassw;
-    const language = req.body.language;
-    const bio = req.body.bio;
-    const userId = req.user.id;
-    const address = req.body.address;
-    const { title, content } = req.body;
-    let updateFields = [];
-    let updateParams = [];
-    let paramIndex = 1;
-
-    if (name) {
-      updateFields.push(`name=$${paramIndex++}`);
-      updateParams.push(name);
-    }
-    if (email) {
-      updateFields.push(`email=$${paramIndex++}`);
-      updateParams.push(email);
-    }
-    if (yrs_exp) {
-      updateFields.push(`yrs_exp=$${paramIndex++}`);
-      updateParams.push(yrs_exp);
-    }
-    if (c_no) {
-      updateFields.push(`c_no=$${paramIndex++}`);
-      updateParams.push(c_no);
-    }
-    if (courts) {
-      updateFields.push(`courts=$${paramIndex++}`);
-      updateParams.push(courts);
-    }
-    if (city) {
-      updateFields.push(`city=$${paramIndex++}`);
-      updateParams.push(city);
-    }
-    if (area_of_prac) {
-      updateFields.push(`area_of_prac=$${paramIndex++}`);
-      updateParams.push(area_of_prac);
-    }
-    if (state) {
-      updateFields.push(`states=$${paramIndex++}`);
-      updateParams.push(state);
-    }
-    if (language) {
-      updateFields.push(`language=$${paramIndex++}`);
-      updateParams.push(language);
-    }
-    if (bio) {
-      updateFields.push(`bio=$${paramIndex++}`);
-      updateParams.push(bio);
-    }
-
-    if (req.file) {
-      // Upload the image to Cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        public_id: `user_profile_${Date.now()}`,
-      });
-      updateFields.push(`image=$${paramIndex++}`);
-      updateParams.push(result.secure_url);
-    }
-
-    if (passw && cpassw) {
-      if (passw !== cpassw) {
-        return res.status(400).json({ success: false, message: 'Password and confirm password do not match!' });
-      }
-      const hashedPassword = await bcrypt.hash(passw, saltRounds);
-      updateFields.push(`passw=$${paramIndex++}`);
-      updateParams.push(hashedPassword);
-    } else if (passw || cpassw) {
-      return res.status(400).json({ success: false, message: 'Both password and confirm password are required!' });
-    }
-
-    if (address) {
-      let location;
-      try {
-        location = await geocodeAddress(address);
-        const latitude = location ? location.lat : null;
-        const longitude = location ? location.lng : null;
-        updateFields.push(`address=$${paramIndex++}`);
-        updateFields.push(`latitude=$${paramIndex++}`);
-        updateFields.push(`longitude=$${paramIndex++}`);
-        updateParams.push(address, latitude, longitude);
-      } catch (error) {
-        console.error('Geocoding failed:', error);
-        updateFields.push(`address=$${paramIndex++}`);
-        updateFields.push(`latitude = NULL`);
-        updateFields.push(`longitude = NULL`);
-        updateParams.push(address);
-      }
-    }
-
-    if (updateFields.length > 0) {
-      let updateQuery;
-      if (req.user.role === 'lawyer') {
-        updateQuery = `UPDATE lawyers SET ${updateFields.join(', ')} WHERE id=$${paramIndex}`;
-      } else if (req.user.role === 'client') {
-        updateQuery = `UPDATE clientsignup SET ${updateFields.join(', ')} WHERE id=$${paramIndex}`;
-      }
-      updateParams.push(userId);
-      await client.query(updateQuery, updateParams);
-    }
-
-    if (title && content) {
-      await client.query('INSERT INTO articles (title, content, author_id) VALUES($1, $2, $3)', [title, content, userId]);
-      await client.query('COMMIT');
-      return res.json({ success: true, message: 'Article Uploaded successfully!' });
-    }
-
-    await client.query('COMMIT');
-    res.json({ success: true, message: 'Profile updated successfully!' });
-  } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('Error updating profile:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-  } finally {
-    client.release();
-  }
-});
-
-
-app.post('/delArticle',async(req,res)=>{
- 
-  try{
     const articleId = req.query.articleId;
-    const result = await pool.query('DELETE FROM articles WHERE id = $1', [articleId]);
+    const result = await pool.query("DELETE FROM articles WHERE id = $1", [
+      articleId,
+    ]);
 
     if (result.rowCount > 0) {
-        res.json({ success: true, message: 'Article deleted successfully' });
+      res.json({ success: true, message: "Article deleted successfully" });
     } else {
-        res.json({ success: false, message: 'Article not found' });
+      res.json({ success: false, message: "Article not found" });
     }
-  } catch(error){
-    console.error('Error deleting article:',error.stack);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  } catch (error) {
+    console.error("Error deleting article:", error.stack);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
-})
-
-
-passport.use('client-login',new LocalStrategy({
-   usernameField: 'lo_email',
-   passwordField: 'lo_password'
-},
-  
-async(email, password, done)=>{
-  try{
-    const clientUser = await pool.query('SELECT  email,id,passw,c_no,role FROM clientsignup WHERE email = $1', [email]);
-    if (clientUser.rows.length > 0) {
-      const user = clientUser.rows[0];
-      const match = await bcrypt.compare(password, user.passw);
-      if (match) {
-        return done(null, user);
-      } else {
-        return done(null, false, { message: 'Invalid password' });
-      }
-    } else {
-      const lawyerUser = await pool.query('SELECT id,email, passw,name,c_no,yrs_exp,bio,area_of_prac,image,role FROM lawyers WHERE email = $1', [email]);
-      if (lawyerUser.rows.length > 0) {
-        const user = lawyerUser.rows[0];
-        const match = await bcrypt.compare(password, user.passw);
-        if (match) {
-          return done(null, user);
-        } else {
-          return done(null, false, { message: 'Invalid password' });
-        }
-      } else {
-        return done(null, false, { message: 'User not found' });
-      }
-    }
-} catch(error){
-  return done(error);
-}
-}
-));
-
-passport.serializeUser((user, done)=>{
-  // console.log('serializing user: ',user);
-  done(null, {id: user.id, role:user.role});
 });
 
-passport.deserializeUser(async (user,done)=>{
+passport.use(
+  "client-login",
+  new LocalStrategy(
+    {
+      usernameField: "lo_email",
+      passwordField: "lo_password",
+    },
+
+    async (email, password, done) => {
+      try {
+        const clientUser = await pool.query(
+          "SELECT  email,id,passw,c_no,role FROM clientsignup WHERE email = $1",
+          [email]
+        );
+        if (clientUser.rows.length > 0) {
+          const user = clientUser.rows[0];
+          const match = await bcrypt.compare(password, user.passw);
+          if (match) {
+            return done(null, user);
+          } else {
+            return done(null, false, { message: "Invalid password" });
+          }
+        } else {
+          const lawyerUser = await pool.query(
+            "SELECT id,email, passw,name,c_no,yrs_exp,bio,area_of_prac,image,role FROM lawyers WHERE email = $1",
+            [email]
+          );
+          if (lawyerUser.rows.length > 0) {
+            const user = lawyerUser.rows[0];
+            const match = await bcrypt.compare(password, user.passw);
+            if (match) {
+              return done(null, user);
+            } else {
+              return done(null, false, { message: "Invalid password" });
+            }
+          } else {
+            return done(null, false, { message: "User not found" });
+          }
+        }
+      } catch (error) {
+        return done(error);
+      }
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  // console.log('serializing user: ',user);
+  done(null, { id: user.id, role: user.role });
+});
+
+passport.deserializeUser(async (user, done) => {
   // console.log(user.id);
   // console.log('deserializing user:', user);
-  try{
-    if(user.role==='client'){
-      const result=  await pool.query('SELECT id,email,name,c_no,role from clientsignup where id= $1',[user.id]);
-      done(null,result.rows[0]);
-    } else if(user.role==='lawyer'){
-      const result = await pool.query('select name,id, email,c_no,yrs_exp,bio,language,states,city,courts,area_of_prac,image,role from lawyers where id=$1',[user.id]);
-      done(null,result.rows[0]);
+  try {
+    if (user.role === "client") {
+      const result = await pool.query(
+        "SELECT id,email,name,c_no,role from clientsignup where id= $1",
+        [user.id]
+      );
+      done(null, result.rows[0]);
+    } else if (user.role === "lawyer") {
+      const result = await pool.query(
+        "select name,id, email,c_no,yrs_exp,bio,language,states,city,courts,area_of_prac,image,role from lawyers where id=$1",
+        [user.id]
+      );
+      done(null, result.rows[0]);
     }
-  } catch(error){
+  } catch (error) {
     done(error);
   }
 });
 
-app.listen(port,()=>{
-    console.log(`Server running on http://localhost:${port}`);
-});    
-
-
-
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
