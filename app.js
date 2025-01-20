@@ -829,6 +829,68 @@ app.get("/fullarticle", async (req, res) => {
   }
 });
 
+//BNSS SECTIONS
+app.get("/bnss", (req, res) => {
+  res.render("bnsschapters.ejs");
+});
+
+app.get("/bnss_sections", async (req, res) => {
+  const chapter = parseInt(req.query.chapter);
+  if (isNaN(chapter)) {
+    return res.status(400).send("Invalid chapter number");
+  }
+  const query = `
+    SELECT * 
+    FROM bnss_sections 
+    WHERE chapter_number = $1 
+    AND section_number !~ '\\(.*\\)'`;
+  try {
+    const { rows } = await pool.query(query, [chapter]);
+    res.render("bnssSectionlist.ejs", { data: rows });
+  } catch (err) {
+    console.error("Error executing query:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+app.get("/bnss_section", async (req, res) => {
+  let section_number = req.query.section_number;
+  
+  // Normalize the input section number by removing spaces
+  section_number = section_number.replace(/\s+/g, '');
+
+  const query = `
+    SELECT * 
+    FROM bnss_sections 
+    WHERE REPLACE(section_number, ' ', '') = $1 OR REPLACE(section_number, ' ', '') LIKE $1 || '(%'
+    ORDER BY section_number;
+  `;
+
+  try {
+    const { rows } = await pool.query(query, [section_number]);
+
+    // Ensure that the main section is the first element in the array
+    // rows.sort((a, b) => {
+    //   const normalizedA = a.section_number.replace(/\s+/g, '');
+    //   const normalizedB = b.section_number.replace(/\s+/g, '');
+
+    //   if (normalizedA === section_number) return -1; // Main section comes first
+    //   if (normalizedB === section_number) return 1;
+    //   return normalizedA.localeCompare(normalizedB); // Sort subsections normally
+    // });
+
+    if (rows.length === 0) {
+      return res.status(404).send("Section not found");
+    }
+
+    res.render("bnssSection.ejs", { data: rows });
+  } catch (err) {
+    console.error("Error executing query:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+
 app.get("/userAccount", isuAuthenticated, async (req, res) => {
   try {
     if (req.user.role === "lawyer") {
