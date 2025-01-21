@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css">
     <link rel="icon" type="image/png" href="../uploads/logo.png">
-    <link rel="stylesheet" href="BNSsection.css">
+    <link rel="stylesheet" href="bnssSection.css">
     <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=66793db46b65c10019188ef5&product=inline-share-buttons&source=platform" async="async"></script>
     <style>
         
@@ -71,12 +71,12 @@
                             <div class="ipc-table-2">
                               <table>
                                 <colgroup>
-                                  <col id="col-1" style="width: 10%;">
-                                  <col id="col-2" style="width: 40%;">
-                                  <col id="col-3" style="width: 13%;">
-                                  <col id="col-4" style="width: 12%;">
-                                  <col id="col-5" style="width: 10%;">
-                                  <col id="col-6" style="width: 15%;">
+                                  <col id="col-1">
+                                  <col id="col-2" >
+                                  <col id="col-3" >
+                                  <col id="col-4" >
+                                  <col id="col-5" >
+                                  <col id="col-6">
                                 </colgroup>
                                 <tr>
                                   <th>Section</th>
@@ -104,19 +104,19 @@
                               <table>
                                 <tr>
                                   <td><strong>Punishment</strong></td>
-                                  <td><%= data[0].punishment %></td>
+                                  <td><%= data[0].punishment === 'NaN' ? 'N/A' : data[0].punishment %></td>
                                 </tr>
                                 <tr>
                                   <td><strong>Cognizance</strong></td>
-                                  <td><%= data[0].cognizance %></td>
+                                  <td><%= data[0].cognizance === 'NaN' ? 'N/A' : data[0].cognizance %></td>
                                 </tr>
                                 <tr>
                                   <td><strong>Bail</strong></td>
-                                  <td><%= data[0].bail %></td>
+                                  <td><%= data[0].bail === 'NaN' ? 'N/A' : data[0].bail %></td>
                                 </tr>
                                 <tr>
                                   <td><strong>Triable</strong></td>
-                                  <td><%= data[0].triable %></td>
+                                  <td><%= data[0].triable === 'NaN' ? 'N/A' : data[0].triable %></td>
                                 </tr>
                               </table>
                             </div>

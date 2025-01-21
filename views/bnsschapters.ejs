@@ -41,12 +41,7 @@
           <div class="search-box-container">
             <div class="search-box">
               <form action="#">
-                <input
-                  type="search"
-                  name="search"
-                  placeholder="Search for BNSS Chapters"
-                  id="search"
-                />
+                <input type="search" name="search" placeholder="Search for BNSS Sections" id="search" oninput="performSearch()">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </form>
             </div>
@@ -528,6 +523,454 @@
       crpcChp.onclick = () => {
         crpcSections.classList.toggle("crpc-subsec-active");
       };
+
+      //SEARCH BNSS SECTIONS
+async function performSearch() {
+    
+    const searchInput = document.getElementById('search');
+    const resultsContainer = document.querySelector('.ipc-list');
+    const searchTerm = searchInput.value.trim();
+
+    if (!searchTerm) {
+        resultsContainer.innerHTML = `
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=1">
+                    <span class="crpc-chp">BNSS Chapter 1 - Preliminary</span>
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=2">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 2 - Constitution of Criminal Courts and
+                      Offices</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=3">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 3 - Power of Courts</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=4">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 4 - Powers of Superior Officers of Police
+                      and Aid to the Magistrates and the Police</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=5">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 5 - Arrest of Persons</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=6">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 6 - Processes to Compel Appearance</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=7">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 7 - Process to Compel the Production of
+                      Things</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=8">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 8 - Reciprocal Arrangements for Assistance
+                      in Certain Matters and Procedure for Attachment and
+                      Forfeiture of Property</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=9">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 9 - Security for Keeping the Peace and for
+                      Good Behaviour</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=10">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 10 - Order for Maintenance of Wives,
+                      Children and Parents</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=11">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 11 - Maintenance of Public Order and
+                      Tranquillity</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=12">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 12 - Preventive Action of the Police</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=13">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 13 - Information to the Police and Their
+                      Powers to Investigate</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=14">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 14 - Jurisdiction of the Criminal Courts in
+                      Inquiries and Trials</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=15">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 15 - Conditions Requisite for Initiation of
+                      Proceedings</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=16">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 16 - Complaints to Magistrates</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=17">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 17 - Commencement of Proceedings before
+                      Magistrates</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=18">
+                    <span class="crpc-chp">BNSS Chapter 18 - The Charge</span>
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=19">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 19 - Trial before a Court of Session</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=20">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 20 - Trial of Warrant-Cases by
+                      Magistrates</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=21">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 21 - Trial of Summons-Cases by
+                      Magistrates</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=22">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 22 - Summary Trials</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=23">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 23 - Plea Bargaining</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=24">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 24 - Attendance of Persons Confined or
+                      Detained in Prisons</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=25">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 25 - Evidence in Inquiries and Trials</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=26">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 26 - General Provisions as to Inquiries and
+                      Trials</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=27">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 27 - Provisions as to Accused Persons of
+                      Unsound Mind</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=28">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 28 - Provisions as to Offences Affecting the
+                      Administration of Justice</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=29">
+                    <span class="crpc-chp">BNSS Chapter 29 - The Judgment</span>
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=30">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 30 - Submission of Death Sentences for
+                      Confirmation</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=31">
+                    <span class="crpc-chp">BNSS Chapter 31 - Appeals</span>
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=32">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 32 - Reference and Revision</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=33">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 33 - Transfer of Criminal Cases</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=34">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 34 - Execution, Suspension, Remission, and
+                      Commutation of Sentences</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=35">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 35 - Provisions as to Bail and Bonds</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=36">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 36 - Disposal of Property</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=37">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 37 - Irregular Proceedings</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=38">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 38 - Limitation for Taking Cognizance of
+                      Certain Offences</span
+                    >
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span class="arrow">➤</span>
+                <span class="crpc-link">
+                  <a href="bnss_sections?chapter=39">
+                    <span class="crpc-chp"
+                      >BNSS Chapter 39 - Miscellaneous</span
+                    >
+                  </a>
+                </span>
+              </li>
+        `;
+        return;
+    }
+
+    try {
+        const response = await fetch(`/bnss_sections/search?search=${encodeURIComponent(searchTerm)}`);
+        const data = await response.json();
+        console.log(data);
+
+        if (data.success) {
+            if (data.data.length > 0) {
+                resultsContainer.innerHTML = data.data
+                    .map(section => `
+                        <li>
+            <span class="arrow">➤</span>
+            <span class="crpc-link">
+                <a href="/bnss_section?section_number=${section.section_number}">
+                <span class="crpc-chp">BNSS Section ${section.section_number} - ${section.section_name}</span>
+                </a>
+            </span>
+        </li>
+                    `)
+                    .join('');
+            } else {
+                resultsContainer.innerHTML = '<p>No results found.</p>';
+            }
+        } else {
+            resultsContainer.innerHTML = `<p>${data.message}</p>`;
+        }
+    } catch (error) {
+        console.error('Error performing search:', error);
+        resultsContainer.innerHTML = '<p>An error occurred while fetching results.</p>';
+    }
+}
+
     </script>
   </body>
 </html>

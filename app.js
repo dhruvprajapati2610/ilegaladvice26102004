@@ -843,7 +843,9 @@ app.get("/bnss_sections", async (req, res) => {
     SELECT * 
     FROM bnss_sections 
     WHERE chapter_number = $1 
-    AND section_number !~ '\\(.*\\)'`;
+    AND section_number !~ '\\(.*\\)'
+    ORDER BY section_number ASC
+    `;
   try {
     const { rows } = await pool.query(query, [chapter]);
     res.render("bnssSectionlist.ejs", { data: rows });
@@ -889,6 +891,80 @@ app.get("/bnss_section", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+
+app.get("/bnss_sections/search", async (req, res) => {
+  const searchTerm = req.query.search;
+  if (!searchTerm) {
+    return res.status(400).json({
+      success: false,
+      message: "Search term is required",
+      data: [],
+    });
+  }
+
+  const query = `
+    SELECT * 
+    FROM bnss_sections 
+    WHERE (section_number ILIKE $1 OR section_name ILIKE $1)
+    AND section_number NOT LIKE '%(%'
+  `;
+
+  try {
+    const { rows } = await pool.query(query, [`%${searchTerm}%`]);
+    res.json({
+      success: true,
+      message:
+        rows.length > 0
+          ? "Search results fetched successfully"
+          : "No results found",
+      data: rows,
+    });
+  } catch (err) {
+    console.error("Error executing search query:", err);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching search results",
+      data: [],
+    });
+  }
+});
+
+app.get("/bnss_sections/search/:chapterNumber", async (req, res) => {
+  const searchTerm = req.query.search;
+  const chapterNumber = req.params.chapterNumber;
+  if (!searchTerm) {
+    return res.status(400).json({
+      success: false,
+      message: "Search term is required",
+      data: [],
+    });
+  }
+  const query = `SELECT * FROM bnss_sections WHERE (section_name ILIKE $1 OR section_number ILIKE $1) AND section_number NOT LIKE '%(%' 
+                 AND chapter_number = $2
+ `;
+  try {
+    const { rows } = await pool.query(query, [
+      `%${searchTerm}%`,
+      chapterNumber,
+    ]);
+    res.json({
+      success: true,
+      message:
+        rows.length > 0
+          ? "Search results fetched successfully"
+          : "No results found",
+      data: rows,
+    });
+  } catch (err) {
+    console.error("Error executing search query:", err);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching search results",
+      data: [],
+    });
+  }
+});
+
 
 
 app.get("/userAccount", isuAuthenticated, async (req, res) => {
