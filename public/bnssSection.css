@@ -439,7 +439,9 @@ td {
 .hedg {
   cursor: pointer;
 }
-
+.hedg h2{
+  text-align: left;
+}
 .crpc-item {
   display: flex;
   column-gap: 5px;
