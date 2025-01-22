@@ -1,0 +1,3256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>iLegal Home</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Slab&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/community-login.css" />
+    <link rel="stylesheet" href="/swiper-bundle.min.css" />
+  </head>
+
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <header class="header">
+      <nav class="nav container">
+        <div class="nav-data">
+          <img
+            class="logo"
+            src="/images/logo.png"
+            height="69px"
+            alt=""
+            srcset=""
+            style="padding-left: 35px"
+          />
+
+          <div class="search-box-container">
+            <div class="search-box">
+              <form action="" method="get">
+                <input
+                  type="search"
+                  name="search"
+                  placeholder="Search"
+                  id="search"
+                />
+                <div class="ipc-submit">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+              </form>
+            </div>
+            <div class="search-result-container">
+              <div class="search-results"></div>
+            </div>
+          </div>
+          <div class="search-logo">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+            <i class="fa-solid fa-xmark cancel-search"></i>
+          </div>
+        </div>
+        <div class="nav-menu" id="nav-menu">
+          <ul class="nav-list">
+            <li class="dropdown-item item-5">
+              <a>
+                <div class="nav-link dropdown-button nav-link-home">
+                  <i class="fa-solid fa-house"></i><span>Home</span>
+                </div>
+              </a>
+            </li>
+            <li class="dropdown-item item-5">
+              <a>
+                <div class="nav-link dropdown-button nav-link-notification">
+                  <div class="notification-icon">
+                    <i class="fa-solid fa-bell"></i>
+                  </div>
+                  <span>Notification </span>
+                </div>
+              </a>
+            </li>
+            <li class="dropdown-item item-5">
+              <a>
+                <div class="nav-link dropdown-button nav-link-account">
+                  <i class="fa-solid fa-user"></i><span>Account</span>
+                </div>
+              </a>
+            </li>
+            <li class="dropdown-item item-5">
+              <a>
+                <div class="nav-link dropdown-button nav-link-website">
+                  <i class="fa-solid fa-arrow-right-to-bracket"></i
+                  ><span>iLegalAdvice</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <div class="body">
+      <div class="main-body">
+        <div class="sub-body">
+          <div class="post-section-0">
+            <div class="post-section">
+              <div class="write-post-container">
+                <div class="write-post">
+                  <div class="profile-container">
+                    <div class="profile-image">
+                      <img
+                        src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134735/lawyer_profile_1735134731374.jpg"
+                      />
+                    </div>
+                  </div>
+                  <div class="post-text">
+                    <span>Share a Post...</span>
+                  </div>
+                </div>
+                <div class="post-media">
+                  <div class="post-image">
+                    <i class="fa-solid fa-image"></i><span>Image</span>
+                  </div>
+                </div>
+              </div>
+              <div id="posts-container" class="user-post-container">
+                <div id="post-container" class="user-post" data-post-id="176">
+                  <div class="user-info">
+                    <div class="profile-name">
+                      <div class="profile-container">
+                        <div class="profile-image">
+                          <img
+                            src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735133522/tnhyrotdg8ukbjqtia5z.jpg"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                      <div class="user-name-day">
+                        <a href="#"><div class="user-name">Ronit Patel</div></a>
+                        <div class="post-day">19 days ago</div>
+                      </div>
+                    </div>
+                    <div class="follow-container">
+                      <input type="hidden" name="postLawyerId" value="60" />
+                      <input
+                        type="hidden"
+                        name="postIdForFollower"
+                        value="176>"
+                      />
+                    </div>
+                  </div>
+                  <div class="post-info">
+                    <div id="posts-para" class="post-para" data-post-id="176">
+                      Amidst the courtroom battles and piles of paperwork, it’s
+                      essential to take a breather. Spending Sunday morning with
+                      my family at the beach was the perfect recharge. Ready to
+                      take on the legal challenges of the week ahead! How do you
+                      all unwind?
+                    </div>
+
+                    <div class="user-post-image">
+                      <div class="post-img-box">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735135471/community_post_1735135468249.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="post-stat" data-post-id="176">
+                    <div class="like-comment">
+                      <div class="likes-number"></div>
+                      <div class="comment-number">
+                        <a><span>1 comments</span></a>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="like-share-comment">
+                      <div class="like">
+                        <i
+                          class="like-btn fa-solid fa-thumbs-up like-bigger like-button like-active"
+                          data-user-id="11"
+                          data-post-id="176"
+                        ></i>
+                        <span id="likes-176"> 4 Likes </span>
+                      </div>
+
+                      <div class="comment" data-post-id="176">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>Comment</span>
+                      </div>
+                      <div class="share">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Share</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="post-container" class="user-post" data-post-id="167">
+                  <div class="user-info">
+                    <div class="profile-name">
+                      <div class="profile-container">
+                        <div class="profile-image">
+                          <img
+                            src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134735/lawyer_profile_1735134731374.jpg"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                      <div class="user-name-day">
+                        <a><div class="user-name">Krishna Thanvi</div></a>
+                        <div class="post-day">19 days ago</div>
+                      </div>
+                    </div>
+                    <div class="follow-container">
+                      <input type="hidden" name="postLawyerId" value="129" />
+                      <input
+                        type="hidden"
+                        name="postIdForFollower"
+                        value="167>"
+                      />
+                    </div>
+                  </div>
+                  <div class="post-info">
+                    <div id="posts-para" class="post-para" data-post-id="167">
+                      Meet my new intern, Rohini! He's a bright young law
+                      student eager to learn the ropes. Mentorship is an
+                      important part of our profession #lawstudents #mentorship
+                      #lawfirm
+                    </div>
+
+                    <div class="user-post-image">
+                      <div class="post-img-box">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134704/community_post_1735134701410.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="post-stat" data-post-id="167">
+                    <div class="like-comment">
+                      <div class="likes-number"></div>
+                      <div class="comment-number">
+                        <a><span>3 comments</span></a>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="like-share-comment">
+                      <div class="like">
+                        <i
+                          class="like-btn fa-solid fa-thumbs-up like-bigger like-button like-active"
+                          data-user-id="11"
+                          data-post-id="167"
+                        ></i>
+                        <span id="likes-167"> 2 Likes </span>
+                      </div>
+
+                      <div class="comment" data-post-id="167">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>Comment</span>
+                      </div>
+                      <div class="share">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Share</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="user-post" data-post-id="163">
+                  <div class="user-info">
+                    <div class="profile-name">
+                      <div class="profile-container">
+                        <div class="profile-image">
+                          <img
+                            src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134735/lawyer_profile_1735134731374.jpg"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                      <div class="user-name-day">
+                        <a>
+                          <div class="user-name">Krishna Thanvi</div>
+                        </a>
+                        <div class="post-day">25 December 2024 at 07:19 pm</div>
+                      </div>
+                    </div>
+
+                    <div class="follow-container">
+                      <input type="hidden" name="postLawyerId" value="129" />
+                    </div>
+                  </div>
+                  <div class="post-info">
+                    <div class="post-para" data-post-id="163">
+                      Case update: Successfully mediated a dispute between two
+                      business partners. Mediation is a powerful tool for
+                      resolving conflicts outside of court #mediation #adr
+                      #lawyering
+                    </div>
+
+                    <div class="user-post-image">
+                      <div class="post-img-box">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134557/community_post_1735134552883.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="post-stat" data-post-id="163">
+                    <div class="like-comment">
+                      <div class="likes-number"></div>
+                      <div class="comment-number">
+                        <a> <span>0 Comments</span> </a>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="like-share-comment">
+                      <div>
+                        <i
+                          class="fa-solid fa-thumbs-up like-bigger like-button like-active"
+                          data-user-id="undefined"
+                          data-post-id="163"
+                        ></i>
+                        <span id="likes-163">1 Likes</span>
+                      </div>
+                      <div class="comment" data-post-id="163">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>Comment</span>
+                      </div>
+                      <div class="share">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Share</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mobile-suggestions suggestion-container">
+                  <div class="s-heading">
+                    <span>Suggestions for you</span>
+                  </div>
+                  <div class="s-content">
+                    <div class="swiper-container">
+                      <div class="swiper-wrapper">
+                        <div class="swiper-slide suggestion-account">
+                          <div class="profile-name">
+                            <div class="profile-container">
+                              <div class="profile-image">
+                                <img
+                                  src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735133464/lawyer_profile_1735133463147.jpg"
+                                  alt=""
+                                />
+                              </div>
+                            </div>
+                            <div class="user-name-day">
+                              <div class="user-name">Iyer Sitaraman</div>
+                              <div class="followed-by">
+                                Followed by Adv Dhruv Prajapati, Adv Sanskar
+                                Srivastva
+                              </div>
+                            </div>
+                          </div>
+                          <div class="follow-container">
+                            <div class="follow-btn">Follow</div>
+                            <div class="follow-icon">
+                              <i class="fa-solid fa-user-plus"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="swiper-slide suggestion-account">
+                          <div class="profile-name">
+                            <div class="profile-container">
+                              <div class="profile-image">
+                                <img
+                                  src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134345/user_profile_1735134343837.webp"
+                                  alt=""
+                                />
+                              </div>
+                            </div>
+                            <div class="user-name-day">
+                              <div class="user-name">Harsh Mehta</div>
+                              <div class="followed-by">
+                                Followed by Adv Dhruv Prajapati, Adv Sanskar
+                                Srivastva
+                              </div>
+                            </div>
+                          </div>
+                          <div class="follow-container">
+                            <div class="follow-btn">Follow</div>
+                            <div class="follow-icon">
+                              <i class="fa-solid fa-user-plus"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="swiper-slide suggestion-account">
+                          <div class="profile-name">
+                            <div class="profile-container">
+                              <div class="profile-image">
+                                <img
+                                  src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134735/lawyer_profile_1735134731374.jpg"
+                                  alt=""
+                                />
+                              </div>
+                            </div>
+                            <div class="user-name-day">
+                              <div class="user-name">Krishna Thanvi</div>
+                              <div class="followed-by">
+                                Followed by Adv Garv Thanvi, Adv Ronit Patel
+                              </div>
+                            </div>
+                          </div>
+                          <div class="follow-container">
+                            <div class="follow-btn">Follow</div>
+                            <div class="follow-icon">
+                              <i class="fa-solid fa-user-plus"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="swiper-pagination lawyers-swiper-pagination"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="user-post" data-post-id="162">
+                  <div class="user-info">
+                    <div class="profile-name">
+                      <div class="profile-container">
+                        <div class="profile-image">
+                          <img
+                            src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134735/lawyer_profile_1735134731374.jpg"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                      <div class="user-name-day">
+                        <a>
+                          <div class="user-name">Krishna Thanvi</div>
+                        </a>
+                        <div class="post-day">25 December 2024 at 07:17 pm</div>
+                      </div>
+                    </div>
+
+                    <div class="follow-container">
+                      <input type="hidden" name="postLawyerId" value="129" />
+                    </div>
+                  </div>
+                  <div class="post-info">
+                    <div class="post-para" data-post-id="162">
+                      Attended a seminar on 'Women's Rights in India' today.
+                      Powerful discussions on the need for greater equality and
+                      justice. As lawyers, we must continue to advocate for
+                      change #womensrights #genderjustice #lawreform
+                    </div>
+
+                    <div class="user-post-image">
+                      <div class="post-img-box">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134478/community_post_1735134474851.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="post-stat" data-post-id="162">
+                    <div class="like-comment">
+                      <div class="likes-number"></div>
+                      <div class="comment-number">
+                        <a> <span>1 Comments</span> </a>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="like-share-comment">
+                      <div>
+                        <i
+                          class="fa-solid fa-thumbs-up like-bigger like-button like-active"
+                          data-user-id="undefined"
+                          data-post-id="162"
+                        ></i>
+                        <span id="likes-162">1 Likes</span>
+                      </div>
+                      <div class="comment" data-post-id="162">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>Comment</span>
+                      </div>
+                      <div class="share">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Share</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="post-container" class="user-post" data-post-id="174">
+                  <div class="user-info">
+                    <div class="profile-name">
+                      <div class="profile-container">
+                        <div class="profile-image">
+                          <img
+                            src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735133522/tnhyrotdg8ukbjqtia5z.jpg"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                      <div class="user-name-day">
+                        <a><div class="user-name">Ronit Patel</div></a>
+                        <div class="post-day">26 days ago</div>
+                      </div>
+                    </div>
+                    <div class="follow-container">
+                      <input type="hidden" name="postLawyerId" value="60" />
+                      <input
+                        type="hidden"
+                        name="postIdForFollower"
+                        value="174>"
+                      />
+                    </div>
+                  </div>
+                  <div class="post-info">
+                    <div id="posts-para" class="post-para" data-post-id="174">
+                      Honored to provide pro bono legal assistance to a group of
+                      underprivileged women fighting workplace harassment. Legal
+                      literacy is key to empowering society, and I’m committed
+                      to doing my part. Together, we can create a safer and more
+                      equitable workplace for all. #ProBono #SocialJustice
+                    </div>
+
+                    <div class="user-post-image">
+                      <div class="post-img-box">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735135357/community_post_1735135354319.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="post-stat" data-post-id="174">
+                    <div class="like-comment">
+                      <div class="likes-number"></div>
+                      <div class="comment-number">
+                        <a><span>0 comments</span></a>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="like-share-comment">
+                      <div class="like">
+                        <i
+                          class="like-btn fa-solid fa-thumbs-up like-bigger like-button"
+                          data-user-id="53"
+                          data-post-id="174"
+                        ></i>
+                        <span id="likes-174"> 1 Likes </span>
+                      </div>
+
+                      <div class="comment" data-post-id="174">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>Comment</span>
+                      </div>
+                      <div class="share">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Share</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="post-container" class="user-post" data-post-id="175">
+                  <div class="user-info">
+                    <div class="profile-name">
+                      <div class="profile-container">
+                        <div class="profile-image">
+                          <img
+                            src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735133464/lawyer_profile_1735133463147.jpg"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                      <div class="user-name-day">
+                        <a><div class="user-name">Iyer Sitaraman</div></a>
+                        <div class="post-day">26 days ago</div>
+                      </div>
+                    </div>
+                    <div class="follow-container">
+                      <input type="hidden" name="postLawyerId" value="11" />
+                      <input
+                        type="hidden"
+                        name="postIdForFollower"
+                        value="175>"
+                      />
+
+                      <div
+                        class="follow-btn follow-11"
+                        id="follow-btn-post-175"
+                        data-post-id="175"
+                      >
+                        Follow
+                      </div>
+                    </div>
+                  </div>
+                  <div class="post-info">
+                    <div id="posts-para" class="post-para" data-post-id="175">
+                      Success Story: Case Closed! We're thrilled to share a
+                      recent success story from our law firm! Our team
+                      successfully secured a favorable verdict for our client in
+                      a complex [case type] case. We're proud of the outcome and
+                      grateful for the trust our client placed in us. Key
+                      Takeaways: - Our expertise in [specific area of law] made
+                      all the difference in this case. - Attention to detail and
+                      thorough preparation were crucial in achieving a
+                      successful outcome. - Our client-centric approach ensured
+                      that our client's needs and goals were prioritized
+                      throughout the process. Get in Touch: If you're facing a
+                      similar legal challenge, don't hesitate to reach out to
+                      us. Our experienced team is here to help. #lawfirm
+                      #successstory #caselaw #lawyersofinstagram #justice Image
+                      suggestion: A professional photo of your law firm's team
+                      or a graphic illustrating the success story.
+                    </div>
+
+                    <div class="user-post-image">
+                      <div class="post-img-box">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735135464/community_post_1735135462544.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="post-stat" data-post-id="175">
+                    <div class="like-comment">
+                      <div class="likes-number"></div>
+                      <div class="comment-number">
+                        <a><span>1 comments</span></a>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="like-share-comment">
+                      <div class="like">
+                        <i
+                          class="like-btn fa-solid fa-thumbs-up like-bigger like-button"
+                          data-user-id="53"
+                          data-post-id="175"
+                        ></i>
+                        <span id="likes-175"> 2 Likes </span>
+                      </div>
+
+                      <div class="comment" data-post-id="175">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>Comment</span>
+                      </div>
+                      <div class="share">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Share</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="user-post" data-post-id="177">
+                  <div class="user-info">
+                    <div class="profile-name">
+                      <div class="profile-container">
+                        <div class="profile-image">
+                          <img
+                            src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735133464/lawyer_profile_1735133463147.jpg"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                      <div class="user-name-day">
+                        <a>
+                          <div class="user-name">Iyer Sitaraman</div>
+                        </a>
+                        <div class="post-day">25 December 2024 at 07:38 pm</div>
+                      </div>
+                    </div>
+
+                    <div class="follow-container">
+                      <input type="hidden" name="postLawyerId" value="11" />
+                      <div
+                        class="follow-btn-2 follow-11"
+                        id="follow-btn-post-177"
+                        data-post-id="177"
+                      >
+                        Follow
+                      </div>
+                    </div>
+                  </div>
+                  <div class="post-info">
+                    <div class="post-para" data-post-id="177">
+                      Meet Rukmini Rao, our experienced family law attorney!
+                      With over 10 years of experience, Rukmini has helped
+                      countless families navigate complex legal issues. Her
+                      expertise and compassion make her a valuable asset to our
+                      team. Get to know Rukmini better: [link to bio page]
+                      #meettheteam #familylaw #lawyersofinstagram Image
+                      suggestion: A professional photo of Rukmini Rao, dressed
+                      in formal Indian attire, with a warm and approachable
+                      smile.
+                    </div>
+
+                    <div class="user-post-image">
+                      <div class="post-img-box">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735135697/community_post_1735135695798.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="post-stat" data-post-id="177">
+                    <div class="like-comment">
+                      <div class="likes-number"></div>
+                      <div class="comment-number">
+                        <a> <span>1 Comments</span> </a>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="like-share-comment">
+                      <div>
+                        <i
+                          class="fa-solid fa-thumbs-up like-bigger like-button"
+                          data-user-id="undefined"
+                          data-post-id="177"
+                        ></i>
+                        <span id="likes-177">0 Likes</span>
+                      </div>
+                      <div class="comment" data-post-id="177">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>Comment</span>
+                      </div>
+                      <div class="share">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Share</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="community-section-3">
+            <div class="suggestion-container b-suggestions">
+              <div class="s-heading">
+                <span>Suggestions for you</span>
+              </div>
+              <div class="s-content">
+                <div class="suggestion-account">
+                  <div class="profile-name">
+                    <div class="profile-container">
+                      <div class="profile-image">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735133464/lawyer_profile_1735133463147.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div class="user-name-day">
+                      <input
+                        type="hidden"
+                        name="suggestedLawyerId"
+                        value="131"
+                      />
+
+                      <a>
+                        <div class="user-name">Iyer Sitaraman</div>
+                      </a>
+
+                      <div class="followed-by">Followed by Harsh Mehta</div>
+                    </div>
+                  </div>
+
+                  <div class="follow-container">
+                    <div
+                      class="follow-btn"
+                      onclick="suggestionLawyerFollow(131)"
+                      id="follow-suggestion-131"
+                    >
+                      Follow
+                    </div>
+                  </div>
+                </div>
+                <div class="suggestion-account">
+                  <div class="profile-name">
+                    <div class="profile-container">
+                      <div class="profile-image">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134345/user_profile_1735134343837.webp"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div class="user-name-day">
+                      <input
+                        type="hidden"
+                        name="suggestedLawyerId"
+                        value="131"
+                      />
+
+                      <a href="/community/user-profile?id=131">
+                        <div class="user-name">Harsh Mehta</div>
+                      </a>
+
+                      <div class="followed-by">Followed by Iyer Sitaraman</div>
+                    </div>
+                  </div>
+
+                  <div class="follow-container">
+                    <div
+                      class="follow-btn"
+                      onclick="suggestionLawyerFollow(131)"
+                      id="follow-suggestion-131"
+                    >
+                      Follow
+                    </div>
+                  </div>
+                </div>
+                <div class="suggestion-account">
+                  <div class="profile-name">
+                    <div class="profile-container">
+                      <div class="profile-image">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735134735/lawyer_profile_1735134731374.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div class="user-name-day">
+                      <input
+                        type="hidden"
+                        name="suggestedLawyerId"
+                        value="131"
+                      />
+
+                      <a href="/community/user-profile?id=131">
+                        <div class="user-name">Krishna Thanvi</div>
+                      </a>
+
+                      <div class="followed-by">Followed by Iyer Sitaraman</div>
+                    </div>
+                  </div>
+
+                  <div class="follow-container">
+                    <div
+                      class="follow-btn"
+                      onclick="suggestionLawyerFollow(131)"
+                      id="follow-suggestion-131"
+                    >
+                      Follow
+                    </div>
+                  </div>
+                </div>
+
+                <div class="suggestion-account">
+                  <div class="profile-name">
+                    <div class="profile-container">
+                      <div class="profile-image">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735133522/tnhyrotdg8ukbjqtia5z.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div class="user-name-day">
+                      <input
+                        type="hidden"
+                        name="suggestedLawyerId"
+                        value="131"
+                      />
+
+                      <a href="/community/user-profile?id=131">
+                        <div class="user-name">Ronit Patel</div>
+                      </a>
+
+                      <div class="followed-by">Followed by Iyer Sitaraman</div>
+                    </div>
+                  </div>
+
+                  <div class="follow-container">
+                    <div
+                      class="follow-btn"
+                      onclick="suggestionLawyerFollow(131)"
+                      id="follow-suggestion-131"
+                    >
+                      Follow
+                    </div>
+                  </div>
+                </div>
+                <div class="suggestion-account">
+                  <div class="profile-name">
+                    <div class="profile-container">
+                      <div class="profile-image">
+                        <img
+                          src="https://res.cloudinary.com/dabla3fwm/image/upload/v1735132244/lawyer_profile_1735132242201.jpg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div class="user-name-day">
+                      <input
+                        type="hidden"
+                        name="suggestedLawyerId"
+                        value="131"
+                      />
+
+                      <a href="/community/user-profile?id=131">
+                        <div class="user-name">Garv Thanvi</div>
+                      </a>
+
+                      <div class="followed-by">Followed by Iyer Sitaraman</div>
+                    </div>
+                  </div>
+
+                  <div class="follow-container">
+                    <div
+                      class="follow-btn"
+                      onclick="suggestionLawyerFollow(131)"
+                      id="follow-suggestion-131"
+                    >
+                      Follow
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-form-container-0">
+        <div class="login-form-container">
+          <div class="login-signup-title">
+            <div class="login-title title-box" style="margin-left: 0%">
+              Login Form
+            </div>
+            <div class="signup-title title-box">Signup Form</div>
+          </div>
+          <div class="form-container">
+            <div class="slider-container">
+              <input type="radio" name="slide" id="login" checked />
+              <input type="radio" name="slide" id="signup" />
+              <label for="login" class="login-slide slider-box">Login</label>
+              <label for="signup" class="signup-slide slider-box">SignUp</label>
+              <div class="slider"></div>
+            </div>
+            <div class="inner-form-container">
+              <form
+                action="/login"
+                method="post"
+                id="login-form"
+                style="margin-left: 0%"
+              >
+                <div class="input-field">
+                  <input
+                    type="email"
+                    name="lo_email"
+                    id="login-email"
+                    placeholder="Email Address"
+                    required
+                  />
+                </div>
+                <div class="input-field if-field if-password">
+                  <input
+                    type="password"
+                    name="lo_password"
+                    id="login-password"
+                    placeholder="Password"
+                    required
+                  />
+                  <i
+                    id="toggle-password"
+                    class="fas fa-eye-slash toggle-password"
+                  ></i>
+                </div>
+                <div class="pass-link">
+                  <a href="/forgetpassword">Forget Password ?</a>
+                </div>
+
+                <br />
+                <div class="btn-container">
+                  <div class="btn-layer"></div>
+                  <input type="submit" class="submit-btn" id="login-btn" />
+                </div>
+                <div class="not-a-mem">
+                  Don't have an account ?
+                  <a href="#" class="signup-link">SignUp Now</a>
+                </div>
+              </form>
+              <form
+                action="/signup?formType=form2"
+                enctype="multipart/form-data"
+                method="post"
+                id="lawyer-signup-form"
+              >
+                <div class="input-field note">
+                  <div class="note-para">
+                    <p>
+                      <strong>Note:</strong> Lawyer account verification needs
+                      24 hours. If your Account does not get activated within 24
+                      hours kindly contact at 8779642973/9372294445.
+                    </p>
+                  </div>
+                </div>
+                <div class="input-field">
+                  <input
+                    type="text"
+                    name="l_name"
+                    id="signup-lawyer-name"
+                    placeholder="Name"
+                  />
+                </div>
+                <div class="input-field if-field">
+                  <input
+                    type="email"
+                    name="l_email"
+                    id="signup-lawyer-email"
+                    placeholder="Email Address"
+                    required
+                  />
+                </div>
+                <div class="input-field if-field if-password">
+                  <input
+                    type="password"
+                    name="l_password"
+                    id="signup-lawyer-password"
+                    placeholder="Password"
+                    required
+                  />
+                  <i
+                    id="toggle-l-password"
+                    class="fas fa-eye-slash toggle-password"
+                  ></i>
+                </div>
+                <div class="input-field if-field if-password">
+                  <input
+                    type="password"
+                    name="l_c_password"
+                    id="signup-lawyer-cpassword"
+                    placeholder="Confirm password"
+                    required
+                  />
+                  <i
+                    id="toggle-l-co-password"
+                    class="fas fa-eye-slash toggle-password"
+                  ></i>
+                </div>
+                <div class="input-field if-field">
+                  <input
+                    type="tel"
+                    name="phone"
+                    id="lawyer-phone"
+                    placeholder="Contact number"
+                    required
+                  />
+                </div>
+                <div class="input-field if-field">
+                  <input
+                    type="file"
+                    name="image"
+                    id="lawyer-upload-img"
+                    placeholder="Upload your image"
+                  />
+                </div>
+                <div class="input-field if-field">
+                  <div class="custom-select-1">
+                    <div
+                      class="select-button"
+                      role="combobox"
+                      aria-labelledby="select button"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-controls="select-dropdown"
+                    >
+                      <span class="selected-value">Select Languages </span>
+                      <span class="arrow"></span>
+                    </div>
+                    <ul
+                      class="select-dropdown select-dropdown-2"
+                      role="listbox"
+                    >
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Assamese"
+                          name="language[]"
+                          value="Assamese"
+                        />
+                        <label for="Assamese">Assamese</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Bengali"
+                          name="language[]"
+                          value="Bengali"
+                        />
+                        <label for="Bengali">Bengali</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Bodo"
+                          name="language[]"
+                          value="Bodo"
+                        />
+                        <label for="Bodo">Bodo</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Dogri"
+                          name="language[]"
+                          value="Dogri"
+                        />
+                        <label for="Dogri">Dogri</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="English"
+                          name="language[]"
+                          value="English"
+                        />
+                        <label for="English">English</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Gujarati"
+                          name="language[]"
+                          value="Gujarati"
+                        />
+                        <label for="Gujarati">Gujarati</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Hindi"
+                          name="language[]"
+                          value="Hindi"
+                        />
+                        <label for="Hindi">Hindi</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Kannada"
+                          name="language[]"
+                          value="Kannada"
+                        />
+                        <label for="Kannada">Kannada</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Kashmiri"
+                          name="language[]"
+                          value="Kashmiri"
+                        />
+                        <label for="Kashmiri">Kashmiri</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Konkani"
+                          name="language[]"
+                          value="Konkani"
+                        />
+                        <label for="Konkani">Konkani</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Maithili"
+                          name="language[]"
+                          value="Maithili"
+                        />
+                        <label for="Maithili">Maithili</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Malayalam"
+                          name="language[]"
+                          value="Malayalam"
+                        />
+                        <label for="Malayalam">Malayalam</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Manipuri"
+                          name="language[]"
+                          value="Manipuri"
+                        />
+                        <label for="Manipuri">Manipuri</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Marathi"
+                          name="language[]"
+                          value="Marathi"
+                        />
+                        <label for="Marathi">Marathi</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Nepali"
+                          name="language[]"
+                          value="Nepali"
+                        />
+                        <label for="Nepali">Nepali</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Odia"
+                          name="language[]"
+                          value="Odia"
+                        />
+                        <label for="Odia">Odia</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Punjabi"
+                          name="language[]"
+                          value="Punjabi"
+                        />
+                        <label for="Punjabi">Punjabi</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Sanskrit"
+                          name="language[]"
+                          value="Sanskrit"
+                        />
+                        <label for="Sanskrit">Sanskrit</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Santali"
+                          name="language[]"
+                          value="Santali"
+                        />
+                        <label for="Santali">Santali</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Sindhi"
+                          name="language[]"
+                          value="Sindhi"
+                        />
+                        <label for="Sindhi">Sindhi</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Tamil"
+                          name="language[]"
+                          value="Tamil"
+                        />
+                        <label for="Tamil">Tamil</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Telugu"
+                          name="language[]"
+                          value="Telugu"
+                        />
+                        <label for="Telugu">Telugu</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Urdu"
+                          name="language[]"
+                          value="Urdu"
+                        />
+                        <label for="Urdu">Urdu</label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="input-field if-field">
+                  <input
+                    type="text"
+                    name="courts"
+                    id="signup-lawyer-name"
+                    placeholder="Enter the courts that you serve"
+                  />
+                </div>
+                <div class="input-field if-field">
+                  <div class="custom-select-g">
+                    <div
+                      class="select-button-g"
+                      role="combobox"
+                      aria-labelledby="select button"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-controls="select-dropdown-1"
+                    >
+                      <span class="selected-value-g">Select state</span>
+                      <span class="arrow-g"></span>
+                    </div>
+                    <ul
+                      class="select-dropdown-g"
+                      role="listbox"
+                      id="select-dropdown-1"
+                    >
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="andhra_pradesh"
+                          name="state"
+                          value="andhra_pradesh"
+                        />
+                        <label for="andhra_pradesh">Andhra Pradesh</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="arunachal_pradesh"
+                          name="state"
+                          value="arunachal_pradesh"
+                        />
+                        <label for="arunachal_pradesh">Arunachal Pradesh</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="assam"
+                          name="state"
+                          value="assam"
+                        />
+                        <label for="assam">Assam</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="bihar"
+                          name="state"
+                          value="bihar"
+                        />
+                        <label for="bihar">Bihar</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="chhattisgarh"
+                          name="state"
+                          value="chhattisgarh"
+                        />
+                        <label for="chhattisgarh">Chhattisgarh</label>
+                      </li>
+                      <li role="option-g">
+                        <input type="radio" id="goa" name="state" value="goa" />
+                        <label for="goa">Goa</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="gujarat"
+                          name="state"
+                          value="gujarat"
+                        />
+                        <label for="gujarat">Gujarat</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="haryana"
+                          name="state"
+                          value="haryana"
+                        />
+                        <label for="haryana">Haryana</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="himachal_pradesh"
+                          name="state"
+                          value="himachal_pradesh"
+                        />
+                        <label for="himachal_pradesh">Himachal Pradesh</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="jharkhand"
+                          name="state"
+                          value="jharkhand"
+                        />
+                        <label for="jharkhand">Jharkhand</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="karnataka"
+                          name="state"
+                          value="karnataka"
+                        />
+                        <label for="karnataka">Karnataka</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="kerala"
+                          name="state"
+                          value="kerala"
+                        />
+                        <label for="kerala">Kerala</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="madhya_pradesh"
+                          name="state"
+                          value="madhya_pradesh"
+                        />
+                        <label for="madhya_pradesh">Madhya Pradesh</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="maharashtra"
+                          name="state"
+                          value="maharashtra"
+                        />
+                        <label for="maharashtra">Maharashtra</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="manipur"
+                          name="state"
+                          value="manipur"
+                        />
+                        <label for="manipur">Manipur</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="meghalaya"
+                          name="state"
+                          value="meghalaya"
+                        />
+                        <label for="meghalaya">Meghalaya</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="mizoram"
+                          name="state"
+                          value="mizoram"
+                        />
+                        <label for="mizoram">Mizoram</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="nagaland"
+                          name="state"
+                          value="nagaland"
+                        />
+                        <label for="nagaland">Nagaland</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="odisha"
+                          name="state"
+                          value="odisha"
+                        />
+                        <label for="odisha">Odisha</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="punjab"
+                          name="state"
+                          value="punjab"
+                        />
+                        <label for="punjab">Punjab</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="rajasthan"
+                          name="state"
+                          value="rajasthan"
+                        />
+                        <label for="rajasthan">Rajasthan</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="sikkim"
+                          name="state"
+                          value="sikkim"
+                        />
+                        <label for="sikkim">Sikkim</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="tamil_nadu"
+                          name="state"
+                          value="tamil_nadu"
+                        />
+                        <label for="tamil_nadu">Tamil Nadu</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="telangana"
+                          name="state"
+                          value="telangana"
+                        />
+                        <label for="telangana">Telangana</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="tripura"
+                          name="state"
+                          value="tripura"
+                        />
+                        <label for="tripura">Tripura</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="uttar_pradesh"
+                          name="state"
+                          value="uttar_pradesh"
+                        />
+                        <label for="uttar_pradesh">Uttar Pradesh</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="uttarakhand"
+                          name="state"
+                          value="uttarakhand"
+                        />
+                        <label for="uttarakhand">Uttarakhand</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="west_bengal"
+                          name="state"
+                          value="west_bengal"
+                        />
+                        <label for="west_bengal">West Bengal</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="andaman_nicobar_islands"
+                          name="state"
+                          value="andaman_nicobar_islands"
+                        />
+                        <label for="andaman_nicobar_islands"
+                          >Andaman and Nicobar Islands</label
+                        >
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="chandigarh"
+                          name="state"
+                          value="chandigarh"
+                        />
+                        <label for="chandigarh">Chandigarh</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="dadar_nagar_haveli"
+                          name="state"
+                          value="dadar_nagar_haveli"
+                        />
+                        <label for="dadar_nagar_haveli"
+                          >Dadra and Nagar Haveli</label
+                        >
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="daman_diu"
+                          name="state"
+                          value="daman_diu"
+                        />
+                        <label for="daman_diu">Daman Diu</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="delhi"
+                          name="state"
+                          value="delhi"
+                        />
+                        <label for="delhi">Delhi</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="jammu_kashmir"
+                          name="state"
+                          value="jammu_kashmir"
+                        />
+                        <label for="jammu_kashmir">Jammu and Kashmir</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="ladakh"
+                          name="state"
+                          value="ladakh"
+                        />
+                        <label for="ladakh">Ladakh</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="lakshadweep"
+                          name="state"
+                          value="lakshadweep"
+                        />
+                        <label for="lakshadweep">Lakshadweep</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="puducherry"
+                          name="state"
+                          value="puducherry"
+                        />
+                        <label for="puducherry">Puducherry</label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="input-field if-field">
+                  <div class="custom-select-g">
+                    <div
+                      class="select-button-g"
+                      role="combobox"
+                      aria-labelledby="select button"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-controls="select-dropdown-2"
+                    >
+                      <span class="selected-value-g" name="city"
+                        >Select city</span
+                      >
+                      <span class="arrow-g"></span>
+                    </div>
+                    <ul
+                      class="select-dropdown-g"
+                      role="listbox"
+                      id="select-dropdown-2"
+                    ></ul>
+                  </div>
+                </div>
+                <div class="input-field if-field">
+                  <div class="custom-select-g">
+                    <div
+                      class="select-button-g"
+                      role="combobox"
+                      aria-labelledby="select button"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-controls="select-dropdown"
+                    >
+                      <span class="selected-value-g">Select Gender</span>
+                      <span class="arrow-g"></span>
+                    </div>
+                    <ul
+                      class="select-dropdown-g"
+                      role="listbox"
+                      id="select-dropdown-1"
+                    >
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="Male"
+                          name="gender"
+                          value="Male"
+                        />
+                        <label for="Male">Male</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="Female"
+                          name="gender"
+                          value="Female"
+                        />
+                        <label for="Female">Female</label>
+                      </li>
+                      <li role="option-g">
+                        <input
+                          type="radio"
+                          id="Other"
+                          name="gender"
+                          value="Other"
+                        />
+                        <label for="Other">Other</label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="input-field if-field">
+                  <div class="custom-select-1">
+                    <div
+                      class="select-button"
+                      role="combobox"
+                      aria-labelledby="select button"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-controls="select-dropdown"
+                    >
+                      <span class="selected-value">Area of Practice </span>
+                      <span class="arrow"></span>
+                    </div>
+                    <ul
+                      class="select-dropdown select-dropdown-2"
+                      role="listbox"
+                    >
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Divorce"
+                          name="areaofpractice[]"
+                          value="Divorce"
+                        />
+                        <label for="Divorce">Divorce</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Family-Dispute"
+                          name="areaofpractice[]"
+                          value="Family Dispute"
+                        />
+                        <label for="Family-Dispute">Family Dispute</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Child-Custody"
+                          name="areaofpractice[]"
+                          value="Child Custody"
+                        />
+                        <label for="Child-Custody">Child Custody</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Medical-Negligence"
+                          name="areaofpractice[]"
+                          value="Medical Negligence"
+                        />
+                        <label for="Medical-Negligence"
+                          >Medical Negligence</label
+                        >
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Criminal"
+                          name="areaofpractice[]"
+                          value="Criminal"
+                        />
+                        <label for="Criminal">Criminal</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Property"
+                          name="areaofpractice[]"
+                          value="Property"
+                        />
+                        <label for="Property">Property</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Cyber-Crime"
+                          name="areaofpractice[]"
+                          value="Cyber Crime"
+                        />
+                        <label for="Cyber-Crime">Cyber Crime</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Labour-&-Services"
+                          name="areaofpractice[]"
+                          value="Labour & Services"
+                        />
+                        <label for="Labour-&-Services">Labour & Services</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Landlord"
+                          name="areaofpractice[]"
+                          value="Landlord"
+                        />
+                        <label for="Landlord">Landlord</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Real-Estate"
+                          name="areaofpractice[]"
+                          value="Real Estate"
+                        />
+                        <label for="Real-Estate">Real Estate</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Trademark-&-copyright"
+                          name="areaofpractice[]"
+                          value="Trademark & copyright"
+                        />
+                        <label for="Trademark-&-copyright"
+                          >Trademark & copyright</label
+                        >
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Startup"
+                          name="areaofpractice[]"
+                          value="Startup"
+                        />
+                        <label for="Startup">Startup</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Custom-&-Central-Excices"
+                          name="areaofpractice[]"
+                          value="Custom & Central Excices"
+                        />
+                        <label for="Custom-&-Central-Excices"
+                          >Custom & Central Excices</label
+                        >
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Banking-&-Finance"
+                          name="areaofpractice[]"
+                          value="Banking & Finance"
+                        />
+                        <label for="Banking-&-Finance">Banking & Finance</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Corporate"
+                          name="areaofpractice[]"
+                          value="Corporate"
+                        />
+                        <label for="Corporate">Corporate</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Gst-&-Tax"
+                          name="areaofpractice[]"
+                          value="Gst & Tax"
+                        />
+                        <label for="Gst-&-Tax">Gst & Tax</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Documentation"
+                          name="areaofpractice[]"
+                          value="Documentation"
+                        />
+                        <label for="Documentation">Documentation</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Consumer-Court"
+                          name="areaofpractice[]"
+                          value="Consumer Court"
+                        />
+                        <label for="Consumer-Court">Consumer Court</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Civil"
+                          name="areaofpractice[]"
+                          value="Civil"
+                        />
+                        <label for="Civil">Civil</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Check-Bounce"
+                          name="areaofpractice[]"
+                          value="Check Bounce"
+                        />
+                        <label for="Check-Bounce">Cheque Bounce</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="RERA"
+                          name="areaofpractice[]"
+                          value="RERA"
+                        />
+                        <label for="RERA">RERA</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Litigation-and-Dispute-Resolution"
+                          name="areaofpractice[]"
+                          value="Litigation and Dispute Resolution"
+                        />
+                        <label for="Litigation-and-Dispute-Resolution"
+                          >Litigation and Dispute Resolution</label
+                        >
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Insurance"
+                          name="areaofpractice[]"
+                          value="Insurance"
+                        />
+                        <label for="Insurance">Insurance</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Immigration"
+                          name="areaofpractice[]"
+                          value="Immigration"
+                        />
+                        <label for="Immigration">Immigration</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="International-Law"
+                          name="areaofpractice[]"
+                          value="International Law"
+                        />
+                        <label for="International-Law">International Law</label>
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Central-Administrative-Tribunal"
+                          name="areaofpractice[]"
+                          value="Central Administrative Tribunal"
+                        />
+                        <label for="Central-Administrative-Tribunal"
+                          >Central Administrative Tribunal</label
+                        >
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Maharashtra-Administrative-Tribunal"
+                          name="areaofpractice[]"
+                          value="Maharashtra Administrative Tribunal"
+                        />
+                        <label for="Maharashtra-Administrative-Tribunal"
+                          >Maharashtra Administrative Tribunal</label
+                        >
+                      </li>
+                      <li role="option">
+                        <input
+                          type="checkbox"
+                          id="Debts-Recovery-Tribunal"
+                          name="areaofpractice[]"
+                          value="Debts Recovery Tribunal"
+                        />
+                        <label for="Debts-Recovery-Tribunal"
+                          >Debts Recovery Tribunal</label
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="input-field if-field">
+                  <input
+                    type="number"
+                    name="experience"
+                    id="year-exp"
+                    placeholder="Years of Experience"
+                    required
+                  />
+                </div>
+                <div class="input-field if-field">
+                  <input
+                    type="text"
+                    name="lic_no"
+                    id="signup-lawyer-lic_no"
+                    placeholder="Enrollment Number"
+                  />
+                </div>
+                <div class="input-field if-field bio">
+                  <textarea
+                    name="bio"
+                    id="bio"
+                    cols="30"
+                    rows="10"
+                    placeholder="Bio"
+                    required
+                  ></textarea>
+                </div>
+                <div class="input-field if-field bio">
+                  <textarea
+                    name="address"
+                    id="address"
+                    cols="30"
+                    rows="10"
+                    placeholder="Office address"
+                    required
+                  ></textarea>
+                </div>
+                <div class="input-field if-field checkbox">
+                  <input type="checkbox" name="leadAccount" id="lead-account" />
+                  <label for="leadAccount"
+                    >Create an account exclusively for the Community Platform
+                    (without access to leads)
+                  </label>
+                </div>
+                <div class="btn-container">
+                  <div class="btn-layer"></div>
+                  <input
+                    type="submit"
+                    class="submit-btn"
+                    id="lawyer-signup-btn"
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+      const swiper = new Swiper(".swiper-container", {
+        slidesPerView: 3,
+        spaceBetween: 20,
+        loop: true,
+        grabCursor: true,
+
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+          dynamicBullets: true,
+        },
+        breakpoints: {
+          490: {
+            slidesPerView: 3,
+            spaceBetween: 20,
+          },
+          0: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
+        },
+      });
+
+      function showToast() {
+        const toast = document.getElementById("toast");
+        const toastMessage = document.getElementById("toastMessage");
+        if (toast && toastMessage) {
+          setTimeout(() => {
+            toast.classList.add("hide");
+            toastMessage.classList.add("hide");
+            // toastMessage.innerText.style.display='none';
+          }, 5000);
+        }
+      }
+
+      window.onload = showToast;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("login-form");
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const formData = new FormData(form);
+          const json = Object.fromEntries(formData.entries());
+          try {
+            const response = await fetch("/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(json),
+            });
+            const data = await response.json();
+            Toastify({
+              text: data.message,
+              duration: 3000,
+              close: true,
+              gravity: "top",
+              position: "center",
+              backgroundColor: data.success ? "#4CAF50" : "FF0000",
+            }).showToast();
+
+            if (data.success) {
+              setTimeout(() => {
+                if (data.userType === "client") {
+                  Toastify({
+                    text: "Clients cannot access lawyer's community.",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: "#FF0000",
+                  }).showToast();
+                  setTimeout(() => {
+                    window.location.href = "/lawyerspage";
+                  }, 1000);
+                } else if (data.userType === "lawyer") {
+                  window.location.href = "/community";
+                }
+              }, 650);
+            }
+          } catch (error) {
+            // console.error('Error:', error);
+            Toastify({
+              text: "Invalid login credentials. please try again.",
+              duration: 3000,
+              close: true,
+              gravity: "top",
+              position: "center",
+              backgroundColor: "#FF0000",
+            }).showToast();
+          }
+        });
+      });
+
+      const loginSignupTitle = document.querySelector(".login-signup-title");
+      const loginText = document.querySelector(".login-title");
+      const loginForm = document.getElementById("login-form");
+      const sliderContainer = document.querySelector(".slider-container");
+      const slideLoginBtn = document.querySelector(".login-slide");
+      const slideSignupBtn = document.querySelector(".signup-slide");
+      const signupLink = document.querySelector(".signup-link");
+      const slider = document.querySelector(".slider");
+
+      slideSignupBtn.onclick = () => {
+        loginForm.style.marginLeft = "-50%";
+        loginText.style.marginLeft = "-50%";
+      };
+      slideLoginBtn.onclick = () => {
+        loginForm.style.marginLeft = "0%";
+        loginText.style.marginLeft = "0%";
+        slider.style.left = "0%";
+        slideLoginBtn.style.color = "#fff";
+        slideSignupBtn.style.color = "hsl(220,12%,45%)";
+        slideSignupBtn.style.cursor = "pointer";
+        slideLoginBtn.style.cursor = "default";
+      };
+      slideSignupBtn.onclick = () => {
+        loginForm.style.marginLeft = "-50%";
+        loginText.style.marginLeft = "-50%";
+        slider.style.left = "50%";
+        slideSignupBtn.style.color = "#fff";
+        slideLoginBtn.style.color = "hsl(220,12%,45%)";
+        slideLoginBtn.style.cursor = "pointer";
+        slideSignupBtn.style.cursor = "default";
+      };
+      signupLink.onclick = () => {
+        loginForm.style.marginLeft = "-50%";
+        loginText.style.marginLeft = "-50%";
+        slider.style.left = "50%";
+        slideSignupBtn.style.color = "#fff";
+        slideLoginBtn.style.color = "hsl(220,12%,45%)";
+        slideLoginBtn.style.cursor = "pointer";
+        slideSignupBtn.style.cursor = "default";
+      };
+
+      const customSelects = document.querySelectorAll(".custom-select-1");
+      const selectButtons = document.querySelectorAll(".select-button");
+      const selectedValues = document.querySelectorAll(".selected-value");
+      const optionsLists = document.querySelectorAll(".select-dropdown");
+
+      customSelects.forEach((customSelect, index) => {
+        const selectBtn = selectButtons[index];
+        const selectedValue = selectedValues[index];
+        const optionsList = optionsLists[index];
+
+        selectBtn.addEventListener("click", () => {
+          customSelect.classList.toggle("active");
+          selectBtn.setAttribute(
+            "aria-expanded",
+            selectBtn.getAttribute("aria-expanded") === "true"
+              ? "false"
+              : "true"
+          );
+        });
+
+        optionsList.querySelectorAll("li").forEach((option) => {
+          option.addEventListener("click", () => {
+            const selectedOptions = optionsList.querySelectorAll(
+              "input[type='checkbox']:checked"
+            );
+            let selectedValuesText = "";
+
+            selectedOptions.forEach((selectedOption) => {
+              selectedValuesText += selectedOption.value + ", ";
+            });
+
+            selectedValue.textContent = selectedValuesText.slice(0, -2); // Remove trailing comma if no options selected
+          });
+        });
+      });
+
+      const customSelectsGender = document.querySelectorAll(
+        ".custom-select-gender"
+      );
+      const selectButtonsGender = document.querySelectorAll(
+        ".select-button-gender"
+      );
+      const selectedValuesGender = document.querySelectorAll(
+        ".selected-value-gender"
+      );
+      const optionsListsGender = document.querySelectorAll(
+        ".select-dropdown-gender"
+      );
+
+      customSelectsGender.forEach((customSelect, index) => {
+        const selectBtnGender = selectButtonsGender[index];
+        const selectedValueGender = selectedValuesGender[index];
+        const optionsListGender = optionsListsGender[index];
+
+        selectBtnGender.addEventListener("click", () => {
+          customSelect.classList.toggle("active");
+          selectBtnGender.setAttribute(
+            "aria-expanded",
+            selectBtnGender.getAttribute("aria-expanded") === "true"
+              ? "false"
+              : "true"
+          );
+        });
+
+        optionsListGender.querySelectorAll("li").forEach((option) => {
+          function handler(e) {
+            if (
+              (e.type === "click" && e.clientX !== 0 && e.clientY !== 0) ||
+              e.key === "Enter"
+            ) {
+              selectedValueGender.textContent = option.children[1].textContent;
+              customSelect.classList.remove("active");
+            }
+          }
+
+          option.addEventListener("keyup", handler);
+          option.addEventListener("click", handler);
+        });
+      });
+
+      const customSelectsG = document.querySelectorAll(".custom-select-g");
+      const selectButtonsG = document.querySelectorAll(".select-button-g");
+      const selectedValuesG = document.querySelectorAll(".selected-value-g");
+      const optionsListsG = document.querySelectorAll(".select-dropdown-g");
+
+      const stateToCities = {
+        andhra_pradesh: [
+          "Anantapur",
+          "Chittoor",
+          "East Godavari",
+          "Guntur",
+          "Kadapa",
+          "Krishna",
+          "Kurnool",
+          "Prakasam",
+          "Nellore",
+          "Srikakulam",
+          "Visakhapatnam",
+          "Vizianagaram",
+          "West Godavari",
+        ],
+        arunachal_pradesh: [
+          "Anjaw",
+          "Changlang",
+          "Dibang Valley",
+          "East Kameng",
+          "East Siang",
+          "Kra Daadi",
+          "Kurung Kumey",
+          "Lohit",
+          "Longding",
+          "Lower Dibang Valley",
+          "Lower Subansiri",
+          "Namsai",
+          "Papum Pare",
+          "Siang",
+          "Tawang",
+          "Tirap",
+          "Upper Siang",
+          "Upper Subansiri",
+          "West Kameng",
+          "West Siang",
+          "Itanagar",
+        ],
+        assam: [
+          "Baksa",
+          "Barpeta",
+          "Biswanath",
+          "Bongaigaon",
+          "Cachar",
+          "Charaideo",
+          "Chirang",
+          "Darrang",
+          "Dhemaji",
+          "Dhubri",
+          "Dibrugarh",
+          "Goalpara",
+          "Golaghat",
+          "Hailakandi",
+          "Hojai",
+          "Jorhat",
+          "Kamrup Metropolitan",
+          "Kamrup (Rural)",
+          "Karbi Anglong",
+          "Karimganj",
+          "Kokrajhar",
+          "Lakhimpur",
+          "Majuli",
+          "Morigaon",
+          "Nagaon",
+          "Nalbari",
+          "Dima Hasao",
+          "Sivasagar",
+          "Sonitpur",
+          "South Salmara Mankachar",
+          "Tinsukia",
+          "Udalguri",
+          "West Karbi Anglong",
+        ],
+        bihar: [
+          "Araria",
+          "Arwal",
+          "Aurangabad",
+          "Banka",
+          "Begusarai",
+          "Bhagalpur",
+          "Bhojpur",
+          "Buxar",
+          "Darbhanga",
+          "East Champaran",
+          "Gaya",
+          "Gopalganj",
+          "Jamui",
+          "Jehanabad",
+          "Kaimur",
+          "Katihar",
+          "Khagaria",
+          "Kishanganj",
+          "Lakhisarai",
+          "Madhepura",
+          "Madhubani",
+          "Munger",
+          "Muzaffarpur",
+          "Nalanda",
+          "Nawada",
+          "Patna",
+          "Purnia",
+          "Rohtas",
+          "Saharsa",
+          "Samastipur",
+          "Saran",
+          "Sheikhpura",
+          "Sheohar",
+          "Sitamarhi",
+          "Siwan",
+          "Supaul",
+          "Vaishali",
+          "West Champaran",
+        ],
+        chhattisgarh: [
+          "Balod",
+          "Baloda Bazar",
+          "Balrampur",
+          "Bastar",
+          "Bemetara",
+          "Bijapur",
+          "Bilaspur",
+          "Dantewada",
+          "Dhamtari",
+          "Durg",
+          "Gariaband",
+          "Janjgir Champa",
+          "Jashpur",
+          "Kabirdham",
+          "Kanker",
+          "Kondagaon",
+          "Korba",
+          "Koriya",
+          "Mahasamund",
+          "Mungeli",
+          "Narayanpur",
+          "Raigarh",
+          "Raipur",
+          "Rajnandgaon",
+          "Sukma",
+          "Surajpur",
+          "Surguja",
+        ],
+        goa: ["North Goa", "South Goa"],
+        gujarat: [
+          "Ahmedabad",
+          "Amreli",
+          "Anand",
+          "Aravalli",
+          "Banaskantha",
+          "Bharuch",
+          "Bhavnagar",
+          "Botad",
+          "Chhota Udaipur",
+          "Dahod",
+          "Dang",
+          "Devbhoomi Dwarka",
+          "Gandhinagar",
+          "Gir Somnath",
+          "Jamnagar",
+          "Junagadh",
+          "Kheda",
+          "Kutch",
+          "Mahisagar",
+          "Mehsana",
+          "Morbi",
+          "Narmada",
+          "Navsari",
+          "Panchmahal",
+          "Patan",
+          "Porbandar",
+          "Rajkot",
+          "Sabarkantha",
+          "Surat",
+          "Surendranagar",
+          "Tapi",
+          "Vadodara",
+          "Valsad",
+        ],
+        haryana: [
+          "Ambala",
+          "Bhiwani",
+          "Charkhi Dadri",
+          "Faridabad",
+          "Fatehabad",
+          "Gurugram",
+          "Hisar",
+          "Jhajjar",
+          "Jind",
+          "Kaithal",
+          "Karnal",
+          "Kurukshetra",
+          "Mahendragarh",
+          "Mewat",
+          "Palwal",
+          "Panchkula",
+          "Panipat",
+          "Rewari",
+          "Rohtak",
+          "Sirsa",
+          "Sonipat",
+          "Yamunanagar",
+        ],
+        himachal_pradesh: [
+          "Bilaspur",
+          "Chamba",
+          "Hamirpur",
+          "Kangra",
+          "Kinnaur",
+          "Kullu",
+          "Lahaul Spiti",
+          "Mandi",
+          "Shimla",
+          "Sirmaur",
+          "Solan",
+          "Una",
+        ],
+        jammu_kashmir: [
+          "Anantnag",
+          "Bandipora",
+          "Baramulla",
+          "Budgam",
+          "Doda",
+          "Ganderbal",
+          "Jammu",
+          "Kargil",
+          "Kathua",
+          "Kishtwar",
+          "Kulgam",
+          "Kupwara",
+          "Leh",
+          "Poonch",
+          "Pulwama",
+          "Rajouri",
+          "Ramban",
+          "Reasi",
+          "Samba",
+          "Shopian",
+          "Srinagar",
+          "Udhampur",
+        ],
+        jharkhand: [
+          "Bokaro",
+          "Chatra",
+          "Deoghar",
+          "Dhanbad",
+          "Dumka",
+          "East Singhbhum",
+          "Garhwa",
+          "Giridih",
+          "Godda",
+          "Gumla",
+          "Hazaribagh",
+          "Jamtara",
+          "Khunti",
+          "Koderma",
+          "Latehar",
+          "Lohardaga",
+          "Pakur",
+          "Palamu",
+          "Ramgarh",
+          "Ranchi",
+          "Sahebganj",
+          "Seraikela Kharsawan",
+          "Simdega",
+          "West Singhbhum",
+        ],
+        karnataka: [
+          "Bagalkot",
+          "Bangalore Rural",
+          "Bangalore Urban",
+          "Belgaum",
+          "Bellary",
+          "Bidar",
+          "Vijayapura",
+          "Chamarajanagar",
+          "Chikkaballapur",
+          "Chikkamagaluru",
+          "Chitradurga",
+          "Dakshina Kannada",
+          "Davanagere",
+          "Dharwad",
+          "Gadag",
+          "Gulbarga",
+          "Hassan",
+          "Haveri",
+          "Kodagu",
+          "Kolar",
+          "Koppal",
+          "Mandya",
+          "Mysore",
+          "Raichur",
+          "Ramanagara",
+          "Shimoga",
+          "Tumkur",
+          "Udupi",
+          "Uttara Kannada",
+          "Yadgir",
+        ],
+        kerala: [
+          "Alappuzha",
+          "Ernakulam",
+          "Idukki",
+          "Kannur",
+          "Kasaragod",
+          "Kollam",
+          "Kottayam",
+          "Kozhikode",
+          "Malappuram",
+          "Palakkad",
+          "Pathanamthitta",
+          "Thiruvananthapuram",
+          "Thrissur",
+          "Wayanad",
+        ],
+        madhya_pradesh: [
+          "Agar Malwa",
+          "Alirajpur",
+          "Anuppur",
+          "Ashoknagar",
+          "Balaghat",
+          "Barwani",
+          "Betul",
+          "Bhind",
+          "Bhopal",
+          "Burhanpur",
+          "Chhatarpur",
+          "Chhindwara",
+          "Damoh",
+          "Datia",
+          "Dewas",
+          "Dhar",
+          "Dindori",
+          "Guna",
+          "Gwalior",
+          "Harda",
+          "Hoshangabad",
+          "Indore",
+          "Jabalpur",
+          "Jhabua",
+          "Katni",
+          "Khandwa",
+          "Khargone",
+          "Mandla",
+          "Mandsaur",
+          "Morena",
+          "Narsinghpur",
+          "Neemuch",
+          "Panna",
+          "Raisen",
+          "Rajgarh",
+          "Ratlam",
+          "Rewa",
+          "Sagar",
+          "Satna",
+          "Sehore",
+          "Seoni",
+          "Shahdol",
+          "Shajapur",
+          "Sheopur",
+          "Shivpuri",
+          "Sidhi",
+          "Singrauli",
+          "Tikamgarh",
+          "Ujjain",
+          "Umaria",
+          "Vidisha",
+        ],
+        maharashtra: [
+          "Ahmednagar",
+          "Akola",
+          "Amravati",
+          "Aurangabad",
+          "Beed",
+          "Bhandara",
+          "Buldhana",
+          "Chandrapur",
+          "Dhule",
+          "Gadchiroli",
+          "Gondia",
+          "Hingoli",
+          "Jalgaon",
+          "Jalna",
+          "Kolhapur",
+          "Latur",
+          "Mumbai City",
+          "Mumbai Suburban",
+          "Nagpur",
+          "Nanded",
+          "Nandurbar",
+          "Nashik",
+          "Navi Mumbai",
+          "Osmanabad",
+          "Palghar",
+          "Parbhani",
+          "Pune",
+          "Raigad",
+          "Ratnagiri",
+          "Sangli",
+          "Satara",
+          "Sindhudurg",
+          "Solapur",
+          "Thane",
+          "Wardha",
+          "Washim",
+          "Yavatmal",
+        ],
+        manipur: [
+          "Bishnupur",
+          "Chandel",
+          "Churachandpur",
+          "Imphal East",
+          "Imphal West",
+          "Jiribam",
+          "Kakching",
+          "Kamjong",
+          "Kangpokpi",
+          "Noney",
+          "Pherzawl",
+          "Senapati",
+          "Tamenglong",
+          "Tengnoupal",
+          "Thoubal",
+          "Ukhrul",
+        ],
+        meghalaya: [
+          "East Garo Hills",
+          "East Jaintia Hills",
+          "East Khasi Hills",
+          "North Garo Hills",
+          "Ri Bhoi",
+          "South Garo Hills",
+          "South West Garo Hills",
+          "South West Khasi Hills",
+          "West Garo Hills",
+          "West Jaintia Hills",
+          "West Khasi Hills",
+        ],
+        mizoram: [
+          "Aizawl",
+          "Champhai",
+          "Kolasib",
+          "Lawngtlai",
+          "Lunglei",
+          "Mamit",
+          "Saiha",
+          "Serchhip",
+          "Aizawl",
+          "Champhai",
+          "Kolasib",
+          "Lawngtlai",
+          "Lunglei",
+          "Mamit",
+          "Saiha",
+          "Serchhip",
+        ],
+        nagaland: [
+          "Dimapur",
+          "Kiphire",
+          "Kohima",
+          "Longleng",
+          "Mokokchung",
+          "Mon",
+          "Peren",
+          "Phek",
+          "Tuensang",
+          "Wokha",
+          "Zunheboto",
+        ],
+        odisha: [
+          "Angul",
+          "Balangir",
+          "Balasore",
+          "Bargarh",
+          "Bhadrak",
+          "Boudh",
+          "Cuttack",
+          "Debagarh",
+          "Dhenkanal",
+          "Gajapati",
+          "Ganjam",
+          "Jagatsinghpur",
+          "Jajpur",
+          "Jharsuguda",
+          "Kalahandi",
+          "Kandhamal",
+          "Kendrapara",
+          "Kendujhar",
+          "Khordha",
+          "Koraput",
+          "Malkangiri",
+          "Mayurbhanj",
+          "Nabarangpur",
+          "Nayagarh",
+          "Nuapada",
+          "Puri",
+          "Rayagada",
+          "Sambalpur",
+          "Subarnapur",
+          "Sundergarh",
+        ],
+        punjab: [
+          "Amritsar",
+          "Barnala",
+          "Bathinda",
+          "Faridkot",
+          "Fatehgarh Sahib",
+          "Fazilka",
+          "Firozpur",
+          "Gurdaspur",
+          "Hoshiarpur",
+          "Jalandhar",
+          "Kapurthala",
+          "Ludhiana",
+          "Mansa",
+          "Moga",
+          "Mohali",
+          "Muktsar",
+          "Pathankot",
+          "Patiala",
+          "Rupnagar",
+          "Sangrur",
+          "Shaheed Bhagat Singh Nagar",
+          "Tarn Taran",
+        ],
+        rajasthan: [
+          "Ajmer",
+          "Alwar",
+          "Banswara",
+          "Baran",
+          "Barmer",
+          "Bharatpur",
+          "Bhilwara",
+          "Bikaner",
+          "Bundi",
+          "Chittorgarh",
+          "Churu",
+          "Dausa",
+          "Dholpur",
+          "Dungarpur",
+          "Ganganagar",
+          "Hanumangarh",
+          "Jaipur",
+          "Jaisalmer",
+          "Jalore",
+          "Jhalawar",
+          "Jhunjhunu",
+          "Jodhpur",
+          "Karauli",
+          "Kota",
+          "Nagaur",
+          "Pali",
+          "Pratapgarh",
+          "Rajsamand",
+          "Sawai Madhopur",
+          "Sikar",
+          "Sirohi",
+          "Tonk",
+          "Udaipur",
+        ],
+        sikkim: ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+        tamil_nadu: [
+          "Ariyalur",
+          "Chennai",
+          "Coimbatore",
+          "Cuddalore",
+          "Dharmapuri",
+          "Dindigul",
+          "Erode",
+          "Kanchipuram",
+          "Kanyakumari",
+          "Karur",
+          "Krishnagiri",
+          "Madurai",
+          "Nagapattinam",
+          "Namakkal",
+          "Nilgiris",
+          "Perambalur",
+          "Pudukkottai",
+          "Ramanathapuram",
+          "Salem",
+          "Sivaganga",
+          "Thanjavur",
+          "Theni",
+          "Thoothukudi",
+          "Tiruchirappalli",
+          "Tirunelveli",
+          "Tiruppur",
+          "Tiruvallur",
+          "Tiruvannamalai",
+          "Tiruvarur",
+          "Vellore",
+          "Viluppuram",
+          "Virudhunagar",
+        ],
+        telangana: [
+          "Adilabad",
+          "Bhadradri Kothagudem",
+          "Hyderabad",
+          "Jagtial",
+          "Jangaon",
+          "Jayashankar",
+          "Jogulamba",
+          "Kamareddy",
+          "Karimnagar",
+          "Khammam",
+          "Komaram Bheem",
+          "Mahabubabad",
+          "Mahbubnagar",
+          "Mancherial",
+          "Medak",
+          "Medchal",
+          "Nagarkurnool",
+          "Nalgonda",
+          "Nirmal",
+          "Nizamabad",
+          "Peddapalli",
+          "Rajanna Sircilla",
+          "Ranga Reddy",
+          "Sangareddy",
+          "Siddipet",
+          "Suryapet",
+          "Vikarabad",
+          "Wanaparthy",
+          "Warangal Rural",
+          "Warangal Urban",
+          "Yadadri Bhuvanagiri",
+        ],
+        tripura: [
+          "Dhalai",
+          "Gomati",
+          "Khowai",
+          "North Tripura",
+          "Sepahijala",
+          "South Tripura",
+          "Unakoti",
+          "West Tripura",
+        ],
+        uttar_pradesh: [
+          "Agra",
+          "Aligarh",
+          "Allahabad",
+          "Ambedkar Nagar",
+          "Amethi",
+          "Amroha",
+          "Auraiya",
+          "Azamgarh",
+          "Baghpat",
+          "Bahraich",
+          "Ballia",
+          "Balrampur",
+          "Banda",
+          "Barabanki",
+          "Bareilly",
+          "Basti",
+          "Bhadohi",
+          "Bijnor",
+          "Budaun",
+          "Bulandshahr",
+          "Chandauli",
+          "Chitrakoot",
+          "Deoria",
+          "Etah",
+          "Etawah",
+          "Faizabad",
+          "Farrukhabad",
+          "Fatehpur",
+          "Firozabad",
+          "Gautam Buddha Nagar",
+          "Ghaziabad",
+          "Ghazipur",
+          "Gonda",
+          "Gorakhpur",
+          "Hamirpur",
+          "Hapur",
+          "Hardoi",
+          "Hathras",
+          "Jalaun",
+          "Jaunpur",
+          "Jhansi",
+          "Kannauj",
+          "Kanpur Dehat",
+          "Kanpur Nagar",
+          "Kasganj",
+          "Kaushambi",
+          "Kheri",
+          "Kushinagar",
+          "Lalitpur",
+          "Lucknow",
+          "Maharajganj",
+          "Mahoba",
+          "Mainpuri",
+          "Mathura",
+          "Mau",
+          "Meerut",
+          "Mirzapur",
+          "Moradabad",
+          "Muzaffarnagar",
+          "Pilibhit",
+          "Pratapgarh",
+          "Raebareli",
+          "Rampur",
+          "Saharanpur",
+          "Sambhal",
+          "Sant Kabir Nagar",
+          "Shahjahanpur",
+          "Shamli",
+          "Shravasti",
+          "Siddharthnagar",
+          "Sitapur",
+          "Sonbhadra",
+          "Sultanpur",
+          "Unnao",
+          "Varanasi",
+        ],
+        uttarakhand: [
+          "Almora",
+          "Bageshwar",
+          "Chamoli",
+          "Champawat",
+          "Dehradun",
+          "Haridwar",
+          "Nainital",
+          "Pauri",
+          "Pithoragarh",
+          "Rudraprayag",
+          "Tehri",
+          "Udham Singh Nagar",
+          "Uttarkashi",
+        ],
+        west_bengal: [
+          "Alipurduar",
+          "Bankura",
+          "Birbhum",
+          "Cooch Behar",
+          "Dakshin Dinajpur",
+          "Darjeeling",
+          "Hooghly",
+          "Howrah",
+          "Jalpaiguri",
+          "Jhargram",
+          "Kalimpong",
+          "Kolkata",
+          "Malda",
+          "Murshidabad",
+          "Nadia",
+          "North 24 Parganas",
+          "Paschim Bardhaman",
+          "Paschim Medinipur",
+          "Purba Bardhaman",
+          "Purba Medinipur",
+          "Purulia",
+          "South 24 Parganas",
+          "Uttar Dinajpur",
+        ],
+        andaman_nicobar_islands: [
+          "Nicobar",
+          "North Middle Andaman",
+          "South Andaman",
+        ],
+        chandigarh: ["Chandigarh"],
+        dadar_nagar_haveli_daman_diu: ["Dadra Nagar Haveli"],
+        daman_diu: ["Daman", "Diu"],
+        delhi: [
+          "Central Delhi",
+          "East Delhi",
+          "New Delhi",
+          "North Delhi",
+          "North East Delhi",
+          "North West Delhi",
+          "Shahdara",
+          "South Delhi",
+          "South East Delhi",
+          "South West Delhi",
+          "West Delhi",
+        ],
+        ladakh: ["Kargil", "Leh"],
+        lakshadweep: ["Lakshadweep"],
+        puducherry: ["Karaikal", "Mahe", "Puducherry", "Yanam"],
+      };
+
+      function updateCityDropdown(state) {
+        const cityDropdown = document.querySelector("#select-dropdown-2");
+        const citySelectButton = cityDropdown.previousElementSibling;
+        const citySelectedValue =
+          citySelectButton.querySelector(".selected-value-g");
+
+        cityDropdown.innerHTML = "";
+
+        if (stateToCities[state]) {
+          stateToCities[state].forEach((city) => {
+            const cityOption = document.createElement("li");
+            cityOption.setAttribute("role", "option-g");
+            cityOption.innerHTML = `
+                <input type="radio" id="${city}" name="city" value="${city}" />
+                <label for="${city}">${city}</label>
+            `;
+            cityDropdown.appendChild(cityOption);
+
+            cityOption.addEventListener("keyup", function (e) {
+              if (e.key === "Enter") {
+                citySelectedValue.textContent =
+                  cityOption.children[1].textContent;
+                cityDropdown.parentNode.classList.remove("active");
+              }
+            });
+
+            cityOption.addEventListener("click", function (e) {
+              if (e.clientX !== 0 && e.clientY !== 0) {
+                citySelectedValue.textContent =
+                  cityOption.children[1].textContent;
+                cityDropdown.parentNode.classList.remove("active");
+              }
+            });
+          });
+        }
+
+        citySelectedValue.textContent = "Select city";
+      }
+
+      function enableCityDropdown() {
+        const cityCustomSelect =
+          document.querySelector("#select-dropdown-2").parentNode;
+        cityCustomSelect.classList.remove("disabled");
+      }
+
+      document
+        .querySelector("#select-dropdown-2")
+        .parentNode.classList.add("disabled");
+
+      customSelectsG.forEach((customSelect, index) => {
+        const selectBtnG = selectButtonsG[index];
+        const selectedValueG = selectedValuesG[index];
+        const optionsListG = optionsListsG[index];
+
+        selectBtnG.addEventListener("click", () => {
+          if (!customSelect.classList.contains("disabled")) {
+            customSelect.classList.toggle("active");
+            selectBtnG.setAttribute(
+              "aria-expanded",
+              selectBtnG.getAttribute("aria-expanded") === "true"
+                ? "false"
+                : "true"
+            );
+          }
+        });
+
+        optionsListG.querySelectorAll("li").forEach((option) => {
+          function handler(e) {
+            if (
+              (e.type === "click" && e.clientX !== 0 && e.clientY !== 0) ||
+              e.key === "Enter"
+            ) {
+              selectedValueG.textContent = option.children[1].textContent;
+              customSelect.classList.remove("active");
+
+              if (option.children[0].name === "state") {
+                updateCityDropdown(option.children[0].value);
+                enableCityDropdown();
+              }
+            }
+          }
+
+          option.addEventListener("keyup", handler);
+          option.addEventListener("click", handler);
+        });
+      });
+
+      const togglePassword = document.getElementById("toggle-password");
+      const passwordField = document.getElementById("login-password");
+      togglePassword.addEventListener("click", () => {
+        if (passwordField.type === "password") {
+          passwordField.type = "text";
+        } else {
+          passwordField.type = "password";
+        }
+        togglePassword.classList.toggle("fa-eye");
+      });
+
+      const togglelPassword = document.getElementById("toggle-l-password");
+      const lawyerpassword = document.getElementById("signup-lawyer-password");
+      togglelPassword.addEventListener("click", () => {
+        if (lawyerpassword.type === "password") {
+          lawyerpassword.type = "text";
+        } else {
+          lawyerpassword.type = "password";
+        }
+        togglelPassword.classList.toggle("fa-eye");
+      });
+      const togglelCoPassword = document.getElementById("toggle-l-co-password");
+      const lawyerCopassword = document.getElementById(
+        "signup-lawyer-cpassword"
+      );
+      togglelCoPassword.addEventListener("click", () => {
+        if (lawyerCopassword.type === "password") {
+          lawyerCopassword.type = "text";
+        } else {
+          lawyerCopassword.type = "password";
+        }
+        togglelCoPassword.classList.toggle("fa-eye");
+      });
+      function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      }
+
+      // Show toast if 'toast' query parameter is present
+      const toastType = getQueryParam("toast");
+      const toastMessage = getQueryParam("message");
+
+      if (toastType && toastMessage) {
+        Toastify({
+          text: toastMessage,
+          duration: 3000, // Duration of the toast
+          close: true,
+          gravity: "top", // Position: top or bottom
+          position: "right", // Left or right
+          backgroundColor: toastType === "success" ? "green" : "red",
+        }).showToast();
+      }
+    </script>
+  </body>
+</html>

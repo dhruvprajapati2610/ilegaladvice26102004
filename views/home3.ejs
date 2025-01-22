@@ -1348,6 +1348,7 @@
       document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("login-form");
         form.addEventListener("submit", async (event) => {
+          console.log("Submit triggered")
           event.preventDefault();
           const formData = new FormData(form);
           const json = Object.fromEntries(formData.entries());

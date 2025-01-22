@@ -1965,11 +1965,28 @@ app.get("/articlewriting", (req, res) => {
 //   }
 // });
 
-app.get("/community", isuAuthenticated, async (req, res) => {
+function communityAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {  
+    return next();
+  } else {
+    res.redirect('/communityLogin');
+  }
+}
+
+app.get("/communityLogin", (req, res) => {
+  if(req.user && req.user.role === 'lawyer'){
+   res.redirect('/community');
+   return;
+  }
+  res.render("community-Login");
+})
+
+app.get("/community", communityAuthenticated, async (req, res) => {
   const client = await pool.connect();
   try {
     const userId = req.user.id;
     const currentUser = req.user || null;
+
 
     if (req.user.role === "lawyer") {
       const offset = 0;
