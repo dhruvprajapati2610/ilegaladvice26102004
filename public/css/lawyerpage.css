@@ -719,6 +719,7 @@ a {
 .lawyer-img img {
     width: 126px;
     height: 142px;
+    font-size: 0;
 }
 
 .image-container {
@@ -726,6 +727,7 @@ a {
     height: 142px;
     overflow: hidden;
     border-radius: 10px;
+    border: 1px solid lightgrey;
 }
 
 .lawyer-detail {
