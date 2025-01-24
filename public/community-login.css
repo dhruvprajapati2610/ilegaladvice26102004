@@ -1527,7 +1527,7 @@ color: var(--text-color);
     height: 100%;
     width: 100%;
     /* color: #fff; */
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     font-weight: 500;
     text-align: center;
     line-height: 48px;
@@ -2151,7 +2151,6 @@ color: var(--text-color);
 }
 .signup-link{
     color: goldenrod;
-    text-decoration: underline;
 }
 .forget_password{
     color: goldenrod;
@@ -2226,9 +2225,7 @@ color: var(--text-color);
     .login-form-container {
         max-width: 350px;
     }
-    .not-a-mem {
-        font-size: 14px;
-    }
+   
     .note-para {
         padding: 10px 9px;
     }
@@ -2942,7 +2939,25 @@ color: var(--text-color);
     }
 }
 @media screen and (max-width:430px){
-   
+    .login-form-container {
+        row-gap: 1rem;
+        padding: 25px 30px;
+    }
+    .not-a-mem {
+        font-size: 15px;
+    }
+    .note {
+        height: 115px !important;
+    }
+    #login-form .btn-container {
+        margin-top: 30px;
+    }
+    .login-form-container {
+        max-width: 350px;
+    }
+    .not-a-mem {
+        margin-top: 20px;
+    }
     .post-text {
         height: 42px;
     }
@@ -2975,7 +2990,32 @@ color: var(--text-color);
     }
     
 }
-
+@media screen and (max-width:390px) {
+    #lawyer-signup-form {
+        height: 240px;
+    }
+    .login-form-container {
+        max-width: 320px;
+    }
+    .title-box {
+        font-size: 1.1rem;
+        line-height: 1.3rem;
+    }
+    .login-form-container {
+        row-gap: 1rem;
+        padding: 25px 25px;
+    }
+    .note-para p{
+        font-size: 12px;
+    }
+    #login-form .btn-container {
+        margin-top: 10px;
+    }
+    .not-a-mem {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+}
 
 #previewContainer{
 display: flex;
