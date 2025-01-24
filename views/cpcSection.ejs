@@ -49,78 +49,24 @@
                     <div id="google_translate_element"></div>
                   </div>
                 <div class="ipc-heading">
-                    <h1>BNSS Section <%=data[0].section_number%> - <%=data[0].section_name%>
+                    <h1>CPC Section <%=data.section_number%> - <%=data.section_name%>
                     </h1>
                 </div>
                 <div class="ipc-image">
                     <div class="ipc-img-box">
-                        <img src="bnss.png" alt="">
+                        <img src="cpc.png" alt="">
                     </div>
                 </div>
                 <div class="ipc-info">
                     <div class="description ">
                         <div class="hedg hedg-1">
-                            <h2>Description of BNSS Section <%=data[0].section_number%> - <%=data[0].section_name%>
-                                </h2>
+                            <h2>Description of CPC Section <%=data.section_number%> - <%=data.section_name%>
+                            </h2>
                         </div>
                         <div class="desc desc-1">
-                          <%-data[0].description%>
+                          <%-data.description%>
                         </div>
-                        <% if (data.length > 1) { %>
-                            <!-- Render detailed table for multiple sections -->
-                            <div class="ipc-table-2">
-                              <table>
-                                <colgroup>
-                                  <col id="col-1">
-                                  <col id="col-2" >
-                                  <col id="col-3" >
-                                  <col id="col-4" >
-                                  <col id="col-5" >
-                                  <col id="col-6">
-                                </colgroup>
-                                <tr>
-                                  <th>Section</th>
-                                  <th>Offence</th>
-                                  <th>Punishment</th>
-                                  <th>Cognizance</th>
-                                  <th>Bail</th>
-                                  <th>Triable</th>
-                                </tr>
-                                <% data.slice(1).forEach(function(section) { %>
-                                <tr>
-                                  <td><%= section.section_number %></td>
-                                  <td><%= section.offence === 'NaN' ? 'N/A' : section.offence %></td>
-                                  <td><%= section.punishment === 'NaN' ? 'N/A' : section.punishment %></td>
-                                  <td><%= section.cognizance === 'NaN' ? 'N/A' : section.cognizance %></td>
-                                  <td><%= section.bail === 'NaN' ? 'N/A' : section.bail %></td>
-                                  <td><%= section.triable === 'NaN' ? 'N/A' : section.triable %></td>
-                                </tr>
-                                <% }); %>
-                              </table>
-                            </div>
-                          <% } else { %>
-                            <!-- Render normal table for a single section -->
-                            <div class="ipc-table">
-                              <table>
-                                <tr>
-                                  <td><strong>Punishment</strong></td>
-                                  <td><%- data[0].punishment === 'NaN' ? 'N/A' : data[0].punishment %></td>
-                                </tr>
-                                <tr>
-                                  <td><strong>Cognizance</strong></td>
-                                  <td><%- data[0].cognizance === 'NaN' ? 'N/A' : data[0].cognizance %></td>
-                                </tr>
-                                <tr>
-                                  <td><strong>Bail</strong></td>
-                                  <td><%- data[0].bail === 'NaN' ? 'N/A' : data[0].bail %></td>
-                                </tr>
-                                <tr>
-                                  <td><strong>Triable</strong></td>
-                                  <td><%- data[0].triable === 'NaN' ? 'N/A' : data[0].triable %></td>
-                                </tr>
-                              </table>
-                            </div>
-                          <% } %>
+                       
                           
                     </div>
 
