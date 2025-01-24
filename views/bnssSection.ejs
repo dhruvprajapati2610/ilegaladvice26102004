@@ -99,9 +99,13 @@
                               </table>
                             </div>
                           <% } else { %>
-                            <!-- Render normal table for a single section -->
+                            <!-- this is normal table for a single section -->
                             <div class="ipc-table">
                               <table>
+                                <tr>
+                                  <td><strong>Offence</strong></td>
+                                  <td><%- data[0].offence === 'NaN' ? 'N/A' : data[0].offence %></td>
+                                </tr>
                                 <tr>
                                   <td><strong>Punishment</strong></td>
                                   <td><%- data[0].punishment === 'NaN' ? 'N/A' : data[0].punishment %></td>
