@@ -31,7 +31,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
     />
     <link rel="icon" type="image/png" href="../uploads/logo.png" />
-    <link rel="stylesheet" href="bnssSectionlist.css" />
+    <link rel="stylesheet" href="bnssChapters.css" />
   </head>
   <body>
     <%- include('partials/header') %>
@@ -41,32 +41,59 @@
           <div class="search-box-container">
             <div class="search-box">
               <form action="#">
-                <input type="search" name="search" placeholder="Search for Sections" id="search" oninput="performSearch()">
+                <input type="search" name="search" placeholder="Search for sections" id="search" oninput="performSearch()">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </form>
             </div>
           </div>
           <div class="ipc-heading">
-            <h1>The Dowry Prohibition Act, 1961</h1>
+            <h1>The Protection of Women from Domestic Violence Act, 2005 - Chapters</h1>
           </div>
           <div class="ipc-box">
             <ul class="ipc-list">
-              <% data.forEach(function(section) { %>
-              <li>
-                <span class="arrow">➤</span>
-                <span class="crpc-link">
-                  <a
-                    href="/dowry_section?section_number=<%=section.section_number%>"
-                  >
-                    <span class="crpc-chp"
-                      >Section <%=section.section_number%> -
-                      <%=section.section_name%></span
-                    >
-                  </a>
-                </span>
-              </li>
-              <% }) %>
-            </ul>
+                <li>
+                  <span class="arrow">➤</span>
+                  <span class="crpc-link">
+                    <a href="pow_sections?chapter=1">
+                      <span class="crpc-chp"> Chapter 1 - Preliminary</span>
+                    </a>
+                  </span>
+                </li>
+                <li>
+                  <span class="arrow">➤</span>
+                  <span class="crpc-link">
+                    <a href="pow_sections?chapter=2">
+                      <span class="crpc-chp"> Chapter 2 - Domestic Violence</span>
+                    </a>
+                  </span>
+                </li>
+                <li>
+                  <span class="arrow">➤</span>
+                  <span class="crpc-link">
+                    <a href="pow_sections?chapter=3">
+                      <span class="crpc-chp">Chapter 3 - Powers and Duties of Protection Officers, Service Providers, Etc.</span>
+                    </a>
+                  </span>
+                </li>
+                <li>
+                  <span class="arrow">➤</span>
+                  <span class="crpc-link">
+                    <a href="pow_sections?chapter=4">
+                      <span class="crpc-chp">Chapter 4 - Procedure for Obtaining Orders of Reliefs</span>
+                    </a>
+                  </span>
+                </li>
+                <li>
+                  <span class="arrow">➤</span>
+                  <span class="crpc-link">
+                    <a href="pow_sections?chapter=5">
+                      <span class="crpc-chp">Chapter 5 - Miscellaneous</span>
+                    </a>
+                  </span>
+                </li>
+              </ul>
+              
+              
           </div>
         </div>
       </div>
@@ -136,36 +163,64 @@
         crpcSections.classList.toggle("crpc-subsec-active");
       };
 
-//DOWRY SECTIONS
+      //SEARCH POW SECTIONS
 async function performSearch() {
-    const urlParams = new URLSearchParams(window.location.search);
+    
     const searchInput = document.getElementById('search');
     const resultsContainer = document.querySelector('.ipc-list');
     const searchTerm = searchInput.value.trim();
-
+    
     if (!searchTerm) {
-        console.log('NO SEARCH TERM')
-        const response1 = await fetch(`/dowry_sections/noSearchTerm`);
-        const data1 = await response1.json();
-                resultsContainer.innerHTML = data1.data
-                    .map(section => `
-                        <li>
-            <span class="arrow">➤</span>
-            <span class="crpc-link">
-                <a href="/dowry_section?section_number=${section.section_number}">
-                <span class="crpc-chp">Section ${section.section_number} - ${section.section_name}</span>
-                </a>
-            </span>
-        </li>
-                    `)
-                    .join('');
-            
+        resultsContainer.innerHTML = `
+              <li>
+                  <span class="arrow">➤</span>
+                  <span class="crpc-link">
+                    <a href="pow_sections?chapter=1">
+                      <span class="crpc-chp"> Chapter 1 - Preliminary</span>
+                    </a>
+                  </span>
+                </li>
+                <li>
+                  <span class="arrow">➤</span>
+                  <span class="crpc-link">
+                    <a href="pow_sections?chapter=2">
+                      <span class="crpc-chp"> Chapter 2 - Domestic Violence</span>
+                    </a>
+                  </span>
+                </li>
+                <li>
+                  <span class="arrow">➤</span>
+                  <span class="crpc-link">
+                    <a href="pow_sections?chapter=3">
+                      <span class="crpc-chp">Chapter 3 - Powers and Duties of Protection Officers, Service Providers, Etc.</span>
+                    </a>
+                  </span>
+                </li>
+                <li>
+                  <span class="arrow">➤</span>
+                  <span class="crpc-link">
+                    <a href="pow_sections?chapter=4">
+                      <span class="crpc-chp">Chapter 4 - Procedure for Obtaining Orders of Reliefs</span>
+                    </a>
+                  </span>
+                </li>
+                <li>
+                  <span class="arrow">➤</span>
+                  <span class="crpc-link">
+                    <a href="pow_sections?chapter=5">
+                      <span class="crpc-chp">Chapter 5 - Miscellaneous</span>
+                    </a>
+                  </span>
+                </li>
+        `;
         return;
     }
- 
+
     try {
-        const response = await fetch(`/dowry_sections/search?search=${encodeURIComponent(searchTerm)}`);
+        const response = await fetch(`/pow_sections/search?search=${encodeURIComponent(searchTerm)}`);
         const data = await response.json();
+        console.log(data);
+
         if (data.success) {
             if (data.data.length > 0) {
                 resultsContainer.innerHTML = data.data
@@ -173,7 +228,7 @@ async function performSearch() {
                         <li>
             <span class="arrow">➤</span>
             <span class="crpc-link">
-                <a href="/dowry_section?section_number=${section.section_number}">
+                <a href="/pow_section?section_number=${section.section_number}">
                 <span class="crpc-chp">Section ${section.section_number} - ${section.section_name}</span>
                 </a>
             </span>
