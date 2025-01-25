@@ -857,9 +857,9 @@ app.get("/bnss_sections", async (req, res) => {
 
 app.get("/bnss_section", async (req, res) => {
   let section_number = req.query.section_number;
-  
+
   // Normalize the input section number by removing spaces
-  section_number = section_number.replace(/\s+/g, '');
+  section_number = section_number.replace(/\s+/g, "");
 
   const query = `
     SELECT * 
@@ -975,7 +975,8 @@ app.get("/cpc_sections", async (req, res) => {
   if (isNaN(chapter)) {
     return res.status(400).send("Invalid chapter number");
   }
-  const query = "SELECT * FROM cpc_sections WHERE chapter_number = $1 ORDER BY section_number";
+  const query =
+    "SELECT * FROM cpc_sections WHERE chapter_number = $1 ORDER BY section_number";
   try {
     const { rows } = await pool.query(query, [chapter]);
     res.render("cpcSectionlist.ejs", { data: rows });
@@ -1029,7 +1030,7 @@ app.get("/cpc_sections/search", async (req, res) => {
       data: [],
     });
   }
-}); 
+});
 
 app.get("/cpc_sections/search/:chapterNumber", async (req, res) => {
   const searchTerm = req.query.search;
@@ -1088,9 +1089,86 @@ app.get("/cpc_sections/:chapterNumber", async (req, res) => {
   }
 });
 
+//DOWRY PROHIBITION
+app.get("/dowry_sections", async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT * 
+       FROM dowry_prohibition 
+       ORDER BY 
+         CAST(regexp_replace(section_number, '[^0-9]', '', 'g') AS INTEGER), 
+         section_number`
+    );
+    res.render("dowrySectionlist.ejs", { data: rows });
+  } catch (err) {
+    console.error("Error executing query:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+//JSON RESPONSE ROUTE FOR SEARCHING
+app.get("/dowry_sections/noSearchTerm", async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT * 
+       FROM dowry_prohibition 
+       ORDER BY 
+         CAST(regexp_replace(section_number, '[^0-9]', '', 'g') AS INTEGER), 
+         section_number`
+    );
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("Error executing query:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
 
 
+app.get("/dowry_section", async (req, res) => {
+  const section_number = req.query.section_number;
+  const query = "SELECT * FROM dowry_prohibition WHERE section_number = $1";
 
+  try {
+    const { rows } = await pool.query(query, [section_number]);
+    if (rows.length === 0) {
+      return res.status(404).send("Section not found");
+    }
+    res.render("dowrySection.ejs", { data: rows[0] });
+  } catch (err) {
+    console.error("Error executing query:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+app.get("/dowry_sections/search", async (req, res) => {
+  const searchTerm = req.query.search;
+  if (!searchTerm) {
+    return res.status(400).json({
+      success: false,
+      message: "Search term is required",
+      data: [],
+    });
+  }
+  const query = `SELECT * FROM dowry_prohibition WHERE section_number ILIKE $1 OR section_name ILIKE $1 OR description ILIKE $1 `;
+  try {
+    const { rows } = await pool.query(query, [`%${searchTerm}%`]);
+    res.json({
+      success: true,
+      message:
+        rows.length > 0
+          ? "Search results fetched successfully"
+          : "No results found",
+      data: rows,
+    });
+  } catch (err) {
+    console.error("Error executing search query:", err);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching search results",
+      data: [],
+    });
+  }
+});
 
 
 app.get("/userAccount", isuAuthenticated, async (req, res) => {
@@ -1279,7 +1357,7 @@ app.get("/lawyerspage", async (req, res) => {
     // console.log(page)
     const limit = 10;
     const offset = (page - 1) * limit;
-    
+
     let result;
 
     if (userLat && userLon) {
@@ -2092,27 +2170,26 @@ app.get("/articlewriting", (req, res) => {
 // });
 
 function communityAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {  
+  if (req.isAuthenticated()) {
     return next();
   } else {
-    res.redirect('/communityLogin');
+    res.redirect("/communityLogin");
   }
 }
 
 app.get("/communityLogin", (req, res) => {
-  if(req.user && req.user.role === 'lawyer'){
-   res.redirect('/community');
-   return;
+  if (req.user && req.user.role === "lawyer") {
+    res.redirect("/community");
+    return;
   }
   res.render("community-Login");
-})
+});
 
 app.get("/community", communityAuthenticated, async (req, res) => {
   const client = await pool.connect();
   try {
     const userId = req.user.id;
     const currentUser = req.user || null;
-
 
     if (req.user.role === "lawyer") {
       const offset = 0;
@@ -4269,12 +4346,10 @@ app.post("/add-reply", verifyAuthenticated, async (req, res) => {
   } catch (error) {
     await client.query("ROLLBACK");
     console.error("Error addding reply:", error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error sumbitting reply, please try again later.",
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error sumbitting reply, please try again later.",
+    });
   } finally {
     client.release();
   }
@@ -4831,23 +4906,19 @@ app.post(
 
       if (passw && cpassw) {
         if (passw !== cpassw) {
-          return res
-            .status(400)
-            .json({
-              success: false,
-              message: "Password and confirm password do not match!",
-            });
+          return res.status(400).json({
+            success: false,
+            message: "Password and confirm password do not match!",
+          });
         }
         const hashedPassword = await bcrypt.hash(passw, saltRounds);
         updateFields.push(`passw=$${paramIndex++}`);
         updateParams.push(hashedPassword);
       } else if (passw || cpassw) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "Both password and confirm password are required!",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "Both password and confirm password are required!",
+        });
       }
 
       if (address) {
