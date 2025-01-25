@@ -374,6 +374,10 @@ a {
 }
 .desc li {
   text-align: left;
+  padding-bottom: 10px;
+}
+.desc li > ul {
+  margin-left: 10px;
 }
 .desc p {
   text-align: left;
