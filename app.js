@@ -180,11 +180,6 @@ function isuAuthenticated(req, res, next) {
   }
 }
 
-const API_KEY = process.env.API_KEY;
-const clientId = "8437309c-46c6-4516-aa33-69f508d96e49";
-const clientSecret = "MzWOBwS5b5UPacsspQxkWxsNQAmG2EgP";
-const searchText = "lawyers";
-
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
