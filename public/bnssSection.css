@@ -327,6 +327,15 @@ a {
     margin-inline: auto;
   }
 }
+.dropdown-list{
+  padding-left: 0!important;
+}
+.dropdown-group{
+  display: flex!important;
+  flex-direction: column;
+}
+
+
 .body {
   position: absolute;
   top: 10%;

@@ -408,6 +408,13 @@ a {
         margin-inline: auto;
     }
 }
+.dropdown-list{
+    padding-left: 0!important;
+}
+.dropdown-group{
+    display: flex!important;
+    flex-direction: column;
+}
 
 
 @keyframes width {

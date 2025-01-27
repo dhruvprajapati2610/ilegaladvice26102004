@@ -416,6 +416,14 @@ a {
         width: 36%!important;
     }
 }
+.dropdown-list{
+    padding-left: 0!important;
+}
+.dropdown-group{
+    display: flex!important;
+    flex-direction: column;
+}
+
 
 .body{
     position: absolute;
