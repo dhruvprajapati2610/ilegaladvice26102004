@@ -1,5 +1,6 @@
 node_modules/
 node_modules.zip/
+.env
 #this is gitignore
 
 #  else if(formType==='form3'){
