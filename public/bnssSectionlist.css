@@ -125,6 +125,13 @@ a {
     left: -8px;
 }
 
+.dropdown-list{
+    padding-left: 0!important;
+}
+.dropdown-group{
+    display: flex!important;
+    flex-direction: column;
+}
 
 
 @media screen and (min-width : 1024px) {

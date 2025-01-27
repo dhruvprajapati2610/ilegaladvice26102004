@@ -140,6 +140,7 @@ a {
 
 /* Mobile devices */
 @media screen and (max-width:1118px) {
+    
     .nav-menu {
         background-color: var(--body-color);
         position: absolute;
@@ -305,7 +306,7 @@ a {
         height: 100%;
 
     }
-
+   
     .nav li {
         display: flex;
     }
@@ -338,7 +339,7 @@ a {
     }
 
     .dropdown-content {
-          grid-template-columns: repeat(6, max-content);
+           grid-template-columns: repeat(6, max-content);
         column-gap: 3rem;
         max-width: 1120px;
         margin-inline: auto;
@@ -409,13 +410,26 @@ a {
     }
 }
 
-
+.lawyer-title-container {
+    display: none;
+    width: 200px;
+}
 @keyframes width {
     from {width:0};
     to {
         width: 36%!important;
     }
 }
+.dropdown-list{
+    padding-left: 0!important;
+}
+.dropdown-group{
+    display: flex!important;
+    flex-direction: column;
+}
+
+
+
 
 .body{
     position: absolute;
