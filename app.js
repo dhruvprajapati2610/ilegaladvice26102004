@@ -187,7 +187,7 @@ const searchText = "lawyers";
 
 cloudinary.config({
   cloud_name: "dabla3fwm",
-  api_key: process.env.CLOUDINARY_API_KEY,
+  api_key: "228566377711835",
   api_secret: "k89mMnD6IQi6a-s11wVNePGEH78",
 });
 
