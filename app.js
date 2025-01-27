@@ -1,7 +1,7 @@
 const express = require("express");
 const cron = require("node-cron");
 const bodyParser = require("body-parser");
-const { Pool } = require("pg");
+const pool = require("./config/db.js");
 const axios = require("axios");
 const multer = require("multer");
 const bcrypt = require("bcrypt");
@@ -54,17 +54,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("uploads"));
 const secretKey = crypto.randomBytes(32).toString("hex");
 const upload = multer({ dest: "uploads/" });
-
-const pool = new Pool({
-  user: "postgres",
-  host: "144.24.124.135",
-  database: "ilegaladvice",
-  password: "Pranav@2003",
-  port: 5432,
-  max: 30,
-  idleTimeoutMillis: 60000,
-  connectionTimeoutMillis: 3000,
-});
 
 cron.schedule("0 0 * * *", async () => {
   console.log("Running scheduled task: Deleting 1-week-old notifications");
@@ -180,18 +169,6 @@ const fileFilter = (req, file, cb) => {
 //   fileFilter: fileFilter,
 // });
 
-pool.connect((err) => {
-  if (err) {
-    console.error("Error connecting to PostgreSQL database:", {
-      message: err.message,
-      code: err.code,
-      stack: err.stack,
-      detail: err.detail || "No additional details available",
-    });
-    return;
-  }
-  console.log("Connected to PostgreSQL database");
-});
 
 function isuAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
