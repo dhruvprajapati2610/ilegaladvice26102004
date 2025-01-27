@@ -27,6 +27,7 @@ const { type, userInfo } = require("os");
 const { fileLoader } = require("ejs");
 const { language } = require("googleapis/build/src/apis/language");
 const { cloudidentity } = require("googleapis/build/src/apis/cloudidentity");
+require('dotenv').config();
 app.use(methodOverride("_method"));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -186,7 +187,7 @@ const searchText = "lawyers";
 
 cloudinary.config({
   cloud_name: "dabla3fwm",
-  api_key: "228566377711835",
+  api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: "k89mMnD6IQi6a-s11wVNePGEH78",
 });
 
