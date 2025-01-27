@@ -186,9 +186,9 @@ const clientSecret = "MzWOBwS5b5UPacsspQxkWxsNQAmG2EgP";
 const searchText = "lawyers";
 
 cloudinary.config({
-  cloud_name: "dabla3fwm",
-  api_key: "228566377711835",
-  api_secret: "k89mMnD6IQi6a-s11wVNePGEH78",
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 let emailSendInProgress = false;
@@ -199,8 +199,8 @@ async function getAccessToken() {
       "https://account.olamaps.io/realms/olamaps/protocol/openid-connect/token",
       new URLSearchParams({
         grant_type: "client_credentials",
-        client_id: "8437309c-46c6-4516-aa33-69f508d96e49",
-        client_secret: "MzWOBwS5b5UPacsspQxkWxsNQAmG2EgP",
+        client_id: process.env.OLA_CLIENT_ID,
+        client_secret: process.env.OLA_CLIENT_SECRET,
         scope: "openid",
       }),
       {
