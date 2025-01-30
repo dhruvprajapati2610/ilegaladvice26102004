@@ -31,7 +31,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
     />
     <link rel="icon" type="image/png" href="../uploads/logo.png" />
-    <link rel="stylesheet" href="powChapters.css" />
+    <link rel="stylesheet" href="/powChapters.css" />
   </head>
   <body>
     <%- include('partials/header') %>
@@ -40,7 +40,7 @@
         <div class="ipc-container">
           <div class="search-box-container">
             <div class="search-box">
-              <form action="#">
+              <form onsubmit="event.preventDefault();">
                 <input type="search" name="search" placeholder="Search for sections" id="search" oninput="performSearch()">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </form>
@@ -54,7 +54,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="crpc-link">
-                    <a href="pow_sections?chapter=1">
+                    <a href="/pow/pow_sections?chapter=1">
                       <span class="crpc-chp"> Chapter 1 - Preliminary</span>
                     </a>
                   </span>
@@ -62,7 +62,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="crpc-link">
-                    <a href="pow_sections?chapter=2">
+                    <a href="/pow/pow_sections?chapter=2">
                       <span class="crpc-chp"> Chapter 2 - Domestic Violence</span>
                     </a>
                   </span>
@@ -70,7 +70,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="crpc-link">
-                    <a href="pow_sections?chapter=3">
+                    <a href="/pow/pow_sections?chapter=3">
                       <span class="crpc-chp">Chapter 3 - Powers and Duties of Protection Officers, Service Providers, Etc.</span>
                     </a>
                   </span>
@@ -78,7 +78,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="crpc-link">
-                    <a href="pow_sections?chapter=4">
+                    <a href="/pow/pow_sections?chapter=4">
                       <span class="crpc-chp">Chapter 4 - Procedure for Obtaining Orders of Reliefs</span>
                     </a>
                   </span>
@@ -86,7 +86,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="crpc-link">
-                    <a href="pow_sections?chapter=5">
+                    <a href="/pow/pow_sections?chapter=5">
                       <span class="crpc-chp">Chapter 5 - Miscellaneous</span>
                     </a>
                   </span>
@@ -175,7 +175,7 @@ async function performSearch() {
               <li>
                   <span class="arrow">➤</span>
                   <span class="crpc-link">
-                    <a href="pow_sections?chapter=1">
+                    <a href="/pow/pow_sections?chapter=1">
                       <span class="crpc-chp"> Chapter 1 - Preliminary</span>
                     </a>
                   </span>
@@ -183,7 +183,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="crpc-link">
-                    <a href="pow_sections?chapter=2">
+                    <a href="/pow/pow_sections?chapter=2">
                       <span class="crpc-chp"> Chapter 2 - Domestic Violence</span>
                     </a>
                   </span>
@@ -191,7 +191,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="crpc-link">
-                    <a href="pow_sections?chapter=3">
+                    <a href="/pow/pow_sections?chapter=3">
                       <span class="crpc-chp">Chapter 3 - Powers and Duties of Protection Officers, Service Providers, Etc.</span>
                     </a>
                   </span>
@@ -199,7 +199,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="crpc-link">
-                    <a href="pow_sections?chapter=4">
+                    <a href="/pow/pow_sections?chapter=4">
                       <span class="crpc-chp">Chapter 4 - Procedure for Obtaining Orders of Reliefs</span>
                     </a>
                   </span>
@@ -207,7 +207,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="crpc-link">
-                    <a href="pow_sections?chapter=5">
+                    <a href="/pow/pow_sections?chapter=5">
                       <span class="crpc-chp">Chapter 5 - Miscellaneous</span>
                     </a>
                   </span>
@@ -217,7 +217,7 @@ async function performSearch() {
     }
 
     try {
-        const response = await fetch(`/pow_sections/search?search=${encodeURIComponent(searchTerm)}`);
+        const response = await fetch(`/pow/pow_sections/search?search=${encodeURIComponent(searchTerm)}`);
         const data = await response.json();
         console.log(data);
 
@@ -228,7 +228,7 @@ async function performSearch() {
                         <li>
             <span class="arrow">➤</span>
             <span class="crpc-link">
-                <a href="/pow_section?section_number=${section.section_number}">
+                <a href="/pow/pow_section?section_number=${section.section_number}">
                 <span class="crpc-chp">Section ${section.section_number} - ${section.section_name}</span>
                 </a>
             </span>

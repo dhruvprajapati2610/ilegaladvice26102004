@@ -31,7 +31,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
     />
     <link rel="icon" type="image/png" href="../uploads/logo.png" />
-    <link rel="stylesheet" href="powChapters.css" />
+    <link rel="stylesheet" href="/powChapters.css" />
   </head>
   <body>
     <%- include('partials/header') %>
@@ -40,7 +40,7 @@
         <div class="ipc-container">
           <div class="search-box-container">
             <div class="search-box">
-              <form action="#">
+              <form onsubmit="event.preventDefault();">
                 <input type="search" name="search" placeholder="Search for sections" id="search" oninput="performSearch()">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </form>
@@ -54,7 +54,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=1">
+                    <a href="/bsa/bsa_sections?chapter=1">
                       <span class="sakshya-chp">Chapter 1 - Preliminary</span>
                     </a>
                   </span>
@@ -62,7 +62,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=2">
+                    <a href="/bsa/bsa_sections?chapter=2">
                       <span class="sakshya-chp">Chapter 2 - Relevancy of Facts</span>
                     </a>
                   </span>
@@ -70,7 +70,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=3">
+                    <a href="/bsa/bsa_sections?chapter=3">
                       <span class="sakshya-chp">Chapter 3 - Facts Which Need Not Be Proved</span>
                     </a>
                   </span>
@@ -78,7 +78,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=4">
+                    <a href="/bsa/bsa_sections?chapter=4">
                       <span class="sakshya-chp">Chapter 4 - Oral Evidence</span>
                     </a>
                   </span>
@@ -86,7 +86,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=5">
+                    <a href="/bsa/bsa_sections?chapter=5">
                       <span class="sakshya-chp">Chapter 5 - Documentary Evidence</span>
                     </a>
                   </span>
@@ -94,7 +94,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=6">
+                    <a href="/bsa/bsa_sections?chapter=6">
                       <span class="sakshya-chp">Chapter 6 - Exclusion of Oral by Documentary Evidence</span>
                     </a>
                   </span>
@@ -102,7 +102,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=7">
+                    <a href="/bsa/bsa_sections?chapter=7">
                       <span class="sakshya-chp">Chapter 7 - Burden of Proof</span>
                     </a>
                   </span>
@@ -110,7 +110,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=8">
+                    <a href="/bsa/bsa_sections?chapter=8">
                       <span class="sakshya-chp">Chapter 8 - Estoppel</span>
                     </a>
                   </span>
@@ -118,7 +118,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=9">
+                    <a href="/bsa/bsa_sections?chapter=9">
                       <span class="sakshya-chp">Chapter 9 - Witnesses</span>
                     </a>
                   </span>
@@ -126,7 +126,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=10">
+                    <a href="/bsa/bsa_sections?chapter=10">
                       <span class="sakshya-chp">Chapter 10 - Examination of Witnesses</span>
                     </a>
                   </span>
@@ -134,7 +134,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=11">
+                    <a href="/bsa/bsa_sections?chapter=11">
                       <span class="sakshya-chp">Chapter 11 - Improper Admission and Rejection of Evidence</span>
                     </a>
                   </span>
@@ -142,7 +142,7 @@
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=12">
+                    <a href="/bsa/bsa_sections?chapter=12">
                       <span class="sakshya-chp">Chapter 12 - Repeal and Savings</span>
                     </a>
                   </span>
@@ -232,7 +232,7 @@ async function performSearch() {
              <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=1">
+                    <a href="/bsa/bsa_sections?chapter=1">
                       <span class="sakshya-chp">Chapter 1 - Preliminary</span>
                     </a>
                   </span>
@@ -240,7 +240,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=2">
+                    <a href="/bsa/bsa_sections?chapter=2">
                       <span class="sakshya-chp">Chapter 2 - Relevancy of Facts</span>
                     </a>
                   </span>
@@ -248,7 +248,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=3">
+                    <a href="/bsa/bsa_sections?chapter=3">
                       <span class="sakshya-chp">Chapter 3 - Facts Which Need Not Be Proved</span>
                     </a>
                   </span>
@@ -256,7 +256,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=4">
+                    <a href="/bsa/bsa_sections?chapter=4">
                       <span class="sakshya-chp">Chapter 4 - Oral Evidence</span>
                     </a>
                   </span>
@@ -264,7 +264,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=5">
+                    <a href="/bsa/bsa_sections?chapter=5">
                       <span class="sakshya-chp">Chapter 5 - Documentary Evidence</span>
                     </a>
                   </span>
@@ -272,7 +272,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=6">
+                    <a href="/bsa/bsa_sections?chapter=6">
                       <span class="sakshya-chp">Chapter 6 - Exclusion of Oral by Documentary Evidence</span>
                     </a>
                   </span>
@@ -280,7 +280,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=7">
+                    <a href="/bsa/bsa_sections?chapter=7">
                       <span class="sakshya-chp">Chapter 7 - Burden of Proof</span>
                     </a>
                   </span>
@@ -288,7 +288,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=8">
+                    <a href="/bsa/bsa_sections?chapter=8">
                       <span class="sakshya-chp">Chapter 8 - Estoppel</span>
                     </a>
                   </span>
@@ -296,7 +296,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=9">
+                    <a href="/bsa/bsa_sections?chapter=9">
                       <span class="sakshya-chp">Chapter 9 - Witnesses</span>
                     </a>
                   </span>
@@ -304,7 +304,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=10">
+                    <a href="/bsa/bsa_sections?chapter=10">
                       <span class="sakshya-chp">Chapter 10 - Examination of Witnesses</span>
                     </a>
                   </span>
@@ -312,7 +312,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=11">
+                    <a href="/bsa/bsa_sections?chapter=11">
                       <span class="sakshya-chp">Chapter 11 - Improper Admission and Rejection of Evidence</span>
                     </a>
                   </span>
@@ -320,7 +320,7 @@ async function performSearch() {
                 <li>
                   <span class="arrow">➤</span>
                   <span class="sakshya-link">
-                    <a href="/bsa_sections?chapter=12">
+                    <a href="/bsa/bsa_sections?chapter=12">
                       <span class="sakshya-chp">Chapter 12 - Repeal and Savings</span>
                     </a>
                   </span>
@@ -330,7 +330,7 @@ async function performSearch() {
     }
 
     try {
-        const response = await fetch(`/bsa_sections/search?search=${encodeURIComponent(searchTerm)}`);
+        const response = await fetch(`/bsa/bsa_sections/search?search=${encodeURIComponent(searchTerm)}`);
         const data = await response.json();
         console.log(data);
 
@@ -341,7 +341,7 @@ async function performSearch() {
                         <li>
             <span class="arrow">➤</span>
             <span class="crpc-link">
-                <a href="/bsa_section?section_number=${section.section_number}">
+                <a href="/bsa/bsa_section?section_number=${section.section_number}">
                 <span class="crpc-chp">Section ${section.section_number} - ${section.section_name}</span>
                 </a>
             </span>

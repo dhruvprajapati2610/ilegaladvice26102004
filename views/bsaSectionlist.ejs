@@ -31,7 +31,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
     />
     <link rel="icon" type="image/png" href="../uploads/logo.png" />
-    <link rel="stylesheet" href="powChapters.css" />
+    <link rel="stylesheet" href="/powChapters.css" />
   </head>
   <body>
     <%- include('partials/header') %>
@@ -40,7 +40,7 @@
         <div class="ipc-container">
           <div class="search-box-container">
             <div class="search-box">
-              <form action="#">
+              <form onsubmit="event.preventDefault();">
                 <input type="search" name="search" placeholder="Search for Sections" id="search" oninput="performSearch()">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </form>
@@ -56,7 +56,7 @@
                 <span class="arrow">➤</span>
                 <span class="crpc-link">
                   <a
-                    href="/bsa_section?section_number=<%=section.section_number%>"
+                    href="/bsa/bsa_section?section_number=<%=section.section_number%>"
                   >
                     <span class="crpc-chp"
                       >Section <%=section.section_number%> -
@@ -146,14 +146,14 @@ async function performSearch() {
 
     if (!searchTerm) {
         console.log('NO SEARCH TERM')
-        const response1 = await fetch(`/bsa_sections/${chapterNumber}`);
+        const response1 = await fetch(`/bsa/bsa_sections/${chapterNumber}`);
         const data1 = await response1.json();
                 resultsContainer.innerHTML = data1.data
                     .map(section => `
                         <li>
             <span class="arrow">➤</span>
             <span class="crpc-link">
-                <a href="/bsa_section?section_number=${section.section_number}">
+                <a href="/bsa/bsa_section?section_number=${section.section_number}">
                 <span class="crpc-chp">Section ${section.section_number} - ${section.section_name}</span>
                 </a>
             </span>
@@ -165,7 +165,7 @@ async function performSearch() {
     }
  
     try {
-        const response = await fetch(`/bsa_sections/search/${chapterNumber}?search=${encodeURIComponent(searchTerm)}`);
+        const response = await fetch(`/bsa/bsa_sections/search/${chapterNumber}?search=${encodeURIComponent(searchTerm)}`);
         const data = await response.json();
         if (data.success) {
             if (data.data.length > 0) {
@@ -174,7 +174,7 @@ async function performSearch() {
                         <li>
             <span class="arrow">➤</span>
             <span class="crpc-link">
-                <a href="/bsa_section?section_number=${section.section_number}">
+                <a href="/bsa/bsa_section?section_number=${section.section_number}">
                 <span class="crpc-chp">Section ${section.section_number} - ${section.section_name}</span>
                 </a>
             </span>
