@@ -27,12 +27,19 @@ const { type, userInfo } = require("os");
 const { fileLoader } = require("ejs");
 const { language } = require("googleapis/build/src/apis/language");
 const { cloudidentity } = require("googleapis/build/src/apis/cloudidentity");
-require('dotenv').config();
+
+//ROUTE IMPORTS
+const ipcRoutes = require("./routes/ipcRoutes.js");
+const crpcRoutes = require("./routes/crpcRoutes.js");
+const bnsRoutes = require("./routes/bnsRoutes.js");
+const bnssRoutes = require("./routes/bnssRoutes.js");
+const cpcRoutes = require("./routes/cpcRoutes.js");
+
+require("dotenv").config();
 app.use(methodOverride("_method"));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "uploads")));
-// app.use(express.static(path.join(__dirname,'images')));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // app.use('/uploads/:id',(req,res,next)=>{
 //   const lawyerId = req.params.id;
@@ -53,6 +60,7 @@ app.use("/lawyerspage", express.static(path.join(__dirname, "uploads")));
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.static("public"));
 app.use(express.static("uploads"));
+
 const secretKey = crypto.randomBytes(32).toString("hex");
 const upload = multer({ dest: "uploads/" });
 
@@ -95,7 +103,7 @@ app.use((req, res, next) => {
 });
 app.use((req, res, next) => {
   res.locals.userId = req.user ? req.user.id : false;
-  res.locals.role = req.user ? req.user.role : false; // Set userId or false
+  res.locals.role = req.user ? req.user.role : false;
   next();
 });
 
@@ -169,7 +177,6 @@ const fileFilter = (req, file, cb) => {
 //   storage: storage,
 //   fileFilter: fileFilter,
 // });
-
 
 function isuAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
@@ -245,7 +252,13 @@ async function geocodeAddress(address) {
   }
 }
 
-// geocodeAddress('Shop No.04, YourLawyer - Law Firm, Samanvay CHS Ltd, Plot No.13, beside Bank Of Maharashtra, Block G, Sector 11, Kharghar, Navi Mumbai, Maharashtra 410210 ');
+//ROUTES
+app.use("/ipc", ipcRoutes);
+app.use("/crpc", crpcRoutes);
+app.use("/bns", bnsRoutes);
+app.use("/bnss", bnssRoutes);
+app.use("/cpc", cpcRoutes);
+
 
 app.get("/about-us", (req, res) => {
   res.render("aboutus");
@@ -261,27 +274,6 @@ app.get("/terms-of-use", (req, res) => {
 
 app.get("/contact-us", (req, res) => {
   res.render("contact-us");
-});
-
-app.get("/crpclist", (req, res) => {
-  res.render("crpclist.ejs");
-});
-
-app.get("/crpc", async (req, res) => {
-  const chapter = req.query.chapter;
-  try {
-    var sql = "select * from crpc_chapters where chapter_number=$1";
-    var crpc = await pool.query(sql, [chapter]);
-    console.log(crpc.rows);
-    res.render("crpcDrop.ejs", { data: crpc.rows });
-  } catch (err) {
-    console.error("Error retrieving data from the database:", err);
-    res.status(500).send("Internal server error");
-  }
-});
-
-app.get("/bns", (req, res) => {
-  res.render("bnschapters.ejs");
 });
 
 app.get("/", async (req, res) => {
@@ -448,195 +440,6 @@ app.get("/reset-password", async (req, res) => {
   }
 });
 
-// app.get('/re6act',(req,res)=>{
-//   res.render('react');
-// })
-
-app.get("/allipc", async (req, res) => {
-  try {
-    const { rows: ipcSections } = await pool.query(
-      `SELECT id,case when offence='nan' then null else '- ' || offence end as offence, substring(ipc_section from 5) as ipc_section FROM ipc_sections`
-    );
-
-    const noResults = ipcSections.length === 0;
-
-    res.render("ipclist", { ipc: ipcSections, noResults });
-  } catch (error) {
-    console.error("Error fetching IPC sections:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-app.get("/ipc", async (req, res) => {
-  try {
-    id = req.query.id;
-    const query = `select * from ipc_sections where id=$1`;
-    const results = await pool.query(query, [id]);
-    const ipc = results.rows.map((row) => ({
-      id: row.id,
-      triable: row.triable,
-      bail: row.bail,
-      cognizance: row.cognizance,
-      conclusion: row.conclusion,
-      importance: row.importance,
-      practical_application: row.practical_application,
-      punishment_detailed: row.punishment_detailed,
-      offence_detailed: row.offence_detailed,
-      ipc_section: row.ipc_section.substring(4),
-      punishment: row.punishment,
-      offence: row.offence,
-      description_split: row.description_split,
-      ipc_in_simple_words: row.ipc_in_simple_words,
-    }));
-    res.render("ipc", { ipc });
-  } catch {
-    console.log(error);
-  }
-});
-
-app.get("/bns_sections", async (req, res) => {
-  const chapter = parseInt(req.query.chapter);
-  if (isNaN(chapter)) {
-    return res.status(400).send("Invalid chapter number");
-  }
-  const query = "SELECT * FROM bns_sections WHERE chapter_number = $1";
-  try {
-    const { rows } = await pool.query(query, [chapter]);
-    res.render("BNSsectionlist.ejs", { data: rows });
-  } catch (err) {
-    console.error("Error executing query:", err);
-    res.status(500).send("Server error");
-  }
-});
-
-app.get("/bns_section", async (req, res) => {
-  const section_number = req.query.section_number;
-  const query = "SELECT * FROM bns_sections WHERE section_number = $1";
-
-  try {
-    const { rows } = await pool.query(query, [section_number]);
-    if (rows.length === 0) {
-      return res.status(404).send("Section not found");
-    }
-    res.render("BNSsection.ejs", { data: rows[0] });
-  } catch (err) {
-    console.error("Error executing query:", err);
-    res.status(500).send("Server error");
-  }
-});
-
-app.get("/bns_sections/search", async (req, res) => {
-  const searchTerm = req.query.search;
-  if (!searchTerm) {
-    return res.status(400).json({
-      success: false,
-      message: "Search term is required",
-      data: [],
-    });
-  }
-  const query = `SELECT * FROM bns_sections WHERE section_name ILIKE $1 OR description ILIKE $1 OR section_number ILIKE $1 `;
-  try {
-    const { rows } = await pool.query(query, [`%${searchTerm}%`]);
-    res.json({
-      success: true,
-      message:
-        rows.length > 0
-          ? "Search results fetched successfully"
-          : "No results found",
-      data: rows,
-    });
-  } catch (err) {
-    console.error("Error executing search query:", err);
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while fetching search results",
-      data: [],
-    });
-  }
-});
-
-app.get("/bns_sections/search/:chapterNumber", async (req, res) => {
-  const searchTerm = req.query.search;
-  const chapterNumber = req.params.chapterNumber;
-  if (!searchTerm) {
-    return res.status(400).json({
-      success: false,
-      message: "Search term is required",
-      data: [],
-    });
-  }
-  const query = `SELECT * FROM bns_sections WHERE (section_name ILIKE $1 OR description ILIKE $1 OR section_number ILIKE $1) 
-                 AND chapter_number = $2
- `;
-  try {
-    const { rows } = await pool.query(query, [
-      `%${searchTerm}%`,
-      chapterNumber,
-    ]);
-    res.json({
-      success: true,
-      message:
-        rows.length > 0
-          ? "Search results fetched successfully"
-          : "No results found",
-      data: rows,
-    });
-  } catch (err) {
-    console.error("Error executing search query:", err);
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while fetching search results",
-      data: [],
-    });
-  }
-});
-
-app.get("/bns_sections/:chapterNumber", async (req, res) => {
-  const chapterNumber = req.params.chapterNumber;
-  const query = `select * from bns_sections where chapter_number = $1`;
-
-  try {
-    const { rows } = await pool.query(query, [chapterNumber]);
-    res.json({
-      success: true,
-      message: "Bns sections fetched",
-      data: rows,
-    });
-  } catch (error) {
-    console.error("Error fetching bns_sections for a chapter", err);
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while fetching bns_sections results",
-      data: [],
-    });
-  }
-});
-
-app.get("/search-ipc", async (req, res) => {
-  try {
-    const searchQuery = req.query.search || "";
-    const { rows: ipcSections } = await pool.query(
-      `
-    select id,
-    substring(ipc_section from 5) as ipc_section,
-    case when offence='nan' then null else '- '|| offence end as offence,
-    description
-    from ipc_sections
-    where ipc_section ilike $1
-    or offence ilike $1
-    or description ilike $1
-    `,
-      [`%${searchQuery}%`]
-    );
-
-    const noResults = ipcSections.length === 0;
-
-    res.render("ipclist", { ipc: ipcSections, noResults });
-  } catch (error) {
-    console.error("Error searching IPC sections:", error);
-    res.status(500).send("Internal server error");
-  }
-});
 
 app.get("/articles", async (req, res) => {
   const client = await pool.connect();
@@ -799,266 +602,6 @@ app.get("/fullarticle", async (req, res) => {
     console.error("An error ocurred:", error.message);
   } finally {
     client.release();
-  }
-});
-
-//BNSS SECTIONS
-app.get("/bnss", (req, res) => {
-  res.render("bnsschapters.ejs");
-});
-
-app.get("/bnss_sections", async (req, res) => {
-  const chapter = parseInt(req.query.chapter);
-  if (isNaN(chapter)) {
-    return res.status(400).send("Invalid chapter number");
-  }
-  const query = `
-    SELECT * 
-    FROM bnss_sections 
-    WHERE chapter_number = $1 
-    AND section_number !~ '\\(.*\\)'
-    ORDER BY section_number ASC
-    `;
-  try {
-    const { rows } = await pool.query(query, [chapter]);
-    res.render("bnssSectionlist.ejs", { data: rows });
-  } catch (err) {
-    console.error("Error executing query:", err);
-    res.status(500).send("Server error");
-  }
-});
-
-app.get("/bnss_section", async (req, res) => {
-  let section_number = req.query.section_number;
-
-  // Normalize the input section number by removing spaces
-  section_number = section_number.replace(/\s+/g, "");
-
-  const query = `
-    SELECT * 
-    FROM bnss_sections 
-    WHERE REPLACE(section_number, ' ', '') = $1 OR REPLACE(section_number, ' ', '') LIKE $1 || '(%'
-    ORDER BY section_number;
-  `;
-
-  try {
-    const { rows } = await pool.query(query, [section_number]);
-
-    // Ensure that the main section is the first element in the array
-    // rows.sort((a, b) => {
-    //   const normalizedA = a.section_number.replace(/\s+/g, '');
-    //   const normalizedB = b.section_number.replace(/\s+/g, '');
-
-    //   if (normalizedA === section_number) return -1; // Main section comes first
-    //   if (normalizedB === section_number) return 1;
-    //   return normalizedA.localeCompare(normalizedB); // Sort subsections normally
-    // });
-
-    if (rows.length === 0) {
-      return res.status(404).send("Section not found");
-    }
-
-    res.render("bnssSection.ejs", { data: rows });
-  } catch (err) {
-    console.error("Error executing query:", err);
-    res.status(500).send("Server error");
-  }
-});
-
-app.get("/bnss_sections/search", async (req, res) => {
-  const searchTerm = req.query.search;
-  if (!searchTerm) {
-    return res.status(400).json({
-      success: false,
-      message: "Search term is required",
-      data: [],
-    });
-  }
-
-  const query = `
-    SELECT * 
-    FROM bnss_sections 
-    WHERE (section_number ILIKE $1 OR section_name ILIKE $1)
-    AND section_number NOT LIKE '%(%'
-  `;
-
-  try {
-    const { rows } = await pool.query(query, [`%${searchTerm}%`]);
-    res.json({
-      success: true,
-      message:
-        rows.length > 0
-          ? "Search results fetched successfully"
-          : "No results found",
-      data: rows,
-    });
-  } catch (err) {
-    console.error("Error executing search query:", err);
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while fetching search results",
-      data: [],
-    });
-  }
-});
-
-app.get("/bnss_sections/search/:chapterNumber", async (req, res) => {
-  const searchTerm = req.query.search;
-  const chapterNumber = req.params.chapterNumber;
-  if (!searchTerm) {
-    return res.status(400).json({
-      success: false,
-      message: "Search term is required",
-      data: [],
-    });
-  }
-  const query = `SELECT * FROM bnss_sections WHERE (section_name ILIKE $1 OR section_number ILIKE $1) AND section_number NOT LIKE '%(%' 
-                 AND chapter_number = $2
- `;
-  try {
-    const { rows } = await pool.query(query, [
-      `%${searchTerm}%`,
-      chapterNumber,
-    ]);
-    res.json({
-      success: true,
-      message:
-        rows.length > 0
-          ? "Search results fetched successfully"
-          : "No results found",
-      data: rows,
-    });
-  } catch (err) {
-    console.error("Error executing search query:", err);
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while fetching search results",
-      data: [],
-    });
-  }
-});
-
-//CPC SECTIONS
-app.get("/cpc", (req, res) => {
-  res.render("cpcChapters.ejs");
-});
-
-app.get("/cpc_sections", async (req, res) => {
-  const chapter = parseInt(req.query.chapter);
-  if (isNaN(chapter)) {
-    return res.status(400).send("Invalid chapter number");
-  }
-  const query =
-    "SELECT * FROM cpc_sections WHERE chapter_number = $1 ORDER BY section_number";
-  try {
-    const { rows } = await pool.query(query, [chapter]);
-    res.render("cpcSectionlist.ejs", { data: rows });
-  } catch (err) {
-    console.error("Error executing query:", err);
-    res.status(500).send("Server error");
-  }
-});
-
-app.get("/cpc_section", async (req, res) => {
-  const section_number = req.query.section_number;
-  const query = "SELECT * FROM cpc_sections WHERE section_number = $1";
-
-  try {
-    const { rows } = await pool.query(query, [section_number]);
-    if (rows.length === 0) {
-      return res.status(404).send("Section not found");
-    }
-    res.render("cpcSection.ejs", { data: rows[0] });
-  } catch (err) {
-    console.error("Error executing query:", err);
-    res.status(500).send("Server error");
-  }
-});
-
-app.get("/cpc_sections/search", async (req, res) => {
-  const searchTerm = req.query.search;
-  if (!searchTerm) {
-    return res.status(400).json({
-      success: false,
-      message: "Search term is required",
-      data: [],
-    });
-  }
-  const query = `SELECT * FROM cpc_sections WHERE section_number ILIKE $1 OR section_name ILIKE $1 OR description ILIKE $1 `;
-  try {
-    const { rows } = await pool.query(query, [`%${searchTerm}%`]);
-    res.json({
-      success: true,
-      message:
-        rows.length > 0
-          ? "Search results fetched successfully"
-          : "No results found",
-      data: rows,
-    });
-  } catch (err) {
-    console.error("Error executing search query:", err);
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while fetching search results",
-      data: [],
-    });
-  }
-});
-
-app.get("/cpc_sections/search/:chapterNumber", async (req, res) => {
-  const searchTerm = req.query.search;
-  const chapterNumber = req.params.chapterNumber;
-  if (!searchTerm && searchTerm === " ") {
-    return res.status(400).json({
-      success: false,
-      message: "Search term is required",
-      data: [],
-    });
-  }
-  const query = `SELECT * FROM cpc_sections WHERE (section_name ILIKE $1 OR section_number ILIKE $1) 
-                 AND chapter_number = $2
-                 `;
-  try {
-    const { rows } = await pool.query(query, [
-      `%${searchTerm}%`,
-      chapterNumber,
-    ]);
-    res.json({
-      success: true,
-      message:
-        rows.length > 0
-          ? "Search results fetched successfully"
-          : "No results found",
-      data: rows,
-    });
-  } catch (err) {
-    console.error("Error executing search query:", err);
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while fetching search results",
-      data: [],
-    });
-  }
-});
-
-app.get("/cpc_sections/:chapterNumber", async (req, res) => {
-  const chapterNumber = req.params.chapterNumber;
-  const query = `select * from cpc_sections where chapter_number = $1`;
-
-  try {
-    const { rows } = await pool.query(query, [chapterNumber]);
-    res.json({
-      success: true,
-      message: "cpc sections fetched",
-      data: rows,
-    });
-  } catch (error) {
-    console.error("Error fetching cpc_sections for a chapter", err);
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while fetching cpc_sections results",
-      data: [],
-    });
   }
 });
 
@@ -1409,7 +952,6 @@ app.get("/bsa_sections/:chapterNumber", async (req, res) => {
     });
   }
 });
-
 
 app.get("/userAccount", isuAuthenticated, async (req, res) => {
   try {
