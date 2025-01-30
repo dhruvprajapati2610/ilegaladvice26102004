@@ -519,7 +519,30 @@ td {
 #col-6 {
   width: 15%;
 }
-
+.next-prev-section{
+  display: flex;
+      column-gap: 30px;
+      justify-content: center;
+}
+#next-btn,#prev-btn{
+  width: 120px;
+  display: flex;
+  align-items: center;
+  background: goldenrod;
+  padding: 6px;
+  justify-content: center;
+  font-size: 15px;
+  column-gap: 9px;
+  border: 1px solid goldenrod;
+  border-radius: 6px;
+  color: white;
+  outline: none;
+  cursor: pointer;
+}
+#next-btn:hover, #prev-btn:hover{
+  background: rgb(241, 184, 37);
+  border-color: rgb(241, 184, 37);
+}
 @media screen and (max-width: 1345px) {
   .ipc-table-2 table {
     font-size: 15px;

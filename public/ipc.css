@@ -443,6 +443,30 @@ text-align: left;
 #st-1{
     z-index: 1!important;
 }
+.next-prev-section{
+    display: flex;
+        column-gap: 30px;
+        justify-content: center;
+  }
+  #next-btn,#prev-btn{
+    width: 120px;
+    display: flex;
+    align-items: center;
+    background: goldenrod;
+    padding: 6px;
+    justify-content: center;
+    font-size: 15px;
+    column-gap: 9px;
+    border: 1px solid goldenrod;
+    border-radius: 6px;
+    color: white;
+    outline: none;
+    cursor: pointer;
+  }
+  #next-btn:hover, #prev-btn:hover{
+    background: rgb(241, 184, 37);
+    border-color: rgb(241, 184, 37);
+  }
 @media screen and (max-width:1014px) {
     .ipc-img-box img {
         height: 400px;
