@@ -98,15 +98,8 @@
     </div>
 
     <script>
-        const users = [
-            { id: 1, name: 'Alice Smith' },
-            { id: 2, name: 'John Doe' },
-            { id: 3, name: 'Emma Johnson' },
-            { id: 4, name: 'Michael Brown' }
-        ];
-
         async function renderUsers() {
-            const response = await fetch('/notVerifiedLawyers');
+            const response = await fetch('/admin/notVerifiedLawyers');
             const result = await response.json(); 
         
             const userList = document.getElementById('userList');
@@ -130,7 +123,7 @@
                     
                     <div class="actions">
                         <button class="approve" onclick="approveUser(${user.id})">✔ Approve</button>
-                        <button class="decline">❌ Decline</button>
+                        <button class="decline" onclick="declineUser(${user.id})">❌ Decline</button>
                     </div>
                 `;
                 userList.appendChild(userDiv);
@@ -143,7 +136,7 @@
 
         async function approveUser(id) {
     try {
-        const response = await fetch(`/approveLawyer/${id}`, { method: 'POST' });
+        const response = await fetch(`/admin/approveLawyer/${id}`, { method: 'POST' });
         const result = await response.json();
 
         if (result.success) {
@@ -161,7 +154,8 @@
 
 async function declineUser(id) {
     try {
-        const response = await fetch(`/declineLawyer/${id}`, { method: 'POST' });
+        console.log("declineUSER CALLED");
+        const response = await fetch(`/admin/declineLawyer/${id}`, { method: 'POST' });
         const result = await response.json();
 
         if (result.success) {

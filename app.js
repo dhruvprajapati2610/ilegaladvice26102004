@@ -37,6 +37,10 @@ const cpcRoutes = require("./routes/cpcRoutes.js");
 const dowryRoutes = require("./routes/dowryRoutes.js");
 const powRoutes = require("./routes/powRoutes.js");
 const bsaRoutes = require('./routes/bsaRoutes.js');
+const adminRoutes = require("./routes/adminRoutes.js");
+
+//FUNCTION IMPORTS
+const { isuAuthenticated } = require("./middleware/authMiddleware.js");
 
 require("dotenv").config();
 app.use(methodOverride("_method"));
@@ -181,14 +185,6 @@ const fileFilter = (req, file, cb) => {
 //   fileFilter: fileFilter,
 // });
 
-function isuAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  } else {
-    req.flash("error", "You need to be logged in to to access this page.");
-    res.redirect("/signup");
-  }
-}
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -264,6 +260,7 @@ app.use("/cpc", cpcRoutes);
 app.use("/dowry", dowryRoutes);
 app.use("/pow", powRoutes);
 app.use("/bsa", bsaRoutes);
+app.use("/admin", adminRoutes)
 
 app.get("/about-us", (req, res) => {
   res.render("aboutus");
@@ -345,60 +342,6 @@ app.get("/signup", async (req, res) => {
 //  }
 // });
 
-app.get("/admin", isuAuthenticated, async (req, res) => {
-  const userId = req.user.id;
-  const isAdminQuery = `select * from clientsignup where id = $1`;
-  const isAdmin = await pool.query(isAdminQuery, [userId]);
-  if (isAdmin.rows.length === 0) {
-    res.redirect("/");
-    return;
-  }
-  if (isAdmin.rows[0].is_admin === false) {
-    res.redirect("/");
-    return;
-  }
-  res.render("admin-page", { userId });
-});
-
-app.get("/notVerifiedLawyers", async (req, res) => {
-  const notVerifiedLawyersQuery = await pool.query(
-    "select * from lawyers where admin_verified = false"
-  );
-  const notVerifiedLawyers = notVerifiedLawyersQuery.rows;
-  if (notVerifiedLawyers.length > 0) {
-    res.json({ success: true, notVerifiedLawyers });
-  } else {
-    res.json({ successs: false, message: "No unverified available." });
-  }
-});
-
-app.post("/approveLawyer/:id", async (req, res) => {
-  const lawyerId = req.params.id;
-  try {
-    await pool.query("UPDATE lawyers SET admin_verified = true WHERE id = $1", [
-      lawyerId,
-    ]);
-    res.json({ success: true, message: "Lawyer approved successfully." });
-  } catch (error) {
-    console.error("Error approving lawyer:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to approve lawyer." });
-  }
-});
-
-app.post("/declineLawyer/:id", async (req, res) => {
-  const lawyerId = req.params.id;
-  try {
-    await pool.query("DELETE FROM lawyers WHERE id = $1", [lawyerId]);
-    res.json({ success: true, message: "Lawyer declined successfully." });
-  } catch (error) {
-    console.error("Error declining lawyer:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to decline lawyer." });
-  }
-});
 
 app.get("/forgetpassword", (req, res) => {
   res.render("login.ejs");
@@ -3942,37 +3885,6 @@ app.post("/login", (req, res, next) => {
       return res.status(500).send("Internal server error");
     }
   })(req, res, next);
-});
-
-app.post("/admin-login", async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.passw;
-  const query = "SELECT * FROM clientsignup WHERE email = $1";
-
-  try {
-    const result = await pool.query(query, [email]);
-
-    if (result.rows.length === 0) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid email or password" });
-    }
-
-    const user = result.rows[0];
-    const hashedPassword = user.passw;
-    const isMatch = await bcrypt.compare(password, hashedPassword);
-
-    if (isMatch) {
-      return res.redirect("/admin");
-    } else {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid email or password" });
-    }
-  } catch (error) {
-    console.error("Error during admin login:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
 });
 
 const sendEmailWithRetry = async (mailOptions, transporter, retries = 3) => {

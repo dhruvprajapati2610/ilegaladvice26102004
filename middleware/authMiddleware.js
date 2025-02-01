@@ -1,0 +1,10 @@
+function isuAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    req.flash("error", "You need to be logged in to to access this page.");
+    res.redirect("/signup");
+  }
+}
+
+module.exports = { isuAuthenticated };
