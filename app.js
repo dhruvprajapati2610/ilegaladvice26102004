@@ -28,6 +28,7 @@ const { fileLoader } = require("ejs");
 const { language } = require("googleapis/build/src/apis/language");
 const { cloudidentity } = require("googleapis/build/src/apis/cloudidentity");
 
+
 //ROUTE IMPORTS
 const ipcRoutes = require("./routes/ipcRoutes.js");
 const crpcRoutes = require("./routes/crpcRoutes.js");
@@ -40,7 +41,7 @@ const bsaRoutes = require('./routes/bsaRoutes.js');
 const adminRoutes = require("./routes/adminRoutes.js");
 
 //FUNCTION IMPORTS
-const { isuAuthenticated } = require("./middleware/authMiddleware.js");
+const { isuAuthenticated, communityAuthenticated } = require("./middleware/authMiddleware.js");
 
 require("dotenv").config();
 app.use(methodOverride("_method"));
@@ -1550,13 +1551,6 @@ app.get("/articlewriting", (req, res) => {
 //   }
 // });
 
-function communityAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  } else {
-    res.redirect("/communityLogin");
-  }
-}
 
 app.get("/communityLogin", (req, res) => {
   if (req.user && req.user.role === "lawyer") {
@@ -1851,7 +1845,7 @@ SELECT
     mutual_follower_names
 FROM suggestions
 WHERE 
-    (mutual_count > 0 OR followers_following_count > 0) -- Ensure relevance
+    (mutual_count > 0 OR followers_following_count > 0)
     AND lawyer_id NOT IN (SELECT followed_id FROM follow WHERE follower_id = $1) -- Exclude already followed lawyers
     AND lawyer_id NOT IN (
         SELECT followed_id 

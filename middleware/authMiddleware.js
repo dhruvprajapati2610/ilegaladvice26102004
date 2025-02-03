@@ -7,4 +7,12 @@ function isuAuthenticated(req, res, next) {
   }
 }
 
-module.exports = { isuAuthenticated };
+function communityAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect("/communityLogin");
+  }
+}
+
+module.exports = { isuAuthenticated, communityAuthenticated };
