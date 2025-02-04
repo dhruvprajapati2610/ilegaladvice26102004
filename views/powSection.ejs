@@ -69,18 +69,37 @@
                        
                           
                     </div>
-                    <!-- <div class="next-prev-section">
-                        <div class="prev-section">
-                            <a href="/pow/pow_section?section_number=<%=section_number - 1%>">
+                    <% if(data.section_number === 1){ %>
+                        <div class="next-prev-section">
+                            <div class="next-section">
+                                <a href="/pow/pow_section?section_number=<%=parseInt(data.section_number) + 1%>">
+                                <button id="next-btn"> Next<i class="fa-solid fa-forward"></i></button>
+                            </a>
+                            </div>
+                        </div>
+                        <% } else if(data.section_number === 37){ %>
+                        <div class="next-prev-section">
+                            <div class="prev-section">
+                                <a href="/pow/pow_section?section_number=<%=parseInt(data.section_number) - 1%>">
                                 <button id="prev-btn"> <i class="fa-solid fa-backward"></i>Previous</button>
                             </a>
-                            
+                            </div>
                         </div>
-                        <div class="next-section">
-                            <a href="/pow/pow_section?section_number=<%=section_number - 1%>"></a>
-                            <button id="next-btn"> Next<i class="fa-solid fa-forward"></i></button>
+                       <% }else { %>
+                        <div class="next-prev-section">
+                            <div class="prev-section">
+                                <a href="/pow/pow_section?section_number=<%=parseInt(data.section_number) - 1%>">
+                                <button id="prev-btn"> <i class="fa-solid fa-backward"></i>Previous</button>
+                            </a>
+                            </div>
+                            <div class="next-section">
+                                <a href="/pow/pow_section?section_number=<%=parseInt(data.section_number) + 1%>">
+                                <button id="next-btn"> Next<i class="fa-solid fa-forward"></i></button>
+                            </a>
+                            </div>
                         </div>
-                    </div> -->
+                       <% } %>
+    
                    
                     
                    

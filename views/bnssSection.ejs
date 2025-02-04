@@ -88,12 +88,12 @@
                                 </tr>
                                 <% data.slice(1).forEach(function(section) { %>
                                 <tr>
-                                  <td><%= section.section_number %></td>
-                                  <td><%= section.offence === 'NaN' ? 'N/A' : section.offence %></td>
-                                  <td><%= section.punishment === 'NaN' ? 'N/A' : section.punishment %></td>
-                                  <td><%= section.cognizance === 'NaN' ? 'N/A' : section.cognizance %></td>
-                                  <td><%= section.bail === 'NaN' ? 'N/A' : section.bail %></td>
-                                  <td><%= section.triable === 'NaN' ? 'N/A' : section.triable %></td>
+                                  <td><%- section.section_number %></td>
+                                  <td><%- section.offence === 'NaN' ? 'N/A' : section.offence %></td>
+                                  <td><%- section.punishment === 'NaN' ? 'N/A' : section.punishment %></td>
+                                  <td><%- section.cognizance === 'NaN' ? 'N/A' : section.cognizance %></td>
+                                  <td><%- section.bail === 'NaN' ? 'N/A' : section.bail %></td>
+                                  <td><%- section.triable === 'NaN' ? 'N/A' : section.triable %></td>
                                 </tr>
                                 <% }); %>
                               </table>

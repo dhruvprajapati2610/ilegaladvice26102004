@@ -128,3 +128,19 @@ exports.getBsaSectionsByChapterJSON = async (req, res) => {
     });
   }
 };
+
+exports.getBsaSectionById = async (req, res) => {
+  const id = req.query.id;
+  const query = "SELECT * FROM bsa_sections WHERE id = $1";
+
+  try {
+    const { rows } = await pool.query(query, [id]);
+    if (rows.length === 0) {
+      return res.status(404).send("Section not found");
+    }
+    res.render("bsaSection.ejs", { data: rows[0] });
+  } catch (err) {
+    console.error("Error executing query:", err);
+    res.status(500).send("Server error");
+  }
+};

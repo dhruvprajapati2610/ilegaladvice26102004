@@ -77,3 +77,19 @@ exports.searchDowrySections = async (req, res) => {
     });
   }
 };
+
+exports.getDowrySectionById = async (req, res) => {
+  const id = req.query.id;
+  const query = "SELECT * FROM dowry_prohibition WHERE id = $1";
+
+  try {
+    const { rows } = await pool.query(query, [id]);
+    if (rows.length === 0) {
+      return res.status(404).send("Section not found");
+    }
+    res.render("dowrySection.ejs", { data: rows[0] });
+  } catch (err) {
+    console.error("Error executing query:", err);
+    res.status(500).send("Server error");
+  }
+};

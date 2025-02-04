@@ -118,3 +118,19 @@ exports.getCpcSectionsByChapterJSON = async (req, res) => {
     });
   }
 };
+
+exports.getCpcSectionById = async (req, res) => {
+  const id = req.query.id;
+  const query = "SELECT * FROM cpc_sections WHERE id = $1";
+
+  try {
+    const { rows } = await pool.query(query, [id]);
+    if (rows.length === 0) {
+      return res.status(404).send("Section not found");
+    }
+    res.render("cpcSection.ejs", { data: rows[0] });
+  } catch (err) {
+    console.error("Error executing query:", err);
+    res.status(500).send("Server error");
+  }
+};
