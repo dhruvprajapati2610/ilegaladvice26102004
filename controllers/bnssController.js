@@ -21,6 +21,20 @@ exports.getBnssSectionsByChapter = async (req, res) => {
   }
 };
 
+exports.getBnssSectionNew = async (req, res) => {
+  let section_id = req.query.section_number;
+
+  const query = `SELECT * FROM bnss_sections WHERE id_serial = $1`;
+
+  try {
+    const { ids } = await pool.query(query, [section_id]);
+    res.render("bnssSection.ejs", { data: ids });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Server error");
+  }
+}
+
 exports.getBnssSection = async (req, res) => {
   let section_number = req.query.section_number;
   // Normalize the input section number by removing spaces
