@@ -278,8 +278,22 @@ app.get("/terms-of-use", (req, res) => {
 app.get("/contact-us", (req, res) => {
   res.render("contact-us");
 });
-app.get("/booking-page", (req, res) => {
-  res.render("booking-page");
+
+
+app.get("/booking-page", async (req, res) => {
+  try {
+    const result = await pool.query(`
+        SELECT bookingdate, preferreddate FROM client_appointment_details ORDER BY bookingdate DESC;
+      `);
+
+    const previousBookings = result.rows.map((row) => ({
+      appliedDate: new Date(row.bookingdate).toLocaleDateString("en-GB", {day: "2-digit", month: "short", year: "numeric"}),
+      appointmentDate: new Date(row.preferreddate).toLocaleDateString("en-GB", {day: "2-digit", month: "short", year: "numeric"})
+    }));
+    res.render("booking-page", {previousBookings});
+  } catch(err) {
+    console.log(err);
+  }
 });
 
 app.get("/", async (req, res) => {
@@ -4347,8 +4361,8 @@ app.post("/client-appointment-details", async (req, res) => {
   const { name, phone, date, city, areaofpractice } = req.body;
 
   // Validate required fields
-  if (!name || !phone || !date || !areaofpractice) {
-    return res.status(400).json({ error: "All fields are required" });
+  if (!name || !phone || !date || !city || !areaofpractice) {
+    return res.status(400).send({ error: "All fields are required" });
   }
 
   // SQL query to insert
@@ -4357,10 +4371,10 @@ app.post("/client-appointment-details", async (req, res) => {
   try {
     const result = await pool.query(sql, [name, phone, date, city, areaofpractice]);
 
-    res.json({message: "Appointment saved successfully", data: result.rows[0]});
-  } catch(err) {
+    res.redirect("/booking-page");
+  } catch (err) {
     console.error('Error inserting data into the database:', err);
-    res.status(500).json({ error: "Failed to save appointment details" });
+    res.status(500).send({ error: "Failed to save appointment details" });
   }
 })
 

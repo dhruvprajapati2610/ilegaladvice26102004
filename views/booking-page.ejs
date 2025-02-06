@@ -1,238 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Browse top-rated lawyers and advocates in India. Filter by state, city, expertise, experience, and more. Get expert legal advice today on iLegalAdvice!"
-    />
-    <meta
-      name="keywords"
-      content="Find lawyers in India, Best advocates in India, Expert legal advice online, Lawyers by state, Experienced lawyers"
-    />
-    <meta name="author" content="iLegalAdvice" />
-    <title>
-      Find the Best Lawyers and Legal Advice in India | iLegalAdvice
-    </title>
-    <link rel="canonical" href="https://www.ilegaladvice.com/find-lawyers" />
-    <link rel="icon" type="image/png" href="../uploads/logo.png" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
-    />
 
-    <link rel="stylesheet" href="booking-page.css" />
-  </head>
-  <body>
- 
-  
-  
-    <%- include('partials/header') %>
-  
-  
-  
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Browse top-rated lawyers and advocates in India. Filter by state, city, expertise, experience, and more. Get expert legal advice today on iLegalAdvice!" />
+  <meta name="keywords"
+    content="Find lawyers in India, Best advocates in India, Expert legal advice online, Lawyers by state, Experienced lawyers" />
+  <meta name="author" content="iLegalAdvice" />
+  <title>
+    Find the Best Lawyers and Legal Advice in India | iLegalAdvice
+  </title>
+  <link rel="canonical" href="https://www.ilegaladvice.com/find-lawyers" />
+  <link rel="icon" type="image/png" href="../uploads/logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css" />
+
+  <link rel="stylesheet" href="booking-page.css" />
+</head>
+
+<body>
+
+
+
+  <%- include('partials/header') %>
+
+
+
 
     <div class="body">
       <div class="main-body">
-            <div class="booking-container-0">
-             <div class="booking-container">
-                   <div class="booking-heading-container">
-                      <div class="booking-heading">
-                              <h2>Book An Appointment</h2>
-                      </div>
-                      <div class="booking-para">
-                        <p>Easily book an appointment with a lawyer through our seamless booking feature. Simply fill out a short form with your details, and our team will promptly contact you for confirmation. No hassle, no long wait times—just a quick and efficient way to connect with the right legal expert. Get the guidance you need, when you need it!</p>
-                      </div>
-                   </div>
-                   <div class="booking-from-container">
-                       <div class="booking-form">
-                        <form action="/client-appointment-details" method="post">
-                          <div class="input-fields">
-                           <div class="input-field if-field">
-                             <input
-                               type="text"
-                               name="name"
-                               id="client-name"
-                               placeholder="Name"
-                             />
-                           </div>
-                           <div class="input-field if-field">
-                             <input
-                               type="tel"
-                               name="phone"
-                               id="client-phone"
-                               placeholder="Contact number"
-                               required
-                             />
-                           </div>
-                           <div class="input-field if-field">
-                             <input
-                               type="date"
-                               name="date"
-                               id="client-date"
-                               placeholder="Select prefferd date"
-                               required
-                             />
-                           </div>
-                           <div class="input-field if-field">
-                             <div class="custom-select-g">
-                               <div
-                                 class="select-button-g"
-                                 role="combobox"
-                                 aria-labelledby="select button"
-                                 aria-haspopup="listbox"
-                                 aria-expanded="false"
-                                 aria-controls="select-dropdown-2"
-                               >
-                                 <span class="selected-value-g" name="city"
-                                   >Select city</span
-                                 >
-                                 <span class="arrow-g"></span>
-                               </div>
-                               <ul
-                                 class="select-dropdown-g"
-                                 role="listbox"
-                                 id="select-dropdown-2"
-                               ></ul>
-                             </div>
-                           </div>
-                           <div class="input-field if-field">
-                             <div class="custom-select-n" style="width: 200px">
-                               <select name="areaofpractice">
-                                 <option value="" class="select-aop">Select Area of Practice</option>
-                                 <option value="Divorce">Divorce</option>
-                                 <option value="Family Dispute">Family Dispute</option>
-                                 <option value="Child Custody">Child Custody</option>
-                                 <option value="Medical Negligence">
-                                   Medical Negligence
-                                 </option>
-                                 <option value="Criminal">Criminal</option>
-                                 <option value="Property">Property</option>
-                                 <option value="Cyber Crime">Cyber Crime</option>
-                                 <option value="Labour & Services">
-                                   Labour & Services
-                                 </option>
-                                 <option value="Landlord">Landlord</option>
-                                 <option value="Real Estate">Real Estate</option>
-                                 <option value="Trademark & copyright">
-                                   Trademark & Copyright
-                                 </option>
-                                 <option value="Startup">Startup</option>
-                                 <option value="Custom & Central Excises">
-                                   Custom & Central Excises
-                                 </option>
-                                 <option value="Banking & Finance">
-                                   Banking & Finance
-                                 </option>
-                                 <option value="Corporate">Corporate</option>
-                                 <option value="Gst & Tax">Gst & Tax</option>
-                                 <option value="Documentation">Documentation</option>
-                                 <option value="Consumer Court">Consumer Court</option>
-                                 <option value="Civil">Civil</option>
-                                 <option value="Check Bounce">Check Bounce</option>
-                                 <option value="RERA">RERA</option>
-                                 <option value="Litigation and Dispute Resolution">
-                                   Litigation and Dispute Resolution
-                                 </option>
-                                 <option value="Insurance">Insurance</option>
-                                 <option value="Immigration">Immigration</option>
-                                 <option value="international law">
-                                   International Law
-                                 </option>
-                                 <option value="Central Administrative Tribunal">
-                                   Central Administrative Tribunal
-                                 </option>
-                                 <option value="Maharashtra Administrative Tribunal">
-                                   Maharashtra Administrative Tribunal
-                                 </option>
-                                 <option value="Debts Recovery Tribunal">
-                                   Debts Recovery Tribunal
-                                 </option>
-                               </select>
-                             </div>
-                           </div>
-                          </div>
-                          <div class="btn-container">
-                           <div class="btn-layer"></div>
-                           <input
-                             type="submit"
-                             class="submit-btn"
-                             id="lawyer-signup-btn"
-                           />
-                         </div>
-                         </form>
-                       </div>
-                   </div>
-             </div>
-            </div> 
-            <div class="previous-booking-container-0">
-            <div class="previous-booking-container">
-              <div class="previous-booking-heading">
-                <h2>Previous Bookings</h2>
+        <div class="booking-container-0">
+          <div class="booking-container">
+            <div class="booking-heading-container">
+              <div class="booking-heading">
+                <h2>Book An Appointment</h2>
               </div>
-              <div class="previous-booking-table">
-                   <table class="booking-table">
-                    <colgroup>
-                      <col id="col-1">
-                      <col id="col-2" >
-                      <col id="col-3" >
-                      <col id="col-4" >
-                      <col id="col-5" >
+              <div class="booking-para">
+                <p>Easily book an appointment with a lawyer through our seamless booking feature. Simply fill out a
+                  short form with your details, and our team will promptly contact you for confirmation. No hassle, no
+                  long wait times—just a quick and efficient way to connect with the right legal expert. Get the
+                  guidance you need, when you need it!</p>
+              </div>
+            </div>
+            <div class="booking-from-container">
+              <div class="booking-form">
+                <form action="/client-appointment-details" method="post">
+                  <div class="input-fields">
+                    <div class="input-field if-field">
+                      <input type="text" name="name" id="client-name" placeholder="Name" />
+                    </div>
+                    <div class="input-field if-field">
+                      <input type="tel" name="phone" id="client-phone" placeholder="Contact number" required />
+                    </div>
+                    <div class="input-field if-field">
+                      <input type="date" name="date" id="client-date" placeholder="Select prefferd date" required />
+                    </div>
+                    <div class="input-field if-field">
+                      <div class="custom-select-g">
+                        <div class="select-button-g" role="combobox" aria-labelledby="select button"
+                          aria-haspopup="listbox" aria-expanded="false" aria-controls="select-dropdown-2">
+                          <span class="selected-value-g" name="city">Select city</span>
+                          <span class="arrow-g"></span>
+                        </div>
+                        <ul class="select-dropdown-g" role="listbox" id="select-dropdown-2"></ul>
+                      </div>
+                    </div>
+                    <div class="input-field if-field">
+                      <div class="custom-select-n" style="width: 200px">
+                        <select name="areaofpractice">
+                          <option value="" class="select-aop">Select Area of Practice</option>
+                          <option value="Divorce">Divorce</option>
+                          <option value="Family Dispute">Family Dispute</option>
+                          <option value="Child Custody">Child Custody</option>
+                          <option value="Medical Negligence">
+                            Medical Negligence
+                          </option>
+                          <option value="Criminal">Criminal</option>
+                          <option value="Property">Property</option>
+                          <option value="Cyber Crime">Cyber Crime</option>
+                          <option value="Labour & Services">
+                            Labour & Services
+                          </option>
+                          <option value="Landlord">Landlord</option>
+                          <option value="Real Estate">Real Estate</option>
+                          <option value="Trademark & copyright">
+                            Trademark & Copyright
+                          </option>
+                          <option value="Startup">Startup</option>
+                          <option value="Custom & Central Excises">
+                            Custom & Central Excises
+                          </option>
+                          <option value="Banking & Finance">
+                            Banking & Finance
+                          </option>
+                          <option value="Corporate">Corporate</option>
+                          <option value="Gst & Tax">Gst & Tax</option>
+                          <option value="Documentation">Documentation</option>
+                          <option value="Consumer Court">Consumer Court</option>
+                          <option value="Civil">Civil</option>
+                          <option value="Check Bounce">Check Bounce</option>
+                          <option value="RERA">RERA</option>
+                          <option value="Litigation and Dispute Resolution">
+                            Litigation and Dispute Resolution
+                          </option>
+                          <option value="Insurance">Insurance</option>
+                          <option value="Immigration">Immigration</option>
+                          <option value="international law">
+                            International Law
+                          </option>
+                          <option value="Central Administrative Tribunal">
+                            Central Administrative Tribunal
+                          </option>
+                          <option value="Maharashtra Administrative Tribunal">
+                            Maharashtra Administrative Tribunal
+                          </option>
+                          <option value="Debts Recovery Tribunal">
+                            Debts Recovery Tribunal
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="btn-container">
+                    <div class="btn-layer"></div>
+                    <input type="submit" class="submit-btn" id="lawyer-signup-btn" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="previous-booking-container-0">
+          <div class="previous-booking-container">
+            <div class="previous-booking-heading">
+              <h2>Previous Bookings</h2>
+            </div>
+            <div class="previous-booking-table">
+              <table class="booking-table">
+                <colgroup>
+                  <col id="col-1">
+                  <col id="col-2">
+                  <col id="col-3">
+                  <col id="col-4">
+                  <col id="col-5">
 
-                    </colgroup>
-                     
-                        <tr>
-                          <th>No</th>
-                          <th>Applied Date</th>
-                          <th>Appointment Date</th>
-                          <th>Lawyer Appointed</th>
-                          <th>Appointment Status</th>
-                        </tr>
-                     
-                     
-                        <tr>
-                          <td>1</td>
-                          <td>10-02-2025</td>
-                          <td>20-02-2025</td>
-                          <td class="lawyer-profile">
-                            <div class="lawyer-profile-img-container">
-                                <div class="lawyer-profile-img">
-                                  <img src="../uploads/avatar.png" alt="">
-                                </div>
-                            </div>
-                            <div class="lawyer-name">
-                            <a href="#">Adv Sahil Shelavale</a>
-                            </div>
-                          </td>
-                          <td>Confirmed</td>
-                        </tr>
-                        
-                       
-                   </table>
-              </div>
+                </colgroup>
+
+                <tr>
+                  <th>No</th>
+                  <th>Applied Date</th>
+                  <th>Appointment Date</th>
+                  <th>Lawyer Appointed</th>
+                  <th>Appointment Status</th>
+                </tr>
+
+                <% previousBookings.forEach((booking, index)=> { %>
+                  <tr>
+                    <td>
+                      <%= index + 1 %>
+                    </td>
+                    <td>
+                      <%= booking.appliedDate %>
+                    </td>
+                    <td>
+                      <%= booking.appointmentDate %>
+                    </td>
+                    <td class="lawyer-profile">
+                      <div class="lawyer-profile-img-container">
+                        <div class="lawyer-profile-img">
+                          <img src="../uploads/avatar.png" alt="">
+                        </div>
+                      </div>
+                      <div class="lawyer-name">
+                        <a href="#">Adv Sahil Shelavale</a>
+                      </div>
+                    </td>
+                    <td>Confirmed</td>
+                  </tr>
+
+                  <% }) %>
+
+
+
+              </table>
             </div>
-            </div>
+          </div>
+        </div>
 
       </div>
-      
+
       <%- include('partials/footer') %>
-    
+
     </div>
 
     <script>
-      
+
 
       const showmenu = (toggleId, navId) => {
         const toggle = document.getElementById(toggleId),
@@ -287,8 +254,8 @@
         }
       };
       addEventListener("resize", removeStyle);
-      
-  
+
+
 
       const customSelects = document.querySelectorAll(".custom-select-1");
       const selectButtons = document.querySelectorAll(".select-button");
@@ -417,93 +384,93 @@ then close all select boxes: */
 
 
       const customSelectsG = document.querySelectorAll(".custom-select-g");
-const selectButtonsG = document.querySelectorAll(".select-button-g");
-const selectedValuesG = document.querySelectorAll(".selected-value-g");
-const optionsListsG = document.querySelectorAll(".select-dropdown-g");
+      const selectButtonsG = document.querySelectorAll(".select-button-g");
+      const selectedValuesG = document.querySelectorAll(".selected-value-g");
+      const optionsListsG = document.querySelectorAll(".select-dropdown-g");
 
-const maharashtraCities = [
-  "Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara",
-  "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli",
-  "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban",
-  "Nagpur", "Nanded", "Nandurbar", "Nashik", "Navi Mumbai", "Osmanabad",
-  "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara",
-  "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"
-];
+      const maharashtraCities = [
+        "Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara",
+        "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli",
+        "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban",
+        "Nagpur", "Nanded", "Nandurbar", "Nashik", "Navi Mumbai", "Osmanabad",
+        "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara",
+        "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"
+      ];
 
-function updateCityDropdown() {
-  const cityDropdown = document.querySelector("#select-dropdown-2");
-  const citySelectButton = cityDropdown.previousElementSibling;
-  const citySelectedValue = citySelectButton.querySelector(".selected-value-g");
+      function updateCityDropdown() {
+        const cityDropdown = document.querySelector("#select-dropdown-2");
+        const citySelectButton = cityDropdown.previousElementSibling;
+        const citySelectedValue = citySelectButton.querySelector(".selected-value-g");
 
-  cityDropdown.innerHTML = ""; // Clear existing options
+        cityDropdown.innerHTML = ""; // Clear existing options
 
-  maharashtraCities.forEach((city) => {
-    const cityOption = document.createElement("li");
-    cityOption.setAttribute("role", "option-g");
-    cityOption.innerHTML = `
+        maharashtraCities.forEach((city) => {
+          const cityOption = document.createElement("li");
+          cityOption.setAttribute("role", "option-g");
+          cityOption.innerHTML = `
       <input type="radio" id="${city}" name="city" value="${city}" />
       <label for="${city}">${city}</label>
     `;
-    cityDropdown.appendChild(cityOption);
+          cityDropdown.appendChild(cityOption);
 
-    cityOption.addEventListener("keyup", function (e) {
-      if (e.key === "Enter") {
-        citySelectedValue.textContent = cityOption.children[1].textContent;
-        cityDropdown.parentNode.classList.remove("active");
+          cityOption.addEventListener("keyup", function (e) {
+            if (e.key === "Enter") {
+              citySelectedValue.textContent = cityOption.children[1].textContent;
+              cityDropdown.parentNode.classList.remove("active");
+            }
+          });
+
+          cityOption.addEventListener("click", function () {
+            citySelectedValue.textContent = cityOption.children[1].textContent;
+            cityDropdown.parentNode.classList.remove("active");
+          });
+        });
+
+        citySelectedValue.textContent = "Select city"; // Default text
       }
-    });
 
-    cityOption.addEventListener("click", function () {
-      citySelectedValue.textContent = cityOption.children[1].textContent;
-      cityDropdown.parentNode.classList.remove("active");
-    });
-  });
-
-  citySelectedValue.textContent = "Select city"; // Default text
-}
-
-function enableCityDropdown() {
-  const cityCustomSelect = document.querySelector("#select-dropdown-2").parentNode;
-  cityCustomSelect.classList.remove("disabled");
-}
-
-// Enable city dropdown by default
-document.querySelector("#select-dropdown-2").parentNode.classList.remove("disabled");
-
-// Populate cities on page load
-updateCityDropdown();
-
-customSelectsG.forEach((customSelect, index) => {
-  const selectBtnG = selectButtonsG[index];
-  const selectedValueG = selectedValuesG[index];
-  const optionsListG = optionsListsG[index];
-
-  selectBtnG.addEventListener("click", () => {
-    if (!customSelect.classList.contains("disabled")) {
-      customSelect.classList.toggle("active");
-      selectBtnG.setAttribute(
-        "aria-expanded",
-        selectBtnG.getAttribute("aria-expanded") === "true" ? "false" : "true"
-      );
-    }
-  });
-
-  optionsListG.querySelectorAll("li").forEach((option) => {
-    function handler(e) {
-      if ((e.type === "click" && e.clientX !== 0 && e.clientY !== 0) || e.key === "Enter") {
-        selectedValueG.textContent = option.children[1].textContent;
-        customSelect.classList.remove("active");
+      function enableCityDropdown() {
+        const cityCustomSelect = document.querySelector("#select-dropdown-2").parentNode;
+        cityCustomSelect.classList.remove("disabled");
       }
-    }
 
-    option.addEventListener("keyup", handler);
-    option.addEventListener("click", handler);
-  });
-});
+      // Enable city dropdown by default
+      document.querySelector("#select-dropdown-2").parentNode.classList.remove("disabled");
+
+      // Populate cities on page load
+      updateCityDropdown();
+
+      customSelectsG.forEach((customSelect, index) => {
+        const selectBtnG = selectButtonsG[index];
+        const selectedValueG = selectedValuesG[index];
+        const optionsListG = optionsListsG[index];
+
+        selectBtnG.addEventListener("click", () => {
+          if (!customSelect.classList.contains("disabled")) {
+            customSelect.classList.toggle("active");
+            selectBtnG.setAttribute(
+              "aria-expanded",
+              selectBtnG.getAttribute("aria-expanded") === "true" ? "false" : "true"
+            );
+          }
+        });
+
+        optionsListG.querySelectorAll("li").forEach((option) => {
+          function handler(e) {
+            if ((e.type === "click" && e.clientX !== 0 && e.clientY !== 0) || e.key === "Enter") {
+              selectedValueG.textContent = option.children[1].textContent;
+              customSelect.classList.remove("active");
+            }
+          }
+
+          option.addEventListener("keyup", handler);
+          option.addEventListener("click", handler);
+        });
+      });
 
 
-     
+
     </script>
-  </body>
-</html>
+</body>
 
+</html>
