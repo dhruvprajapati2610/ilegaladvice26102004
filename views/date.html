@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Date Placeholder</title>
+  <style>
+    /* Container for the date input */
+    .date-input-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Hide the default placeholder */
+    input[type="date"] {
+      color: transparent; /* Hide the default text */
+    }
+
+    /* Show the default placeholder when the input has a value */
+    input[type="date"]:not(:focus):not(:valid) {
+      color: transparent;
+    }
+
+    /* Custom placeholder */
+    .date-input-container::before {
+      content: "Preferred Date"; /* Your custom placeholder text */
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      color: #999; /* Placeholder color */
+      pointer-events: none; /* Ensure clicks go through to the input */
+    }
+
+    /* Hide the custom placeholder when the input is focused or has a value */
+    input[type="date"]:focus + .date-input-container::before,
+    input[type="date"]:valid + .date-input-container::before {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="date-input-container">
+    <input type="date" id="dateInput" required>
+  </div>
+
+  <script>
+    const dateInput = document.getElementById('dateInput');
+
+    // Ensure the placeholder is hidden when a date is selected
+    dateInput.addEventListener('input', () => {
+      if (dateInput.value) {
+        dateInput.classList.add('has-value');
+      } else {
+        dateInput.classList.remove('has-value');
+      }
+    });
+  </script>
+</body>
+</html>

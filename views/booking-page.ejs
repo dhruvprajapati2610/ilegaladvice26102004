@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Browse top-rated lawyers and advocates in India. Filter by state, city, expertise, experience, and more. Get expert legal advice today on iLegalAdvice!"
+    />
+    <meta
+      name="keywords"
+      content="Find lawyers in India, Best advocates in India, Expert legal advice online, Lawyers by state, Experienced lawyers"
+    />
+    <meta name="author" content="iLegalAdvice" />
+    <title>
+      Find the Best Lawyers and Legal Advice in India | iLegalAdvice
+    </title>
+    <link rel="canonical" href="https://www.ilegaladvice.com/find-lawyers" />
+    <link rel="icon" type="image/png" href="../uploads/logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
+    />
+
+    <link rel="stylesheet" href="/booking-page.css" />
+  </head>
+  <body>
+ 
+  
+  
+    <%- include('partials/header') %>
+  
+
+    <div class="body">
+      <div class="main-body">
+            <div class="booking-container-0">
+             <div class="booking-container">
+                   <div class="booking-heading-container">
+                      <div class="booking-heading">
+                              <h2>Book An Appointment</h2>
+                      </div>
+                      <div class="booking-para">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur iste iusto magni eum consectetur neque dolore veniam optio doloremque, architecto sapiente qui cupiditate sed ut sunt hic repellat voluptate explicabo.</p>
+                      </div>
+                   </div>
+                   <div class="booking-from-container">
+                       <div class="booking-form">
+                        <form action="">
+                         <div class="input-fields">
+                          <div class="input-field if-field">
+                            <input
+                              type="text"
+                              name="name"
+                              id="client-name"
+                              placeholder="Name"
+                            />
+                          </div>
+                          <div class="input-field if-field">
+                            <input
+                              type="tel"
+                              name="phone"
+                              id="client-phone"
+                              placeholder="Contact number"
+                              required
+                            />
+                          </div>
+                          <div class="input-field if-field">
+                            <input
+                              type="date"
+                              name="date"
+                              id="client-date"
+                              placeholder="Select prefferd date"
+                              required
+                            />
+                          </div>
+                          <div class="input-field if-field">
+                            <div class="custom-select-g">
+                              <div
+                                class="select-button-g"
+                                role="combobox"
+                                aria-labelledby="select button"
+                                aria-haspopup="listbox"
+                                aria-expanded="false"
+                                aria-controls="select-dropdown-2"
+                              >
+                                <span class="selected-value-g" name="city"
+                                  >Select city</span
+                                >
+                                <span class="arrow-g"></span>
+                              </div>
+                              <ul
+                                class="select-dropdown-g"
+                                role="listbox"
+                                id="select-dropdown-2"
+                              ></ul>
+                            </div>
+                          </div>
+                          <div class="input-field if-field">
+                            <div class="custom-select-n" style="width: 200px">
+                              <select name="areaofpractice">
+                                <option value="" class="select-aop">Select Area of Practice</option>
+                                <option value="Divorce">Divorce</option>
+                                <option value="Family Dispute">Family Dispute</option>
+                                <option value="Child Custody">Child Custody</option>
+                                <option value="Medical Negligence">
+                                  Medical Negligence
+                                </option>
+                                <option value="Criminal">Criminal</option>
+                                <option value="Property">Property</option>
+                                <option value="Cyber Crime">Cyber Crime</option>
+                                <option value="Labour & Services">
+                                  Labour & Services
+                                </option>
+                                <option value="Landlord">Landlord</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Trademark & copyright">
+                                  Trademark & Copyright
+                                </option>
+                                <option value="Startup">Startup</option>
+                                <option value="Custom & Central Excises">
+                                  Custom & Central Excises
+                                </option>
+                                <option value="Banking & Finance">
+                                  Banking & Finance
+                                </option>
+                                <option value="Corporate">Corporate</option>
+                                <option value="Gst & Tax">Gst & Tax</option>
+                                <option value="Documentation">Documentation</option>
+                                <option value="Consumer Court">Consumer Court</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Check Bounce">Check Bounce</option>
+                                <option value="RERA">RERA</option>
+                                <option value="Litigation and Dispute Resolution">
+                                  Litigation and Dispute Resolution
+                                </option>
+                                <option value="Insurance">Insurance</option>
+                                <option value="Immigration">Immigration</option>
+                                <option value="international law">
+                                  International Law
+                                </option>
+                                <option value="Central Administrative Tribunal">
+                                  Central Administrative Tribunal
+                                </option>
+                                <option value="Maharashtra Administrative Tribunal">
+                                  Maharashtra Administrative Tribunal
+                                </option>
+                                <option value="Debts Recovery Tribunal">
+                                  Debts Recovery Tribunal
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                         </div>
+                         <div class="btn-container">
+                          <div class="btn-layer"></div>
+                          <input
+                            type="submit"
+                            class="submit-btn"
+                            id="lawyer-signup-btn"
+                          />
+                        </div>
+                        </form>
+                       </div>
+                   </div>
+             </div>
+            </div> 
+             <div class="previous-booking-container">
+
+             </div>
+
+      </div>
+      
+      <%- include('partials/footer') %>
+    </div>
+
+    <script>
+      
+
+      const showmenu = (toggleId, navId) => {
+        const toggle = document.getElementById(toggleId),
+          nav = document.getElementById(navId);
+
+        toggle.addEventListener("click", () => {
+          nav.classList.toggle("show-menu");
+          toggle.classList.toggle("show-icon");
+        });
+      };
+      showmenu("nav-toggle", "nav-menu");
+
+      const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+      dropdownItems.forEach((item) => {
+        const dropdownButton = item.querySelector(".dropdown-button");
+
+        dropdownButton.addEventListener("click", () => {
+          const showDropdown = document.querySelector(".show-dropdown");
+
+          toggleItem(item);
+
+          if (showDropdown && showDropdown !== item) {
+            toggleItem(showDropdown);
+          }
+        });
+      });
+
+      const toggleItem = (item) => {
+        const dropdownContainer = item.querySelector(".dropdown-container");
+
+        if (item.classList.contains("show-dropdown")) {
+          dropdownContainer.removeAttribute("style");
+          item.classList.remove("show-dropdown");
+        } else {
+          dropdownContainer.style.height =
+            dropdownContainer.scrollHeight + "px";
+          item.classList.add("show-dropdown");
+        }
+      };
+      const mediaQuery = matchMedia("(min-width:1118px)"),
+        dropdownContainer = document.querySelectorAll(".dropdown-container");
+
+      const removeStyle = () => {
+        if (mediaQuery.matches) {
+          dropdownContainer.forEach((e) => {
+            e.removeAttribute("style");
+          });
+          dropdownContainer.forEach((e) => {
+            e.classList.remove("show-dropdown");
+          });
+        }
+      };
+      addEventListener("resize", removeStyle);
+      
+  
+
+      const customSelects = document.querySelectorAll(".custom-select-1");
+      const selectButtons = document.querySelectorAll(".select-button");
+      const selectedValues = document.querySelectorAll(".selected-value");
+      const optionsLists = document.querySelectorAll(".select-dropdown");
+      const isPhoneView = window.matchMedia("(max-width: 640px)").matches;
+      //console.log(isPhoneView);
+      document.addEventListener("DOMContentLoaded", () => {
+        if (isPhoneView) {
+          console.log(isPhoneView);
+          // console.log("hello")
+          const viewLawyerButtons = document.querySelectorAll(".lawyer-box");
+          //console.log(viewLawyerButtons);
+          viewLawyerButtons.forEach(function (button) {
+            button.addEventListener("click", async (event) => {
+              console.log(event);
+              const lawyerId = button.dataset.lawyerId;
+              try {
+                const response = await fetch(
+                  `/lawyersprofile?lawyerId=${lawyerId}`,
+                  {
+                    method: "GET",
+                    headers: {
+                      "Content-type": "application/json",
+                    },
+                    // body: JSON.stringify({ lawyerId })
+                  }
+                );
+                if (response.ok) {
+                  window.location.href = `/lawyersprofile?lawyerId=${lawyerId}`;
+                } else {
+                  const errorData = await response.json();
+                  console.error("Error fetching lawyer profile:", errorData);
+                }
+              } catch (error) {
+                console.error("error:", error);
+              }
+            });
+          });
+        } else {
+          console.log(isPhoneView);
+          console.log("hello2");
+          const viewLawyerButtons = document.querySelectorAll(".contact-btn");
+          viewLawyerButtons.forEach((button) => {
+            button.addEventListener("click", async (event) => {
+              const lawyerId = event.target.dataset.lawyerId;
+              try {
+                const response = await fetch(
+                  `/lawyersprofile?lawyerId=${lawyerId}`,
+                  {
+                    method: "GET",
+                    headers: {
+                      "Content-type": "application/json",
+                    },
+                    // body: JSON.stringify({ lawyerId })
+                  }
+                );
+                if (response.ok) {
+                  window.location.href = `/lawyersprofile?lawyerId=${lawyerId}`;
+                } else {
+                  const errorData = await response.json();
+                  console.error("Error fetching lawyer profile:", errorData);
+                }
+              } catch (error) {
+                console.error("error:", error);
+              }
+            });
+          });
+        }
+      });
+
+      customSelects.forEach((customSelect, index) => {
+        const selectBtn = selectButtons[index];
+        const selectedValue = selectedValues[index];
+        const optionsList = optionsLists[index];
+
+        selectBtn.addEventListener("click", () => {
+          customSelect.classList.toggle("active");
+          selectBtn.setAttribute(
+            "aria-expanded",
+            selectBtn.getAttribute("aria-expanded") === "true"
+              ? "false"
+              : "true"
+          );
+        });
+
+        optionsList.querySelectorAll("li").forEach((option) => {
+          function handler(e) {
+            if (
+              (e.type === "click" && e.clientX !== 0 && e.clientY !== 0) ||
+              e.key === "Enter"
+            ) {
+              selectedValue.textContent = option.children[1].textContent;
+              customSelect.classList.remove("active");
+            }
+          }
+
+          option.addEventListener("keyup", handler);
+          option.addEventListener("click", handler);
+        });
+      });
+
+      var x, i, j, l, ll, selElmnt, a, b, c;
+      /* Look for any elements with the class "custom-select": */
+      x = document.getElementsByClassName("custom-select-n");
+      l = x.length;
+      for (i = 0; i < l; i++) {
+        selElmnt = x[i].getElementsByTagName("select")[0];
+        ll = selElmnt.length;
+        /* For each element, create a new DIV that will act as the selected item: */
+        a = document.createElement("DIV");
+        a.setAttribute("class", "select-selected");
+        a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+        x[i].appendChild(a);
+        /* For each element, create a new DIV that will contain the option list: */
+        b = document.createElement("DIV");
+        b.setAttribute("class", "select-items select-hide");
+        for (j = 1; j < ll; j++) {
+          /* For each option in the original select element,
+    create a new DIV that will act as an option item: */
+          c = document.createElement("DIV");
+          c.innerHTML = selElmnt.options[j].innerHTML;
+          c.addEventListener("click", function (e) {
+            /* When an item is clicked, update the original select box,
+        and the selected item: */
+            var y, i, k, s, h, sl, yl;
+            s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+            sl = s.length;
+            h = this.parentNode.previousSibling;
+            for (i = 0; i < sl; i++) {
+              if (s.options[i].innerHTML == this.innerHTML) {
+                s.selectedIndex = i;
+                h.innerHTML = this.innerHTML;
+                y = this.parentNode.getElementsByClassName("same-as-selected");
+                yl = y.length;
+                for (k = 0; k < yl; k++) {
+                  y[k].removeAttribute("class");
+                }
+                this.setAttribute("class", "same-as-selected");
+                break;
+              }
+            }
+            h.click();
+          });
+          b.appendChild(c);
+        }
+        x[i].appendChild(b);
+        a.addEventListener("click", function (e) {
+          /* When the select box is clicked, close any other select boxes,
+    and open/close the current select box: */
+          e.stopPropagation();
+          closeAllSelect(this);
+          this.nextSibling.classList.toggle("select-hide");
+          this.classList.toggle("select-arrow-active");
+        });
+      }
+
+      function closeAllSelect(elmnt) {
+        /* A function that will close all select boxes in the document,
+  except the current select box: */
+        var x,
+          y,
+          i,
+          xl,
+          yl,
+          arrNo = [];
+        x = document.getElementsByClassName("select-items");
+        y = document.getElementsByClassName("select-selected");
+        xl = x.length;
+        yl = y.length;
+        for (i = 0; i < yl; i++) {
+          if (elmnt == y[i]) {
+            arrNo.push(i);
+          } else {
+            y[i].classList.remove("select-arrow-active");
+          }
+        }
+        for (i = 0; i < xl; i++) {
+          if (arrNo.indexOf(i)) {
+            x[i].classList.add("select-hide");
+          }
+        }
+      }
+
+      /* If the user clicks anywhere outside the select box,
+then close all select boxes: */
+      document.addEventListener("click", closeAllSelect);
+
+
+
+
+
+     
+    </script>
+  </body>
+</html>
