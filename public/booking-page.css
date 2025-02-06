@@ -436,10 +436,13 @@ a {
     column-gap: 5rem;
     padding-left: 2%;
     width: 100%;
+    flex-direction: column;
+    row-gap: 5rem;
+    padding: 0rem 4rem 1rem 4rem;
 }
 .input-fields .input-field{
-    height: 60px;
-    width: 460px;
+    height: 50px;
+    width: 430px;
    
 }
 .input-field input{
@@ -454,17 +457,17 @@ a {
     transition: all 0.3s ease;
 }
 .input-fields input{
-    font-size: 20px!important;
+    font-size: 17px!important;
     color:#a5a5a5!important;
     
 }
 .if-field{
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .btn-container{
-    height: 50px;
-    width: 15%;
+    height: 43px;
+    width: 13%;
     margin-top: 20px;
     border-radius: 3px;
     position: relative;
@@ -475,7 +478,7 @@ a {
     width: 100%;
     position: absolute;
     background: linear-gradient(300deg, #efaa00, #e0a432, #e8b046);
-    border-radius: 7px;
+    border-radius: 6px;
     transition: all 0.4s ease;
 }
 .submit-btn{
@@ -488,11 +491,11 @@ a {
     color: #fff;
     padding-left: 0;
     border-radius: 9px;
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 500;
     cursor: pointer;
     text-align: center;
-    line-height: 48px;
+    line-height: 44px;
 }
 .input-field input::placeholder{
     color: #999;
@@ -643,7 +646,7 @@ a {
     font-family: Arial;
     width: 100% !important;
     height: 100%;
-    font-size: 20px;
+    font-size: 17px;
     color: #000 !important;
     border: 1px solid lightgrey;
     border-bottom-width: 2px;
@@ -661,7 +664,7 @@ display: none; /*hide original SELECT element: */
 .select-selected:after {
 position: absolute;
 content: "";
-top: 25px;
+top: 21px;
 right: 10px;
 width: 0;
 height: 0;
@@ -672,13 +675,13 @@ border-color: #a5a5a5 transparent transparent transparent;
 /* Point the arrow upwards when the select box is open (active): */
 .select-selected.select-arrow-active:after {
 border-color: transparent transparent #a5a5a5 transparent;
-top: 18px;
+top: 15px;
 }
 
 /* style the items (options), including the selected item: */
 .select-items div,.select-selected {
 color: #a5a5a5;
-padding: 17px 16px;
+padding: 15px 16px;
 cursor: pointer;
 width: 100%;
 overflow: hidden;
@@ -697,7 +700,7 @@ position: absolute;
 background-color: white;
 opacity: 100;
 top: 100%;
-width: 460px;
+width: 430px;
 left: -1;
 top: 128%;
 right: 0;
@@ -713,6 +716,7 @@ color: #000!important;
 }
 .select-items div{
     color: #000!important;
+    padding: 10px 16px;
 }
 /* Hide the items when the select box is closed: */
 .select-hide {
@@ -749,7 +753,7 @@ background-color: rgba(0, 0, 0, 0.1);
     align-items: center;
     border-radius: 6px;
     border: 1px solid lightgrey;
-    font-size: 20px;
+    font-size: 17px;
     height: 100%;
     color: #999999;
 }
@@ -777,7 +781,6 @@ background-color: rgba(0, 0, 0, 0.1);
     background-color: #fff;
     border: 1px solid #caced1;
     border-radius: 4px;
-    padding: 10px;
     margin-top: 10px;
     max-height: 150px;
     overflow-y: auto;
@@ -814,13 +817,14 @@ background-color: rgba(0, 0, 0, 0.1);
     position: relative;
     cursor: pointer;
     display: flex;
-    gap: 1rem;
+    padding: 7px 16px;
     align-items: center;
+    font-size: 20px;
 }
 
 .select-dropdown-g li label {
     width: 100%;
-    padding: 2px 10px;
+    padding: 0px 0px;
     cursor: pointer;
     display: flex;
     gap: 1rem;
@@ -886,11 +890,13 @@ background-color: rgba(0, 0, 0, 0.1);
 
 
 .booking-container-0{
-    display: flex;
-        padding: 2rem 4rem;
+    display: flex;    
+    padding: 2rem 5rem 4rem 4rem;
         border-radius: 14px;
         box-shadow: 0.1rem 0.1rem 0.5rem rgba(0, 0, 0, 0.3);
         border: 1px solid rgb(255, 255, 255);
+        flex-direction: column;
+        row-gap: 5rem;
 }
 .booking-container{
     display: flex;
@@ -907,7 +913,8 @@ background-color: rgba(0, 0, 0, 0.1);
     font-size: 40px;
 }
 .booking-para p{
-    font-size:20px
+    font-size: 18px;
+    text-align: justify;
 }
 .booking-form-container{
     display: flex;
@@ -934,6 +941,85 @@ background-color: rgba(0, 0, 0, 0.1);
     gap: 1rem;
     row-gap: 1rem;
 }
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #a5a5a5; 
+   
+  }
+  .previous-booking-container-0{
+    border-radius: 14px;
+    box-shadow: 0.1rem 0.1rem 0.5rem rgba(0, 0, 0, 0.3);
+    border: 1px solid rgb(255, 255, 255);
+    padding: 2rem 3rem 4rem 3rem;
+    width: 100%;
+}
+ .previous-booking-container{
+    display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+ } 
+ .previous-booking-heading h2{
+    font-size: 35px;
+ }
+.booking-table{
+    width: 90%;
+    border-collapse: collapse;
+    font-size: 18px;
+    text-align: left;
+    table-layout: fixed;
+}
+.booking-table th{
+    background-color: #f7f8fa;
+    padding: 15px 6px;
+}
+.booking-table td{
+    font-size: 16px;
+    padding: 10px 6px;
+}
+.booking-table th,.booking-table td{
+    border: 1px solid #b8b8b9;
+    vertical-align: top;
+    padding-left: 15px;
+    color: var(--text-color);
+}
+#col-1{
+    width: 5%;
+}
+#col-2,#col-3{
+    width: 20%;
+}
+#col-4{
+width: 30%;
+}
+#col-5{
+    width: 20%;
+}
+.lawyer-profile{
+    display: flex;
+    align-items: center;
+
+}
+.lawyer-profile-img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.lawyer-profile-img img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+.lawyer-name{
+    cursor: pointer;
+}
+.lawyer-name a{
+    color: var(--text-color);
+}
+.lawyer-name a:hover{
+    color: goldenrod;
+    text-decoration: underline;
+}
+
 
 
 
@@ -1034,6 +1120,7 @@ footer{
     outline: none;
     padding-left: 15px;
     border-radius: 6px;
+    padding-right: 5px;
     border: 1px solid lightgrey;
     border-bottom-width: 2px;
     font-size: 17px;
