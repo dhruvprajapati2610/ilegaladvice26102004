@@ -278,6 +278,9 @@ app.get("/terms-of-use", (req, res) => {
 app.get("/contact-us", (req, res) => {
   res.render("contact-us");
 });
+app.get("/booking-page", (req, res) => {
+  res.render("booking-page");
+});
 
 app.get("/", async (req, res) => {
   try {
@@ -1013,9 +1016,8 @@ app.get("/filter-lawyers", async (req, res) => {
     if (ratingFilter.includes("-")) {
       const [minRating, maxRating] = ratingFilter.split("-").map(Number);
       if (!isNaN(minRating) && !isNaN(maxRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${
-          queryParams.length + 1
-        } AND $${queryParams.length + 2}`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${queryParams.length + 1
+          } AND $${queryParams.length + 2}`;
         queryParams.push(minRating, maxRating);
       } else {
         console.error(
@@ -1026,9 +1028,8 @@ app.get("/filter-lawyers", async (req, res) => {
     } else {
       const exactRating = Number(ratingFilter);
       if (!isNaN(exactRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${
-          queryParams.length + 1
-        }`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${queryParams.length + 1
+          }`;
         queryParams.push(exactRating);
       } else {
         console.error("Invalid rating value in ratingFilter:", ratingFilter);
@@ -1036,9 +1037,8 @@ app.get("/filter-lawyers", async (req, res) => {
     }
   }
 
-  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${
-    queryParams.length + 2
-  }`;
+  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2
+    }`;
   queryParams.push(limit, offset);
 
   console.log("Query Params:", queryParams);
@@ -1296,8 +1296,8 @@ app.get("/search-homepage-lawyers", async (req, res) => {
   const whereClauseString =
     whereClause.length > 0
       ? `WHERE ${whereClause.join(
-          " AND "
-        )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
+        " AND "
+      )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
       : `WHERE l.admin_verified = TRUE AND l.lead_community = TRUE`;
 
   try {
@@ -4342,6 +4342,28 @@ app.post("/delArticle", async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
+
+app.post("/client-appointment-details", async (req, res) => {
+  const { name, phone, date, city, areaofpractice } = req.body;
+
+  // Validate required fields
+  if (!name || !phone || !date || !areaofpractice) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  // SQL query to insert
+  const sql = `INSERT INTO client_appointment_details (name, userContactNo, preferredDate, city, areaofPractice) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+
+  try {
+    const result = await pool.query(sql, [name, phone, date, city, areaofpractice]);
+
+    res.json({message: "Appointment saved successfully", data: result.rows[0]});
+  } catch(err) {
+    console.error('Error inserting data into the database:', err);
+    res.status(500).json({ error: "Failed to save appointment details" });
+  }
+})
+
 
 passport.use(
   "client-login",
