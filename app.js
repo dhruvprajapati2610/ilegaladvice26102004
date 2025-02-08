@@ -287,11 +287,11 @@ app.get("/booking-page", async (req, res) => {
       `);
 
     const previousBookings = result.rows.map((row) => ({
-      appliedDate: new Date(row.bookingdate).toLocaleDateString("en-GB", {day: "2-digit", month: "short", year: "numeric"}),
-      appointmentDate: new Date(row.preferreddate).toLocaleDateString("en-GB", {day: "2-digit", month: "short", year: "numeric"})
+      appliedDate: new Date(row.bookingdate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
+      appointmentDate: new Date(row.preferreddate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
     }));
-    res.render("booking-page", {previousBookings});
-  } catch(err) {
+    res.render("booking-page", { previousBookings });
+  } catch (err) {
     console.log(err);
   }
 });
@@ -4359,16 +4359,42 @@ app.post("/delArticle", async (req, res) => {
 
 app.post("/client-appointment-details", async (req, res) => {
   const { name, phone, date, city, areaofpractice } = req.body;
-
   // Validate required fields
   if (!name || !phone || !date || !city || !areaofpractice) {
     return res.status(400).send({ error: "All fields are required" });
   }
 
-  // SQL query to insert
-  const sql = `INSERT INTO client_appointment_details (name, userContactNo, preferredDate, city, areaofPractice) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
-
   try {
+    const mailOptions = {
+      from: "ilegaladvice26@gmail.com",
+      to: "ilegaladvice26@gmail.com",
+      subject: "Client appointment details",
+      text: `Appointment details are as follows:
+          Name: ${name},
+          Phone: ${phone},
+          Appointment Date: ${date},
+          City: ${city},
+          Lawyer's area of practice: ${areaofpractice}`
+    };
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      port: 465,
+      auth: {
+        user: "ilegaladvice26@gmail.com",
+        pass: "csfa hkqe dfbx jyxw",
+      },
+
+      pool: true,
+    });
+
+    await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully.");
+
+    // SQL query to insert
+    const sql = `INSERT INTO client_appointment_details (name, userContactNo, preferredDate, city, areaofPractice) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+
+
     const result = await pool.query(sql, [name, phone, date, city, areaofpractice]);
 
     res.redirect("/booking-page");
