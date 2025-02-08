@@ -467,7 +467,7 @@ a {
 
 .btn-container{
     height: 43px;
-    width: 13%;
+    width: 120px;
     margin-top: 20px;
     border-radius: 3px;
     position: relative;
@@ -977,26 +977,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .booking-table th,.booking-table td{
     border: 1px solid #b8b8b9;
-    vertical-align: top;
     padding-left: 15px;
     color: var(--text-color);
 }
 #col-1{
     width: 5%;
 }
-#col-2,#col-3{
-    width: 20%;
+#col-2{
+    width: 17%;
+}
+#col-3{
+    width: 22%;
 }
 #col-4{
-width: 30%;
+width: 28%;
 }
 #col-5{
-    width: 20%;
+    width: 23%;
 }
 .lawyer-profile{
     display: flex;
     align-items: center;
-
+    width: 100%;
+    column-gap: 5px;
 }
 .lawyer-profile-img{
     height: 50px;
@@ -1019,9 +1022,18 @@ width: 30%;
     color: goldenrod;
     text-decoration: underline;
 }
-
-
-
+.booking-status{
+    display: flex;
+        align-items: center;
+        width: 112px;
+        justify-content: space-between;
+}
+.fa-circle-check{
+    color: green;
+}
+.fa-circle-xmark{
+    color: red;
+}
 
 
 
@@ -1412,4 +1424,328 @@ color:#232121;
 .dropdown-group{
     display: flex!important;
     flex-direction: column;
+}
+
+
+
+@media screen and (max-width:1200px) {
+    .booking-container-0 {
+        padding: 2rem 4rem 4rem 4rem;
+    }
+    .booking-form form{
+        width: 100%;
+    }
+    .booking-table {
+        width: 100%;        
+    }
+    .input-fields .input-field {
+        width: 400px;
+    }
+    .btn-container {
+        height: 40px;
+        width: 114px;
+    }
+    .submit-btn{
+        line-height: 38px;
+    }
+    .select-items{
+        width: 400px;
+    }
+}
+@media screen and (max-width:1118px){
+    .booking-table th{
+       font-size: 15px;
+       padding-left: 10px;
+    }
+    .booking-table td{
+        font-size: 14px;
+        padding-left: 10px;
+    }
+    .booking-container-0 {
+        padding: 2rem 2rem 4rem 2rem;
+    }
+}
+@media screen and (max-width:1024px) {
+    .booking-table{
+        width: 800px;
+    }
+    .previous-booking-table{
+        width: 100%;
+        overflow: auto;
+    }
+    .booking-table td {
+        padding: 5px 6px;
+    }
+    .booking-table th, .booking-table td{
+        padding-left: 15px;
+    }
+    .lawyer-name{
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .input-fields .input-field {
+        width: 350px;
+        height: 50px;
+    }
+    .select-items {
+        width: 350px;
+    }
+    .input-fields input,.custom-select-n,.select-button-g {
+        font-size: 15px!important;
+    }
+    .select-dropdown-g li {
+        font-size: 15px;
+    }
+    .select-selected {
+        color: #a5a5a5;
+        padding: 15px 16px;
+    }
+    .select-selected:after {
+        top: 21px;
+    }
+    .select-selected.select-arrow-active:after {
+        top: 14px;
+    }
+    .booking-heading h2 {
+        font-size: 36px;
+    }
+    .booking-para p {
+        font-size: 16px;
+    }
+    .booking-container{
+        row-gap: 1.5rem;
+    }
+    .booking-form form{
+        row-gap: 0;
+    }
+    .btn-container{
+        margin-top: 25px;
+        height: 40px;
+        width: 105px;
+    }
+    .submit-btn{
+        font-size: 18px;
+    }
+    .select-items div {
+        padding: 6px 16px;
+    }
+    .select-dropdown-g li {
+        padding: 6px 16px;
+    }
+}
+@media screen and (max-width:992px) {
+    .main-body {
+        padding: 0rem 3rem 1rem 3rem;
+    }
+    .booking-container-0 {
+        padding: 2rem 1.5rem 4rem 1.5rem;
+    }  
+}
+@media screen and (max-width:870px) {
+    .input-fields .input-field {
+        width: 300px;
+        height: 45px;
+    }
+    .select-items {
+        width: 300px;
+        height: 182px;
+    }
+     .select-dropdown-g {
+
+        height: 182px;
+    }
+    .select-selected {
+        padding: 13px 16px;
+    }
+    .select-selected:after {
+        top: 18px;
+    }
+    .select-selected.select-arrow-active:after {
+        top: 11px;
+    }
+}
+@media screen and (max-width:768px) {
+    .input-fields .input-field {
+        width: 100%;
+    }
+    .select-items{
+        width: 100%;
+    }
+    .main-body {
+        padding: 0rem 1rem 1rem 1rem;
+    }
+    .btn-container {
+        height: 38px;
+        width: 100px;
+    }
+    .btn-layer{
+        border-radius: 5px;
+    }
+    .submit-btn {
+        font-size: 17px;
+    }
+    .booking-container-0 {
+        padding: 1rem 1rem 2rem 1rem;
+       
+    }
+    .previous-booking-container-0 {
+        padding: 1rem 1rem 2rem 1rem;
+    }
+    .previous-booking-heading h2 {
+        font-size: 33px;
+    }
+    .booking-table th{
+        font-size: 14px;
+        padding-left: 12px;
+    }
+    .lawyer-profile-img {
+        height: 40px;
+        width: 40px;
+    }
+    .lawyer-profile-img img{
+        height: 40px;
+        width: 40px;
+    }
+    .booking-table td {
+        padding: 3px 6px;
+        padding-left: 13px;
+    }
+    .booking-table td {
+        font-size: 13px;
+     }
+     .booking-heading h2 {
+        font-size: 34px;
+    }
+    .booking-para p {
+        font-size: 15px;
+    }
+    .booking-heading-container {
+        row-gap: 8px;
+    }
+    .booking-container {
+        row-gap: 1rem;
+    }
+    .main-body{
+        row-gap: 4rem;
+    }
+    .previous-booking-heading h2 {
+        font-size: 30px;
+    }
+    .previous-booking-container {
+        row-gap: 10px;
+    }
+    .booking-table {
+        width: 750px;
+    }
+    .body{
+        overflow: hidden;
+        padding-top:1rem ;
+        top: 16%;
+    }
+}
+@media screen and (max-width:575px) {
+    .if-field {
+        margin-top: 10px;
+    }
+    .select-items {
+        height: 140px;
+    }
+    .booking-heading h2 {
+        font-size: 30px;
+    }
+    .booking-para p {
+        font-size: 14px;
+    }
+    .booking-heading-container {
+        row-gap: 5px;
+    }
+    .input-fields .input-field {
+        height: 40px;
+    }
+    .input-fields input, .custom-select-n, .select-button-g {
+        font-size: 13px !important;
+    }
+    .select-selected {
+        padding: 11px 16px;
+    }
+    .select-selected.select-arrow-active:after {
+        top: 10px;
+    }
+    .select-selected:after {
+        top: 16px;
+    }
+    .select-dropdown-g {
+        height: 140px;
+    }
+    .select-dropdown-g li {
+        padding: 2px 16px;
+    }
+    .booking-table {
+        width: 700px;
+    }
+    .btn-container {
+        height: 32px;
+        width:95px;
+    }
+    .btn-layer {
+        border-radius: 6px;
+    }
+    .submit-btn {
+        font-size: 15px;
+        line-height: 31px;
+    }
+}
+@media screen and (max-width:490px) {
+    .input-fields {
+        display: flex
+    ;
+        row-gap: 1rem;
+        flex-direction: column;
+        align-items: center;
+    }
+    .input-fields .input-field {
+        height: 50px;
+        width: 90%;
+    }
+    .btn-container {
+        height: 45px;
+        width: 100%;
+        display: flex
+;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-layer{
+        width: 90%;
+        border-radius: 15px;
+    }
+    .submit-btn{
+        font-size: 21px;
+    }
+    .booking-heading-container {
+        row-gap: 10px;
+    }
+    .booking-para p {
+        font-size: 15px;
+    }
+    .previous-booking-heading h2 {
+        font-size: 28px;
+    }
+    .booking-heading h2 {
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .booking-heading h2 {
+        font-size: 26px;
+    }
+    .previous-booking-heading h2 {
+        font-size: 26px;
+    }
+    .booking-para p {
+        font-size: 14px;
+    }
 }
