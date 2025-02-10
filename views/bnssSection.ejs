@@ -132,7 +132,33 @@
                           
                     </div>
 
-                   
+                   <% if(data[0].section_number === "1"){ %>
+                    <div class="next-section">
+                      <a href="/bnss/bnss_section?section_number=<%=parseInt(data[0].section_number) + 1%>">
+                        <button id="next-btn">Next<i class="fa-solid fa-forward"></i></button>
+                    </a>
+                    </div>
+                    <% }else if(data[0].section_number === "533"){ %>
+                      <div class="next-prev-section">
+                        <div class="prev-section">
+                          <a href="/bnss/bnss_section?section_number=<%=parseInt(data[0].section_number) - 1%>">
+                            <button id="prev-btn"> Previous<i class="fa-solid fa-backward"></i></button>
+                        </a>
+                        </div>
+                      <%}else{ %>
+                      <div class="next-prev-section">
+                      <div class="prev-section">
+                        <a href="/bnss/bnss_section?section_number=<%=parseInt(data[0].section_number) - 1%>">
+                          <button id="prev-btn"> Previous<i class="fa-solid fa-backward"></i></button>
+                      </a>
+                      </div>
+                      <div class="next-section">
+                        <a href="/bnss/bnss_section?section_number=<%=parseInt(data[0].section_number) + 1%>">
+                          <button id="next-btn"> Next<i class="fa-solid fa-forward"></i></button>
+                      </a>
+                      </div>
+                  </div>
+                        <% } %>
                     <!-- <div class="next-prev-section">
                       <div class="prev-section">
                         <a href="/bnss/bnss_section?section_number=<%=parseInt(data.section_number) - 1%>">

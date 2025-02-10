@@ -28,7 +28,6 @@ const { fileLoader } = require("ejs");
 const { language } = require("googleapis/build/src/apis/language");
 const { cloudidentity } = require("googleapis/build/src/apis/cloudidentity");
 
-
 //ROUTE IMPORTS
 const ipcRoutes = require("./routes/ipcRoutes.js");
 const crpcRoutes = require("./routes/crpcRoutes.js");
@@ -37,11 +36,14 @@ const bnssRoutes = require("./routes/bnssRoutes.js");
 const cpcRoutes = require("./routes/cpcRoutes.js");
 const dowryRoutes = require("./routes/dowryRoutes.js");
 const powRoutes = require("./routes/powRoutes.js");
-const bsaRoutes = require('./routes/bsaRoutes.js');
+const bsaRoutes = require("./routes/bsaRoutes.js");
 const adminRoutes = require("./routes/adminRoutes.js");
 
 //FUNCTION IMPORTS
-const { isuAuthenticated, communityAuthenticated } = require("./middleware/authMiddleware.js");
+const {
+  isuAuthenticated,
+  communityAuthenticated,
+} = require("./middleware/authMiddleware.js");
 
 require("dotenv").config();
 app.use(methodOverride("_method"));
@@ -186,7 +188,6 @@ const fileFilter = (req, file, cb) => {
 //   fileFilter: fileFilter,
 // });
 
-
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -261,7 +262,7 @@ app.use("/cpc", cpcRoutes);
 app.use("/dowry", dowryRoutes);
 app.use("/pow", powRoutes);
 app.use("/bsa", bsaRoutes);
-app.use("/admin", adminRoutes)
+app.use("/admin", adminRoutes);
 
 app.get("/about-us", (req, res) => {
   res.render("aboutus");
@@ -279,22 +280,45 @@ app.get("/contact-us", (req, res) => {
   res.render("contact-us");
 });
 
-
 app.get("/booking-page", async (req, res) => {
-  try {
-    const result = await pool.query(`
-        SELECT bookingdate, preferreddate FROM client_appointment_details ORDER BY bookingdate DESC;
-      `);
+ 
+  if (!req.user) {
+    res.render("booking-page", { previousBookings: [] }); 
+    return;
+  }
 
+  const userId = req.user.id; 
+
+  try {
+    
+    const result = await pool.query(
+      `
+      SELECT bookingdate, preferreddate 
+      FROM client_appointment_details 
+      WHERE user_id = $1 
+      ORDER BY bookingdate DESC;
+      `,
+      [userId]
+    );
     const previousBookings = result.rows.map((row) => ({
-      appliedDate: new Date(row.bookingdate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
-      appointmentDate: new Date(row.preferreddate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+      appliedDate: new Date(row.bookingdate).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }),
+      appointmentDate: new Date(row.preferreddate).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }),
     }));
     res.render("booking-page", { previousBookings });
   } catch (err) {
-    console.log(err);
+    console.error("Error fetching bookings:", err.message);
+    res.render("booking-page", { previousBookings: [] });
   }
 });
+
 
 app.get("/", async (req, res) => {
   try {
@@ -359,7 +383,6 @@ app.get("/signup", async (req, res) => {
 //   res.status(500).json({message: 'Error processing location', error: error.message});
 //  }
 // });
-
 
 app.get("/forgetpassword", (req, res) => {
   res.render("login.ejs");
@@ -1030,8 +1053,9 @@ app.get("/filter-lawyers", async (req, res) => {
     if (ratingFilter.includes("-")) {
       const [minRating, maxRating] = ratingFilter.split("-").map(Number);
       if (!isNaN(minRating) && !isNaN(maxRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${queryParams.length + 1
-          } AND $${queryParams.length + 2}`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${
+          queryParams.length + 1
+        } AND $${queryParams.length + 2}`;
         queryParams.push(minRating, maxRating);
       } else {
         console.error(
@@ -1042,8 +1066,9 @@ app.get("/filter-lawyers", async (req, res) => {
     } else {
       const exactRating = Number(ratingFilter);
       if (!isNaN(exactRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${queryParams.length + 1
-          }`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${
+          queryParams.length + 1
+        }`;
         queryParams.push(exactRating);
       } else {
         console.error("Invalid rating value in ratingFilter:", ratingFilter);
@@ -1051,8 +1076,9 @@ app.get("/filter-lawyers", async (req, res) => {
     }
   }
 
-  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2
-    }`;
+  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${
+    queryParams.length + 2
+  }`;
   queryParams.push(limit, offset);
 
   console.log("Query Params:", queryParams);
@@ -1310,8 +1336,8 @@ app.get("/search-homepage-lawyers", async (req, res) => {
   const whereClauseString =
     whereClause.length > 0
       ? `WHERE ${whereClause.join(
-        " AND "
-      )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
+          " AND "
+        )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
       : `WHERE l.admin_verified = TRUE AND l.lead_community = TRUE`;
 
   try {
@@ -1564,7 +1590,6 @@ app.get("/articlewriting", (req, res) => {
 //     client.release();
 //   }
 // });
-
 
 app.get("/communityLogin", (req, res) => {
   if (req.user && req.user.role === "lawyer") {
@@ -4357,9 +4382,10 @@ app.post("/delArticle", async (req, res) => {
   }
 });
 
-app.post("/client-appointment-details", async (req, res) => {
+app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
+  const userId = req.user.id;
   const { name, phone, date, city, areaofpractice } = req.body;
-  // Validate required fields
+
   if (!name || !phone || !date || !city || !areaofpractice) {
     return res.status(400).send({ error: "All fields are required" });
   }
@@ -4374,7 +4400,7 @@ app.post("/client-appointment-details", async (req, res) => {
           Phone: ${phone},
           Appointment Date: ${date},
           City: ${city},
-          Lawyer's area of practice: ${areaofpractice}`
+          Lawyer's area of practice: ${areaofpractice}`,
     };
 
     const transporter = nodemailer.createTransport({
@@ -4391,19 +4417,23 @@ app.post("/client-appointment-details", async (req, res) => {
     await transporter.sendMail(mailOptions);
     console.log("Email sent successfully.");
 
-    // SQL query to insert
-    const sql = `INSERT INTO client_appointment_details (name, userContactNo, preferredDate, city, areaofPractice) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+    const sql = `INSERT INTO client_appointment_details (name, userContactNo, preferredDate, city, areaofPractice, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`;
 
-
-    const result = await pool.query(sql, [name, phone, date, city, areaofpractice]);
+    const result = await pool.query(sql, [
+      name,
+      phone,
+      date,
+      city,
+      areaofpractice,
+      userId
+    ]);
 
     res.redirect("/booking-page");
   } catch (err) {
-    console.error('Error inserting data into the database:', err);
+    console.error("Error inserting data into the database:", err);
     res.status(500).send({ error: "Failed to save appointment details" });
   }
-})
-
+});
 
 passport.use(
   "client-login",
