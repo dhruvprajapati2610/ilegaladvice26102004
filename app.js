@@ -4382,6 +4382,66 @@ app.post("/delArticle", async (req, res) => {
   }
 });
 
+app.get("/appointment-admin", async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const isAdminQuery = `select * from clientsignup where id = $1`;
+    const isAdmin = await pool.query(isAdminQuery, [userId]);
+    
+    if (isAdmin.rows.length === 0 || isAdmin.rows[0].is_admin === false) {
+      res.redirect("/");
+      return;
+    }
+    const pendingAppt = await pool.query(
+      'select * from client_appointment_details where lawyer_appointed = false'
+    );
+    console.log("Pending Appointments: ", pendingAppt.rows);
+    res.json(pendingAppt.rows);
+
+  } catch (error) {
+    console.error("Error fetching pending appointments: ", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/search-lawyer-admin", async (req, res) => {
+  try {
+    const searchTerm = req.query.search;
+    const lawyersQuery = `
+      SELECT * 
+      FROM lawyers 
+      WHERE name ILIKE $1
+    `;
+    const lawyers = await pool.query(lawyersQuery, [`%${searchTerm}%`]);
+    res.json(lawyers.rows);
+  } catch (error) {
+    console.error("Error fetching lawyers: ", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post("/appoint-lawyer", async (req, res) => {
+  const { appointment_id, lawyer_id } = req.body;
+  try {
+    if (!appointment_id || !lawyer_id) {
+      return res.status(400).json({ error: "Appointment ID and Lawyer ID are required" });
+    }
+    const query = "UPDATE client_appointment_details SET lawyer_id = $1 WHERE id = $2;";
+    const result = await pool.query(query, [lawyer_id, appointment_id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+    res.status(200).json({ message: "Lawyer appointed successfully" });
+
+  } catch (error) {
+    console.error("Error appointing lawyer: ", error);
+
+    res.status(500).json({ error: "Internal Server Error. Please try again later." });
+  }
+});
+
+
 app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
   const userId = req.user.id;
   const { name, phone, date, city, areaofpractice } = req.body;
