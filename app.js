@@ -281,16 +281,16 @@ app.get("/contact-us", (req, res) => {
 });
 
 app.get("/booking-page", async (req, res) => {
- 
+
   if (!req.user) {
-    res.render("booking-page", { previousBookings: [] }); 
+    res.render("booking-page", { previousBookings: [] });
     return;
   }
 
-  const userId = req.user.id; 
+  const userId = req.user.id;
 
   try {
-    
+
     const result = await pool.query(
       `
       SELECT cad.bookingdate, cad.preferreddate, cad.lawyer_id, cad.lawyer_appointed, l.id AS lawyer_id,
@@ -315,8 +315,8 @@ app.get("/booking-page", async (req, res) => {
       }),
       lawyerName: row.lawyer_name || "Not Assigned",
       lawyerImage: row.lawyer_image || " ",
-      lawyerAppointedStatus : row.lawyer_appointed, 
-      lawyer_id : row.lawyer_id,
+      lawyerAppointedStatus: row.lawyer_appointed,
+      lawyer_id: row.lawyer_id,
     }));
 
     res.render("booking-page", { previousBookings });
@@ -1060,9 +1060,8 @@ app.get("/filter-lawyers", async (req, res) => {
     if (ratingFilter.includes("-")) {
       const [minRating, maxRating] = ratingFilter.split("-").map(Number);
       if (!isNaN(minRating) && !isNaN(maxRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${
-          queryParams.length + 1
-        } AND $${queryParams.length + 2}`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${queryParams.length + 1
+          } AND $${queryParams.length + 2}`;
         queryParams.push(minRating, maxRating);
       } else {
         console.error(
@@ -1073,9 +1072,8 @@ app.get("/filter-lawyers", async (req, res) => {
     } else {
       const exactRating = Number(ratingFilter);
       if (!isNaN(exactRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${
-          queryParams.length + 1
-        }`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${queryParams.length + 1
+          }`;
         queryParams.push(exactRating);
       } else {
         console.error("Invalid rating value in ratingFilter:", ratingFilter);
@@ -1083,9 +1081,8 @@ app.get("/filter-lawyers", async (req, res) => {
     }
   }
 
-  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${
-    queryParams.length + 2
-  }`;
+  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2
+    }`;
   queryParams.push(limit, offset);
 
   console.log("Query Params:", queryParams);
@@ -1343,8 +1340,8 @@ app.get("/search-homepage-lawyers", async (req, res) => {
   const whereClauseString =
     whereClause.length > 0
       ? `WHERE ${whereClause.join(
-          " AND "
-        )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
+        " AND "
+      )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
       : `WHERE l.admin_verified = TRUE AND l.lead_community = TRUE`;
 
   try {
@@ -4392,25 +4389,43 @@ app.post("/delArticle", async (req, res) => {
 app.get("/appointment-admin", async (req, res) => {
   const userId = req.user.id;
   try {
-    const isAdminQuery = `select * from clientsignup where id = $1`;
+    const isAdminQuery = `SELECT * FROM clientsignup WHERE id = $1`;
     const isAdmin = await pool.query(isAdminQuery, [userId]);
-    
+
     if (isAdmin.rows.length === 0 || isAdmin.rows[0].is_admin === false) {
       res.redirect("/");
       return;
     }
+
     const pendingAppt = await pool.query(
-      'select * from client_appointment_details where lawyer_appointed = false'
+      "SELECT * FROM client_appointment_details WHERE lawyer_appointed = false ORDER BY preferreddate;"
     );
-    console.log("Pending Appointments: ", pendingAppt.rows);
 
-    res.render("appointment-admin", pendingAppt.rows);
+    // Transform dates into the desired format (dd/mm/yy)
+    const formattedAppointments = pendingAppt.rows.map((appt) => {
+      const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = String(d.getFullYear()).slice(-2);
+        return `${day}/${month}/${year}`;
+      };
 
+      return {
+        ...appt,
+        preferreddate: formatDate(appt.preferreddate),
+        bookingdate: formatDate(appt.bookingdate),
+      };
+    });
+
+    // Pass the transformed data to the view
+    res.render("appointment-admin", { pendingAppt: formattedAppointments });
   } catch (error) {
     console.error("Error fetching pending appointments: ", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 app.get("/search-lawyer-admin", async (req, res) => {
   try {
