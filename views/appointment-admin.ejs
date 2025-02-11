@@ -219,7 +219,7 @@
     <div class="container">
 
         <% pendingAppt.forEach((appt, index)=> { %>
-            <div class="appointment-box">
+            <div class="appointment-box" id=<%=index %>>
                 <div class="client-details">
                     <div class="details-field">
                         <span>Name :</span>
@@ -278,7 +278,7 @@
                     <div class="search-box-container">
                         <div class="search-box">
                             <form action="" method="get">
-                                <input type="search" name="search" placeholder="Search" id="search">
+                                <input type="search" name="search" placeholder="Search" id="search-<%=index%>">
                                 <div class="ipc-submit"><i class="fa-solid fa-magnifying-glass"></i></div>
                                 <div class="input-checkbox">
                                     <input type="checkbox" name="lawyer-appointment">
@@ -309,44 +309,30 @@
 
 
     <script>
-        const searchResult = document.querySelector(".search-result-container");
-        const searchInput = document.querySelector("#search");
-        const searchButton = document.querySelector(".ipc-submit");
 
-        searchInput.onkeyup = () => {
-            if (searchInput.value.trim() === "") {
-                searchResult.classList.remove("search-result-active");
-            } else {
-                searchResult.classList.add("search-result-active");
-            }
-        };
+        const searchInputs = document.querySelectorAll("input[type='search']");
+        const searchButtons = document.querySelectorAll(".ipc-submit");
 
-        /*
-  searchButton.onclick=()=>{
-      if (searchInput.value.trim() === "") {
-      searchResult.classList.remove("search-result-active");
-    } else {
-      searchResult.classList.add("search-result-active");
-    }
-  } */
+        searchInputs.forEach((searchInput, index) => {
+            const searchResult = searchInput.closest(".search-box-container").querySelector(".search-result-container");
 
-        searchButton.addEventListener("click", (e) => {
-            e.preventDefault();
-        });
+            searchInput.onkeyup = () => {
+                if (searchInput.value.trim() === "") {
+                    searchResult.classList.remove("search-result-active");
+                } else {
+                    searchResult.classList.add("search-result-active");
+                }
+            };
 
-        searchInput.addEventListener("input", () => {
-            if (searchInput.value.trim() === "") {
-                searchResult.classList.remove("search-result-active");
-            }
-        });
+            searchButtons[index].addEventListener("click", (e) => {
+                e.preventDefault();
+            });
 
-        document
-            .getElementById("search")
-            .addEventListener("input", async function () {
-                const query = this.value;
+            searchInput.addEventListener("input", async () => {
+                const query = searchInput.value;
 
                 if (query.trim() === "") {
-                    document.querySelector(".search-results").innerHTML = ""; // Clear results
+                    searchResult.querySelector(".search-results").innerHTML = ""; // Clear results
                     return;
                 }
 
@@ -356,34 +342,44 @@
                     );
                     const results = await response.json();
                     console.log(results);
-                    const resultsContainer = document.querySelector(".search-results");
+
+                    const resultsContainer = searchResult.querySelector(".search-results");
                     resultsContainer.innerHTML = ""; // Clear previous results
 
                     results.forEach((result) => {
-                        console.log(result);
-                        const resultHTML = `
-                <div class="search-result-account">
-                    <div class="search-profile-image-container">
-                        <div class="search-profile-image">
-                            <img src="${result.image || "../uploads/avatar.png"
-                            }" alt="${result.name}">
-                        </div>
-                    </div>
-                    <div class="search-profile-name">
-                       <a href="/community/user-profile?id=${result.id
-                            }"> <div class="search-user-name">${result.name
-                            }</div></a>
-                       
-                        
-                    </div>
+    const resultHTML = `
+        <div onclick="addLawyerName('${result.name}', 'search-${index}')" class="search-result-account">
+            <div class="search-profile-image-container">
+                <div class="search-profile-image">
+                    <img src="${result.image || "../uploads/avatar.png"}" alt="${result.name}">
                 </div>
-            `;
-                        resultsContainer.insertAdjacentHTML("beforeend", resultHTML);
-                    });
+            </div>
+            <div class="search-profile-name">
+                <div class="search-user-name">${result.name}</div>
+            </div>
+        </div>
+    `;
+    resultsContainer.insertAdjacentHTML("beforeend", resultHTML);
+});
+
                 } catch (err) {
                     console.error("Error fetching search results:", err);
                 }
             });
+        })
+
+        function addLawyerName(lawyerName, searchInputId) {
+    console.log(`Setting ${lawyerName} to input: ${searchInputId}`);
+    const searchInput = document.getElementById(searchInputId);
+    if (searchInput) {
+        searchInput.value = lawyerName; // Set the lawyer's name in the search input
+    }
+}
+
+
+
+
+        
     </script>
 </body>
 
