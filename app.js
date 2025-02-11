@@ -4403,7 +4403,8 @@ app.get("/appointment-admin", async (req, res) => {
       'select * from client_appointment_details where lawyer_appointed = false'
     );
     console.log("Pending Appointments: ", pendingAppt.rows);
-    res.json(pendingAppt.rows);
+
+    res.render("appointment-admin", pendingAppt.rows);
 
   } catch (error) {
     console.error("Error fetching pending appointments: ", error);
