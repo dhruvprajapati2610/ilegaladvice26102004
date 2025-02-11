@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Admin Page</title>
+    <style>
+        .container{
+            display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+    margin: 2rem;
+        }
+        .appointment-box{
+            border-radius: 14px;
+    box-shadow: 0.1rem 0.1rem 0.5rem rgba(0, 0, 0, 0.3);
+    border: 1px solid rgb(255, 255, 255);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+        }
+       .submit-btn input{
+        background: goldenrod!important;
+    color: white!important;
+    width: 100%!important;
+    padding: 5px 10px;
+    border-radius: 5px;
+       }
+       .client-details{
+        display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+       }
+        
+.search-result-container{
+    display: none;
+    background: white;
+    box-shadow: 0.1rem 0.1rem 0.5rem rgba(0, 0, 0, 0.3);
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 5px;
+    width: 45%;
+}
+.search-result-active{
+    display: flex;
+}
+.search-results{
+    height: 230px;
+    width: 100%;
+    padding: 1rem 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.5rem;
+    overflow-x: hidden;
+   
+}
+.search-results::-webkit-scrollbar,.notification-content::-webkit-scrollbar {
+    width: 1px;  
+}
+
+
+.search-results::-webkit-scrollbar-track,.notification-content::-webkit-scrollbar-track {
+    background: #f1f1f1;  
+}
+
+
+.search-results::-webkit-scrollbar-thumb,.notification-content::-webkit-scrollbar-thumb {
+    background: #888;  
+    border-radius: 4px;  
+}
+
+
+.search-results::-webkit-scrollbar-thumb:hover,.notification-content::-webkit-scrollbar-thumb:hover {
+    background: #555;  
+}
+
+
+.search-results {
+    scrollbar-width: thin;  
+    scrollbar-color: #888 #f1f1f1;  
+}
+.search-result-account{
+    display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+        cursor: pointer;
+        user-select: none;
+        padding: 0 12px;
+        border-radius: 2px;
+    
+}
+.search-result-account:hover{
+    background-color: rgb(235 235 235);
+}
+.search-profile-image{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid lightgrey;
+}
+.search-profile-image img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.search-profile-name{
+    width: 100%;
+}
+.search-profile-name a{
+    color: var(--text-color);
+}
+.search-user-name{
+    width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 18px;
+    font-weight: bold;
+}
+.search-followed-by{
+    width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 16px;
+}
+
+.search-box{
+      box-shadow: inset 0.1rem 0.1rem 0.5rem rgb(230 230 230 / 30%);
+    border: 1px solid rgb(195 195 195);
+    width: 40%;
+    height: 50px;
+    border-radius: 7px;
+}
+.ipc-submit{
+    border: none;
+    background: none;
+    color: #6a7081;
+    font-size: 20px;
+}
+.search-box form{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 14px 0px 15px;
+}
+.search-box form input{
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 90%;
+    height: 95%;
+    font-size: 20px;
+}
+.search-box form i{
+    cursor: pointer;
+}
+.input-checkbox{
+    position: absolute;
+    left: 53%;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+.input-checkbox input{
+    width: 10%!important;
+}
+.input-checkbox label{
+    width: 115px;
+}
+.submit-btn{
+    position: absolute;
+    left: 72%;
+}
+.submit-btn input{
+        background: goldenrod!important;
+    color: white!important;
+    width: 100%!important;
+    padding: 5px 10px;
+    border-radius: 5px;
+       }
+    </style>
+</head>
+<body>
+     
+    <div class="container">
+
+        <div class="appointment-box">
+            <div class="client-details">
+                 <div class="details-field">
+                     <span>Name :</span>
+                     <span>Sahil Shelavale</span>
+                 </div>
+                 <div class="details-field">
+                     <span>Mobile No :</span>
+                     <span>798780989</span>
+                 </div>
+                 <div class="details-field">
+                     <span>Email :</span>
+                     <span>SahilShelavale12@gmail.com</span>
+                 </div>
+                 <div class="details-field">
+                     <span>Applied Date :</span>
+                     <span>12-02-2025</span>
+                 </div>
+                 <div class="details-field">
+                     <span>Appointment date :</span>
+                     <span>22-02-2025</span>
+                 </div>
+                 <div class="details-field">
+                     <span>City :</span>
+                     <span>Mumbai</span>
+                 </div>
+                 <div class="details-field">
+                     <span>Area of Pratice:</span>
+                     <span>Divorce</span>
+                 </div>
+                 <div class="details-field details-textarea">
+                     <span>Legal issue in few words:</span>
+                     <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat aliquid excepturi voluptate dolore aliquam, in, dicta veniam maxime, soluta obcaecati laborum magni doloribus corrupti similique repellendus dolorum repudiandae quas aut distinctio facilis minus itaque cupiditate. Temporibus praesentium enim voluptas, ab hic culpa nobis exercitationem, dolor, reiciendis dicta cupiditate ad facere.</span>
+                 </div>
+            </div>
+            <div class="lawyer-appointment-search">
+                 <div class="lawyer-appointment-heading">
+                     <h2>Appoint a Lawyer</h2> 
+                 </div>
+                <div class="search-box-container">
+                    <div class="search-box">
+                     <form action="" method="get">
+                       <input type="search" name="search" placeholder="Search" id="search">
+                       <div class="ipc-submit" ><i class="fa-solid fa-magnifying-glass"></i></div>
+                       <div class="input-checkbox">
+                        <input type="checkbox" name="lawyer-appointment">
+                        <label for="lawyer-appointment">
+                            Appoint lawyer
+                        </label>
+                       </div>
+                       <div class="submit-btn">
+                        <input type="submit" value="submit">
+                       </div>
+                       </form>
+                    </div>
+                    <div class="search-result-container">
+                        <div class="search-results">
+                        
+                           
+                        </div>
+                    </div>
+                    
+                  </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        const searchResult = document.querySelector(".search-result-container");
+      const searchInput = document.querySelector("#search");
+      const searchButton = document.querySelector(".ipc-submit");
+
+      searchInput.onkeyup = () => {
+        if (searchInput.value.trim() === "") {
+          searchResult.classList.remove("search-result-active");
+        } else {
+          searchResult.classList.add("search-result-active");
+        }
+      };
+
+      /*
+searchButton.onclick=()=>{
+    if (searchInput.value.trim() === "") {
+    searchResult.classList.remove("search-result-active");
+  } else {
+    searchResult.classList.add("search-result-active");
+  }
+} */
+
+      searchButton.addEventListener("click", (e) => {
+        e.preventDefault();
+      });
+
+      searchInput.addEventListener("input", () => {
+        if (searchInput.value.trim() === "") {
+          searchResult.classList.remove("search-result-active");
+        }
+      });
+
+      document
+        .getElementById("search")
+        .addEventListener("input", async function () {
+          const query = this.value;
+
+          if (query.trim() === "") {
+            document.querySelector(".search-results").innerHTML = ""; // Clear results
+            return;
+          }
+
+          try {
+            const response = await fetch(
+              `/community/search?search=${encodeURIComponent(query)}`
+            );
+            const results = await response.json();
+            console.log(results);
+            const resultsContainer = document.querySelector(".search-results");
+            resultsContainer.innerHTML = ""; // Clear previous results
+
+            results.forEach((result) => {
+              console.log(result);
+              const resultHTML = `
+                <div class="search-result-account">
+                    <div class="search-profile-image-container">
+                        <div class="search-profile-image">
+                            <img src="${
+                              result.image || "../uploads/avatar.png"
+                            }" alt="${result.name}">
+                        </div>
+                    </div>
+                    <div class="search-profile-name">
+                       <a href="/community/user-profile?id=${
+                         result.id
+                       }"> <div class="search-user-name">${
+                result.name
+              }</div></a>
+                       
+                        
+                    </div>
+                </div>
+            `;
+              resultsContainer.insertAdjacentHTML("beforeend", resultHTML);
+            });
+          } catch (err) {
+            console.error("Error fetching search results:", err);
+          }
+        });
+    </script>
+</body>
+</html>
