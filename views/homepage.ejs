@@ -612,6 +612,47 @@
                     <% } %>
                   </div>
                 </div>
+                <div class="gradient-booking swiper-slide">
+                  <div class="find-lawyer-heading">
+                    <h2>Book Your lawyer Appointment !</h2>
+                  </div>
+                  
+                  <div class="appointment-features">
+                      
+                    <div class="feature-box">
+                      <span class="feature-step">
+                        Step 1
+                      </span>
+                      <p>
+                        Provide your basic details and legal query in our simple form.
+                      </p>
+                    </div>
+                    <div class="hdw-arrow">→</div>
+                    <div class="feature-box">
+                      <span class="feature-step">
+                        Step 2
+                      </span>
+                      <p>
+                        Our team will review your request and connect you with a suitable lawyer. 
+                      </p>
+                    </div>
+                    <div class="hdw-arrow">→</div>
+                    <div class="feature-box">
+                      <span class="feature-step">
+                        Step 3
+                      </span>
+                      <p>
+                        Review the appointment details and confirm your slot.
+                      </p>
+                    </div>
+
+                  </div>
+
+
+                  <div class="explore-now">
+                    <button onclick="redirectBookingPage()">Click Here</button>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="swiper-button-next gradient-swiper-next">
@@ -1243,6 +1284,9 @@
 
       const redirectCommunity = () => {
         window.location.href = "/community";
+      };
+      const redirectBookingPage = () => {
+        window.location.href = "/booking-page";
       };
 
       const redirectLogin = () => {
