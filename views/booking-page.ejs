@@ -72,59 +72,31 @@
                 <form action="/client-appointment-details" method="post">
                   <div class="input-fields">
                     <div class="input-field if-field">
-                      <input
-                        type="text"
-                        name="name"
-                        id="client-name"
-                        placeholder="Name"
-                      />
+                      <input type="text" name="name" id="client-name" placeholder="Your Name" />
                     </div>
                     <div class="input-field if-field">
-                      <input
-                        type="tel"
-                        name="phone"
-                        id="client-phone"
-                        placeholder="Contact number"
-                        required
-                      />
+                      <input type="tel" name="phone" id="client-phone" placeholder="Contact number" required />
                     </div>
                     <div class="input-field if-field">
-                      <input
-                        type="date"
-                        name="date"
-                        id="client-date"
-                        placeholder="Select prefferd date"
-                        required
-                      />
+                      <input type="email" name="email" id="client-email" placeholder="Your Email" required />
+                    </div>
+                    <div class="input-field if-field">
+                      <input type="date" name="date" id="client-date" placeholder="Select prefferd date" required />
                     </div>
                     <div class="input-field if-field">
                       <div class="custom-select-g">
-                        <div
-                          class="select-button-g"
-                          role="combobox"
-                          aria-labelledby="select button"
-                          aria-haspopup="listbox"
-                          aria-expanded="false"
-                          aria-controls="select-dropdown-2"
-                        >
-                          <span class="selected-value-g" name="city"
-                            >Select city</span
-                          >
+                        <div class="select-button-g" role="combobox" aria-labelledby="select button"
+                          aria-haspopup="listbox" aria-expanded="false" aria-controls="select-dropdown-2">
+                          <span class="selected-value-g" name="city">Select city</span>
                           <span class="arrow-g"></span>
                         </div>
-                        <ul
-                          class="select-dropdown-g"
-                          role="listbox"
-                          id="select-dropdown-2"
-                        ></ul>
+                        <ul class="select-dropdown-g" role="listbox" id="select-dropdown-2"></ul>
                       </div>
                     </div>
                     <div class="input-field if-field">
                       <div class="custom-select-n" style="width: 200px">
                         <select name="areaofpractice">
-                          <option value="" class="select-aop">
-                            Select Area of Practice
-                          </option>
+                          <option value="" class="select-aop">Select Area of Practice</option>
                           <option value="Divorce">Divorce</option>
                           <option value="Family Dispute">Family Dispute</option>
                           <option value="Child Custody">Child Custody</option>
@@ -176,20 +148,28 @@
                         </select>
                       </div>
                     </div>
+                    <div class="input-field if-field bio">
+                      <textarea
+                        name="legalIssue"
+                        id="legal-issue"
+                        cols="30"
+                        rows="10"
+                        placeholder="Describe your legal issue in simple words"
+                        required
+                      ></textarea>
+                    </div>
+
                   </div>
                   <div class="btn-container">
                     <div class="btn-layer"></div>
-                    <input
-                      type="submit"
-                      class="submit-btn"
-                      id="lawyer-signup-btn"
-                    />
+                    <input type="submit" class="submit-btn" id="lawyer-signup-btn" />
                   </div>
                 </form>
               </div>
             </div>
           </div>
         </div>
+        <% if(previousBookings.length != 0){ %>
         <div class="previous-booking-container-0">
           <div class="previous-booking-container">
             <% if(userId) { %>
@@ -223,15 +203,17 @@
                     <div class="lawyer-profile">
                       <div class="lawyer-profile-img-container">
                         <div class="lawyer-profile-img">
-                          <img src="../uploads/avatar.png" alt="" />
+                          <% if(booking.lawyerImage != " "){ %>
+                          <img src="<%= booking.lawyerImage %>" alt="" />
+                          <% } %>
                         </div>
                       </div>
                       <div class="lawyer-name">
-                        <a href="#">Adv Sahil Shelavale</a>
+                        <a href="/lawyersprofile?lawyerId=<%=booking.lawyer_id%>"><%=booking.lawyerName %></a>
                       </div>
                     </div>
                   </td>
-                  <td>Confirmed</td>
+                  <td><%= booking.lawyerAppointedStatus ? "Appointed" : "Pending..." %></td>
                 </tr>
 
                 <% }) %>
@@ -240,6 +222,7 @@
             <% } %>
           </div>
         </div>
+        <% } %>
       </div>
 
       <%- include('partials/footer') %>

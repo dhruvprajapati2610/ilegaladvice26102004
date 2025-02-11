@@ -293,10 +293,12 @@ app.get("/booking-page", async (req, res) => {
     
     const result = await pool.query(
       `
-      SELECT bookingdate, preferreddate 
-      FROM client_appointment_details 
-      WHERE user_id = $1 
-      ORDER BY bookingdate DESC;
+      SELECT cad.bookingdate, cad.preferreddate, cad.lawyer_id, cad.lawyer_appointed, l.id AS lawyer_id,
+             l.name AS lawyer_name, l.image AS lawyer_image
+      FROM client_appointment_details cad
+      LEFT JOIN lawyers l ON cad.lawyer_id = l.id
+      WHERE cad.user_id = $1
+      ORDER BY cad.bookingdate DESC;
       `,
       [userId]
     );
@@ -311,7 +313,12 @@ app.get("/booking-page", async (req, res) => {
         month: "short",
         year: "numeric",
       }),
+      lawyerName: row.lawyer_name || "Not Assigned",
+      lawyerImage: row.lawyer_image || " ",
+      lawyerAppointedStatus : row.lawyer_appointed, 
+      lawyer_id : row.lawyer_id,
     }));
+
     res.render("booking-page", { previousBookings });
   } catch (err) {
     console.error("Error fetching bookings:", err.message);
@@ -4428,6 +4435,8 @@ app.post("/appoint-lawyer", async (req, res) => {
     }
     const query = "UPDATE client_appointment_details SET lawyer_id = $1 WHERE id = $2;";
     const result = await pool.query(query, [lawyer_id, appointment_id]);
+    const lawyerApptQuery = "UPDATE client_appointment_details SET lawyer_appointed = true WHERE id = $1"
+    const lawyerApptResult = await pool.query(lawyerApptQuery, [appointment_id]);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ error: "Appointment not found" });
@@ -4444,7 +4453,7 @@ app.post("/appoint-lawyer", async (req, res) => {
 
 app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
   const userId = req.user.id;
-  const { name, phone, date, city, areaofpractice } = req.body;
+  const { name, phone, date, city, areaofpractice, email, legalIssue } = req.body;
 
   if (!name || !phone || !date || !city || !areaofpractice) {
     return res.status(400).send({ error: "All fields are required" });
@@ -4458,9 +4467,11 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
       text: `Appointment details are as follows:
           Name: ${name},
           Phone: ${phone},
+          Email: ${email},
           Appointment Date: ${date},
           City: ${city},
-          Lawyer's area of practice: ${areaofpractice}`,
+          Lawyer's area of practice: ${areaofpractice}
+          Description of the issue : %{legalIssue}`,
     };
 
     const transporter = nodemailer.createTransport({
@@ -4477,7 +4488,7 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
     await transporter.sendMail(mailOptions);
     console.log("Email sent successfully.");
 
-    const sql = `INSERT INTO client_appointment_details (name, userContactNo, preferredDate, city, areaofPractice, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`;
+    const sql = `INSERT INTO client_appointment_details (name, userContactNo, preferredDate, city, areaofPractice, user_id, email, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;`;
 
     const result = await pool.query(sql, [
       name,
@@ -4485,7 +4496,9 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
       date,
       city,
       areaofpractice,
-      userId
+      userId,
+      email,
+      legalIssue
     ]);
 
     res.redirect("/booking-page");

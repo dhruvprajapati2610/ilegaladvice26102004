@@ -957,11 +957,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         flex-direction: column;
         row-gap: 1rem;
  } 
+ .previous-booking-table{
+    height: 341px;
+    overflow: auto;
+ }
+ .previous-booking-table::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  
+  .previous-booking-table::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 25px;
+  }
+  
+  .previous-booking-table::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 25px;
+  }
  .previous-booking-heading h2{
     font-size: 35px;
  }
 .booking-table{
-    width: 90%;
+    width: 100%;
     border-collapse: collapse;
     font-size: 18px;
     text-align: left;
@@ -1028,12 +1046,42 @@ width: 28%;
         width: 112px;
         justify-content: space-between;
 }
-.fa-circle-check{
-    color: green;
+.input-fields .bio{
+    height: 120px!important;
 }
-.fa-circle-xmark{
-    color: red;
+.input-field textarea{
+    height: 100%;
+    width: 100%;
+    padding-top: 5px;
+    outline: none;
+    padding-left: 15px;
+    border-radius: 6px;
+    border: 1px solid lightgrey;
+    border-bottom-width: 2px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    resize: none;
 }
+.input-field textarea::placeholder{
+    color: #999;
+    transition: all 0.3s ease;
+    font-size: 15px;
+  }
+.input-field textarea:focus::placeholder{
+    color: goldenrod;
+}
+.input-field textarea:focus{
+    border-color: goldenrod;
+    /* box-shadow: inset 0 0 3px #fb6aae; */
+}
+.input-field input:focus::placeholder{
+    color: goldenrod!important;
+}
+.input-field input:focus{
+    border-color: goldenrod!important;
+    /* box-shadow: inset 0 0 3px #fb6aae; */
+}
+
 
 
 
@@ -1639,6 +1687,9 @@ color:#232121;
     .booking-table {
         width: 750px;
     }
+    .previous-booking-table {
+        height: 243px;
+    }
     .body{
         overflow: hidden;
         padding-top:1rem ;
@@ -1699,8 +1750,7 @@ color:#232121;
 }
 @media screen and (max-width:490px) {
     .input-fields {
-        display: flex
-    ;
+        display: flex;
         row-gap: 1rem;
         flex-direction: column;
         align-items: center;
@@ -1709,11 +1759,22 @@ color:#232121;
         height: 50px;
         width: 90%;
     }
+    .input-fields input, .custom-select-n, .select-button-g {
+        font-size: 15px !important;
+    }
+    .select-selected:after {
+        top: 20px;
+    }
+    .select-selected.select-arrow-active:after {
+        top: 13px;
+    }
+    .select-selected {
+        padding: 14px 16px;
+    }
     .btn-container {
         height: 45px;
         width: 100%;
-        display: flex
-;
+        display: flex;
         align-items: center;
         justify-content: center;
     }
