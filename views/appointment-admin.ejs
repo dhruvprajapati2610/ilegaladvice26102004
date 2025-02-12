@@ -277,11 +277,13 @@
                     </div>
                     <div class="search-box-container">
                         <div class="search-box">
-                            <form action="" method="get">
+                            <form action="/appoint-lawyer" method="post">
+                                <input type="hidden" name="lawyer_id" id="lawyer-id-<%= index %>">
+                                <input type="hidden" name="appointment_id" value="<%= appt.id %>">
                                 <input type="search" name="search" placeholder="Search" id="search-<%=index%>">
                                 <div class="ipc-submit"><i class="fa-solid fa-magnifying-glass"></i></div>
                                 <div class="input-checkbox">
-                                    <input type="checkbox" name="lawyer-appointment">
+                                    <input type="checkbox" name="lawyer_appointment">
                                     <label for="lawyer-appointment">
                                         Appoint lawyer
                                     </label>
@@ -347,20 +349,20 @@
                     resultsContainer.innerHTML = ""; // Clear previous results
 
                     results.forEach((result) => {
-    const resultHTML = `
-        <div onclick="addLawyerName('${result.name}', 'search-${index}')" class="search-result-account">
-            <div class="search-profile-image-container">
-                <div class="search-profile-image">
-                    <img src="${result.image || "../uploads/avatar.png"}" alt="${result.name}">
-                </div>
-            </div>
-            <div class="search-profile-name">
-                <div class="search-user-name">${result.name}</div>
-            </div>
-        </div>
-    `;
-    resultsContainer.insertAdjacentHTML("beforeend", resultHTML);
-});
+                        const resultHTML = `
+                            <div onclick="addLawyerName('${result.name}', 'search-${index}', '${result.id}')" class="search-result-account">
+                                <div class="search-profile-image-container">
+                                    <div class="search-profile-image">
+                                        <img src="${result.image || "../uploads/avatar.png"}" alt="${result.name}">
+                                    </div>
+                                </div>
+                                <div class="search-profile-name">
+                                    <div class="search-user-name">${result.name}</div>
+                                </div>
+                            </div>
+                        `;
+                        resultsContainer.insertAdjacentHTML("beforeend", resultHTML);
+                    });
 
                 } catch (err) {
                     console.error("Error fetching search results:", err);
@@ -368,18 +370,24 @@
             });
         })
 
-        function addLawyerName(lawyerName, searchInputId) {
-    console.log(`Setting ${lawyerName} to input: ${searchInputId}`);
-    const searchInput = document.getElementById(searchInputId);
-    if (searchInput) {
-        searchInput.value = lawyerName; // Set the lawyer's name in the search input
-    }
-}
+        function addLawyerName(lawyerName, searchInputId, lawyerId) {
+            console.log(`Setting ${lawyerName} and lawyer_id: ${lawyerId} to input: ${searchInputId}`);
+            const searchInput = document.getElementById(searchInputId);
+            if (searchInput) {
+                searchInput.value = lawyerName; // Set the lawyer's name in the search input
+            }
+            const form = searchInput.closest("form");
+            const lawyerIdInput = form.querySelector("[name='lawyer_id']");
+            if (lawyerIdInput) {
+                lawyerIdInput.value = lawyerId; // Set the lawyer_id in the hidden input
+            }
+        }
 
 
 
 
-        
+
+
     </script>
 </body>
 

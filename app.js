@@ -4401,7 +4401,6 @@ app.get("/appointment-admin", async (req, res) => {
       "SELECT * FROM client_appointment_details WHERE lawyer_appointed = false ORDER BY preferreddate;"
     );
 
-    // Transform dates into the desired format (dd/mm/yy)
     const formattedAppointments = pendingAppt.rows.map((appt) => {
       const formatDate = (date) => {
         const d = new Date(date);
@@ -4444,25 +4443,27 @@ app.get("/search-lawyer-admin", async (req, res) => {
 });
 
 app.post("/appoint-lawyer", async (req, res) => {
-  const { appointment_id, lawyer_id } = req.body;
-  try {
-    if (!appointment_id || !lawyer_id) {
-      return res.status(400).json({ error: "Appointment ID and Lawyer ID are required" });
+  const { appointment_id, lawyer_id, lawyer_appointment } = req.body;
+  if (lawyer_appointment) {
+    try {
+      if (!appointment_id || !lawyer_id) {
+        return res.status(400).json({ error: "Appointment ID and Lawyer ID are required" });
+      }
+      const query = "UPDATE client_appointment_details SET lawyer_id = $1 WHERE id = $2;";
+      const result = await pool.query(query, [lawyer_id, appointment_id]);
+      const lawyerApptQuery = "UPDATE client_appointment_details SET lawyer_appointed = true WHERE id = $1"
+      const lawyerApptResult = await pool.query(lawyerApptQuery, [appointment_id]);
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({ error: "Appointment not found" });
+      }
+      res.redirect("/appointment-admin");
+
+    } catch (error) {
+      console.error("Error appointing lawyer: ", error);
+
+      res.status(500).json({ error: "Internal Server Error. Please try again later." });
     }
-    const query = "UPDATE client_appointment_details SET lawyer_id = $1 WHERE id = $2;";
-    const result = await pool.query(query, [lawyer_id, appointment_id]);
-    const lawyerApptQuery = "UPDATE client_appointment_details SET lawyer_appointed = true WHERE id = $1"
-    const lawyerApptResult = await pool.query(lawyerApptQuery, [appointment_id]);
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({ error: "Appointment not found" });
-    }
-    res.status(200).json({ message: "Lawyer appointed successfully" });
-
-  } catch (error) {
-    console.error("Error appointing lawyer: ", error);
-
-    res.status(500).json({ error: "Internal Server Error. Please try again later." });
   }
 });
 
@@ -4502,7 +4503,6 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
     });
 
     await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully.");
 
     const sql = `INSERT INTO client_appointment_details (name, userContactNo, preferredDate, city, areaofPractice, user_id, email, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;`;
 
