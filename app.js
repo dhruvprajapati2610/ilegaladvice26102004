@@ -4488,7 +4488,7 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
           Appointment Date: ${date},
           City: ${city},
           Lawyer's area of practice: ${areaofpractice}
-          Description of the issue : %{legalIssue}`,
+          Description of the issue : ${legalIssue}`,
     };
 
     const transporter = nodemailer.createTransport({
