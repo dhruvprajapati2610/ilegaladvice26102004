@@ -4467,6 +4467,9 @@ app.post("/appoint-lawyer", async (req, res) => {
   }
 });
 
+app.get("/appointment-success", async (req, res) => {
+  res.render("successAppointment");
+})
 
 app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
   const userId = req.user.id;
@@ -4517,7 +4520,7 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
       legalIssue
     ]);
 
-    res.redirect("/booking-page");
+    res.redirect("/appointment-success");
   } catch (err) {
     console.error("Error inserting data into the database:", err);
     res.status(500).send({ error: "Failed to save appointment details" });

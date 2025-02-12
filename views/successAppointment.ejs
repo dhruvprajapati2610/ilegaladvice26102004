@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Redirect</title>
+</head>
+<body>
+    <h1>Text?</h1>
+    <p id="countdown">Redirecting in 5 seconds...</p>
+</body>
+<script>
+    let countdown = 5;
+    const countdownElement = document.getElementById('countdown');
+
+    const interval = setInterval(() => {
+        countdown--;
+        countdownElement.textContent = `Redirecting in ${countdown} seconds...`;
+        if (countdown <= 0) {
+            clearInterval(interval); 
+        }
+    }, 1000);
+
+    setTimeout(() => {
+        window.location.href = '/booking-page';
+    }, 5000);
+</script>
+</html>
