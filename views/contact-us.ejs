@@ -3,110 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="description" content="Need help with our website? Contact iLegalAdvice's tech team for support. Lawyers, clients, and users can reach out for any technical issues or queries.">
+    <meta name="keywords" content="Contact iLegalAdvice, legal website support, technical help, lawyer queries, client assistance, legal tech support">
+    <meta name="author" content="iLegalAdvice Tech Team">
+    <title>Contact Us - iLegalAdvice Technical Support</title>
+    <meta property="og:title" content="Contact iLegalAdvice - Get Technical Support">
+    <meta property="og:description" content="Reach out to iLegalAdvice for any website-related issues. Lawyers and clients can contact us for quick assistance.">
+    <meta property="og:type" content="ilegaladvice.com">
     <link rel="icon" type="image/png" href="../uploads/logo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css">
+    <link rel="stylesheet" href="contact-us.css">
 
-        <link rel="stylesheet" href="contact-us.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ContactPage",
+        "name": "iLegalAdvice Contact Page",
+        "description": "Contact iLegalAdvice's tech team for any website issues or legal queries.",
+        "url": "https://www.ilegaladvice.com/contact-us",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "ilegaladvice26@gmail.com",
+            "telephone": "+91 8779642973",
+            "contactType": "customer support"
+        }
+    }
+    </script>
 </head>
 <body>
+
     <%-include('partials/header') %>
+
     <div class="body">
         <div class="main-body">
             <div class="main-container-0">
                 <div class="main-container">
                     <div class="contact-us-box">
                         <div class="contact-para">
-                            <h1>Contact us</h1>
+                            <h1>Contact Us</h1>
                            <p>
-                            At iLegalAdvice, we are dedicated towards providing a seamless online experience. If you encounter any technical issues with our website or need assistance related to your online experience, please do not hesitate to reach out. Contact us directly via phone or email for prompt support. We're committed to resolving any tech-related concerns to ensure smooth access to our services.</p>
+                            If you are a <strong>lawyer, client, or visitor</strong> experiencing technical issues with iLegalAdvice, our tech team is here to help! We ensure a smooth online experience for our users. Contact us via email or phone, and we’ll assist you as soon as possible.</p>
                         </div>
                         <div class="contact-info">
                                 <div class="mail ci">
-                                    
-                                        <i class="fa-solid fa-envelope"></i>
-                                        <p>ilegaladvice26@gmail.com</p>
-                                    
+                                    <i class="fa-solid fa-envelope"></i>
+                                    <p>Email: <a href="mailto:ilegaladvice26@gmail.com">ilegaladvice26@gmail.com</a></p>
                                 </div>
                                 <div class="contact ci">
-                                    
                                     <i class="fa-solid fa-phone"></i>
-                                    <p> 8779642973 | 9372294445</p>
-                                
-                            </div>
+                                    <p>Call Us: <a href="tel: +91 7208756771">+91 7208756771</a></p>
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
         <%-include('partials/footer') %>
     </div>
+
     <script>
-        const showmenu=(toggleId, navId) =>{
-const toggle = document.getElementById(toggleId),
-      nav=document.getElementById(navId);
+        const showmenu = (toggleId, navId) => {
+            const toggle = document.getElementById(toggleId),
+                  nav = document.getElementById(navId);
 
-      toggle.addEventListener('click',()=>{
-           nav.classList.toggle('show-menu');
-           toggle.classList.toggle('show-icon');
+            toggle.addEventListener('click', () => {
+                nav.classList.toggle('show-menu');
+                toggle.classList.toggle('show-icon');
+            });
+        };
+        showmenu('nav-toggle', 'nav-menu');
 
-      })
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
 
-}
-showmenu('nav-toggle','nav-menu');
+        dropdownItems.forEach((item) => {
+            const dropdownButton = item.querySelector('.dropdown-button');
 
-const dropdownItems = document.querySelectorAll('.dropdown-item')
+            dropdownButton.addEventListener('click', () => {
+                const showDropdown = document.querySelector('.show-dropdown');
 
-dropdownItems.forEach((item)=>{
-const dropdownButton= item.querySelector('.dropdown-button');
+                toggleItem(item);
 
-dropdownButton.addEventListener('click',()=>{
-     const showDropdown= document.querySelector('.show-dropdown')
+                if (showDropdown && showDropdown !== item) {
+                    toggleItem(showDropdown);
+                }
+            });
+        });
 
-     toggleItem(item);
+        const toggleItem = (item) => {
+            const dropdownContainer = item.querySelector('.dropdown-container');
 
-     if(showDropdown && showDropdown!==item){
-       toggleItem(showDropdown)
-     }
-})
-})
+            if (item.classList.contains('show-dropdown')) {
+                dropdownContainer.removeAttribute('style');
+                item.classList.remove('show-dropdown');
+            } else {
+                dropdownContainer.style.height = dropdownContainer.scrollHeight + 'px';
+                item.classList.add('show-dropdown');
+            }
+        };
 
-const toggleItem = (item) =>{
- const dropdownContainer = item.querySelector('.dropdown-container');
- 
- if(item.classList.contains('show-dropdown')){
-      dropdownContainer.removeAttribute('style');
-      item.classList.remove('show-dropdown');
- }
- else{
-     
- dropdownContainer.style.height=dropdownContainer.scrollHeight +'px';
- item.classList.add('show-dropdown'); 
- }
+        const mediaQuery = matchMedia('(min-width:1118px)'),
+              dropdownContainer = document.querySelectorAll('.dropdown-container');
 
+        const removeStyle = () => {
+            if (mediaQuery.matches) {
+                dropdownContainer.forEach((e) => {
+                    e.removeAttribute('style');
+                });
 
+                dropdownContainer.forEach((e) => {
+                    e.classList.remove('show-dropdown');
+                });
+            }
+        };
+        addEventListener('resize', removeStyle);
+    </script>
 
-}
-const mediaQuery=matchMedia('(min-width:1118px)'),
-dropdownContainer=document.querySelectorAll('.dropdown-container')
-
-const removeStyle=()=>{
- if(mediaQuery.matches){
-      dropdownContainer.forEach((e)=>{
-         e.removeAttribute('style');
-      })
-
-      dropdownContainer.forEach((e)=>{
-           e.classList.remove('show-dropdown');
-        })
-      
- }
-}
-addEventListener('resize',removeStyle);
-</script>
 </body>
 </html>
