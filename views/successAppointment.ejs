@@ -1,16 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown Redirect</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Browse top-rated lawyers and advocates in India. Filter by state, city, expertise, experience, and more. Get expert legal advice today on iLegalAdvice!" />
+  <meta name="keywords"
+    content="Find lawyers in India, Best advocates in India, Expert legal advice online, Lawyers by state, Experienced lawyers" />
+  <meta name="author" content="iLegalAdvice" />
+  <title>
+    Find the Best Lawyers and Legal Advice in India | iLegalAdvice
+  </title>
+  <link rel="canonical" href="https://www.ilegaladvice.com/find-lawyers" />
+  <link rel="icon" type="image/png" href="../uploads/logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css" />
+
+  <link rel="stylesheet" href="successAppointment.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"      />
 </head>
+
 <body>
-    <h1>Text?</h1>
-    <p id="countdown">Redirecting in 5 seconds...</p>
-</body>
-<script>
-    let countdown = 5;
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <%- include('partials/header') %>
+
+    <div class="body">
+      <div class="main-body">
+
+        <div class="success-message-container">
+        <p class="success-message">Your Lawyer Appointment Request has been received successfully.Our team will review the details and connect you with a Lawyer within few hours.</p>
+        <i class="fa-solid fa-circle-check"></i>
+        <p class="appointment-query">If you have any questions or need to make changes to your appointment, please contact us at 7208756771 / <a href="mailto:ilegaladvice26@gmail.com">ilegaladvice26@gmail.com.</a></p>
+        <p id="countdown">Redirecting in 5 seconds...</p>
+        </div>
+      </div>
+
+      <%- include('partials/footer') %>
+    </div>
+
+    <script>
+     
+
+      const showmenu = (toggleId, navId) => {
+        const toggle = document.getElementById(toggleId),
+          nav = document.getElementById(navId);
+
+        toggle.addEventListener("click", () => {
+          nav.classList.toggle("show-menu");
+          toggle.classList.toggle("show-icon");
+        });
+      };
+      showmenu("nav-toggle", "nav-menu");
+
+      const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+      dropdownItems.forEach((item) => {
+        const dropdownButton = item.querySelector(".dropdown-button");
+
+        dropdownButton.addEventListener("click", () => {
+          const showDropdown = document.querySelector(".show-dropdown");
+
+          toggleItem(item);
+
+          if (showDropdown && showDropdown !== item) {
+            toggleItem(showDropdown);
+          }
+        });
+      });
+
+      const toggleItem = (item) => {
+        const dropdownContainer = item.querySelector(".dropdown-container");
+
+        if (item.classList.contains("show-dropdown")) {
+          dropdownContainer.removeAttribute("style");
+          item.classList.remove("show-dropdown");
+        } else {
+          dropdownContainer.style.height =
+            dropdownContainer.scrollHeight + "px";
+          item.classList.add("show-dropdown");
+        }
+      };
+      const mediaQuery = matchMedia("(min-width:1118px)"),
+        dropdownContainer = document.querySelectorAll(".dropdown-container");
+
+      const removeStyle = () => {
+        if (mediaQuery.matches) {
+          dropdownContainer.forEach((e) => {
+            e.removeAttribute("style");
+          });
+          dropdownContainer.forEach((e) => {
+            e.classList.remove("show-dropdown");
+          });
+        }
+      };
+      addEventListener("resize", removeStyle);
+
+
+      let countdown = 5;
     const countdownElement = document.getElementById('countdown');
 
     const interval = setInterval(() => {
@@ -24,5 +114,11 @@
     setTimeout(() => {
         window.location.href = '/booking-page';
     }, 5000);
-</script>
+
+     
+    </script>
+</body>
+ </html>
+ 
+
 </html>

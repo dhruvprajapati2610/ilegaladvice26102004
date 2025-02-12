@@ -37,13 +37,13 @@
                 <h2>Book An Appointment</h2>
               </div>
               <div class="booking-para">
-                <% if(!userId){ %>
+                <!-- <% if(!userId){ %>
                   <p style="color: red">
                     Please
                     <a href="/signup" style="text-decoration: underline">Log In</a>
                     First to book an appointment with a lawyer.
                   </p>
-                  <% } %>
+                  <% } %> -->
                     <p>
                       Easily book an appointment with a lawyer through our seamless
                       booking feature. Simply fill out a short form with your
@@ -424,45 +424,62 @@ then close all select boxes: */
       const selectedValuesG = document.querySelectorAll(".selected-value-g");
       const optionsListsG = document.querySelectorAll(".select-dropdown-g");
 
-      const maharashtraCities = [
-        "Ahmednagar",
-        "Akola",
-        "Amravati",
-        "Aurangabad",
-        "Beed",
-        "Bhandara",
-        "Buldhana",
-        "Chandrapur",
-        "Dhule",
-        "Gadchiroli",
-        "Gondia",
-        "Hingoli",
-        "Jalgaon",
-        "Jalna",
-        "Kolhapur",
-        "Latur",
-        "Mumbai City",
-        "Mumbai Suburban",
-        "Nagpur",
-        "Nanded",
-        "Nandurbar",
-        "Nashik",
-        "Navi Mumbai",
-        "Osmanabad",
-        "Palghar",
-        "Parbhani",
-        "Pune",
-        "Raigad",
-        "Ratnagiri",
-        "Sangli",
-        "Satara",
-        "Sindhudurg",
-        "Solapur",
-        "Thane",
-        "Wardha",
-        "Washim",
-        "Yavatmal",
-      ];
+      const maharashtraCities =[
+  "Airoli",
+  "Ambernath",
+  "Andheri",
+  "Badlapur",
+  "Bandra",
+  "Belapur",
+  "Bhandup",
+  "Bhayandar",
+  "Bhiwandi",
+  "Borivali",
+  "Chembur",
+  "Colaba",
+  "Dadar",
+  "Dahisar",
+  "Diva",
+  "Dombivli",
+  "Ghatkopar",
+  "Goregaon",
+  "Jogeshwari",
+  "Juhu",
+  "Kalwa",
+  "Kalyan",
+  "Kandivali",
+  "Kanjurmarg",
+  "Karjat",
+  "Khar",
+  "Khopoli",
+  "Kurla",
+  "Mahalaxmi",
+  "Mahim",
+  "Malad",
+  "Mankhurd",
+  "Mira Road",
+  "Mulund",
+  "Mumbra",
+  "Mumbai",
+  "Navi Mumbai",
+  "Nerul",
+  "Panvel",
+  "Parel",
+  "Powai",
+  "Sanpada",
+  "Santacruz",
+  "Seawoods",
+  "Sion",
+  "Thane",
+  "Turbhe",
+  "Ulhasnagar",
+  "Vashi",
+  "Vikhroli",
+  "Vile Parle",
+  "Virar",
+  "Wadala",
+  "Worli"
+];
 
       function updateCityDropdown() {
         const cityDropdown = document.querySelector("#select-dropdown-2");
