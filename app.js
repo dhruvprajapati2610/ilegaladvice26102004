@@ -4386,7 +4386,7 @@ app.post("/delArticle", async (req, res) => {
   }
 });
 
-app.get("/appointment-admin", async (req, res) => {
+app.get("/appointment-admin", isuAuthenticated, async (req, res) => {
   const userId = req.user.id;
   try {
     const isAdminQuery = `SELECT * FROM clientsignup WHERE id = $1`;

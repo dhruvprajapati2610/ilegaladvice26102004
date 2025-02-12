@@ -1,43 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Browse top-rated lawyers and advocates in India. Filter by state, city, expertise, experience, and more. Get expert legal advice today on iLegalAdvice!"
-    />
-    <meta
-      name="keywords"
-      content="Find lawyers in India, Best advocates in India, Expert legal advice online, Lawyers by state, Experienced lawyers"
-    />
-    <meta name="author" content="iLegalAdvice" />
-    <title>
-      Find the Best Lawyers and Legal Advice in India | iLegalAdvice
-    </title>
-    <link rel="canonical" href="https://www.ilegaladvice.com/find-lawyers" />
-    <link rel="icon" type="image/png" href="../uploads/logo.png" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
-    />
 
-    <link rel="stylesheet" href="booking-page.css" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Browse top-rated lawyers and advocates in India. Filter by state, city, expertise, experience, and more. Get expert legal advice today on iLegalAdvice!" />
+  <meta name="keywords"
+    content="Find lawyers in India, Best advocates in India, Expert legal advice online, Lawyers by state, Experienced lawyers" />
+  <meta name="author" content="iLegalAdvice" />
+  <title>
+    Find the Best Lawyers and Legal Advice in India | iLegalAdvice
+  </title>
+  <link rel="canonical" href="https://www.ilegaladvice.com/find-lawyers" />
+  <link rel="icon" type="image/png" href="../uploads/logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css" />
 
-  <body>
-    <%- include('partials/header') %>
+  <link rel="stylesheet" href="booking-page.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"      />
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <%- include('partials/header') %>
 
     <div class="body">
       <div class="main-body">
@@ -49,186 +38,210 @@
               </div>
               <div class="booking-para">
                 <% if(!userId){ %>
-                <p style="color: red">
-                  Please
-                  <a href="/signup" style="text-decoration: underline"
-                    >Log In</a
-                  >
-                  First to book an appointment with a lawyer.
-                </p>
-                <% } %>
-                <p>
-                  Easily book an appointment with a lawyer through our seamless
-                  booking feature. Simply fill out a short form with your
-                  details, and our team will promptly contact you for
-                  confirmation. No hassle, no long wait times—just a quick and
-                  efficient way to connect with the right legal expert. Get the
-                  guidance you need, when you need it!
-                </p>
+                  <p style="color: red">
+                    Please
+                    <a href="/signup" style="text-decoration: underline">Log In</a>
+                    First to book an appointment with a lawyer.
+                  </p>
+                  <% } %>
+                    <p>
+                      Easily book an appointment with a lawyer through our seamless
+                      booking feature. Simply fill out a short form with your
+                      details, and our team will promptly contact you for
+                      confirmation. No hassle, no long wait times—just a quick and
+                      efficient way to connect with the right legal expert. Get the
+                      guidance you need, when you need it!
+                    </p>
               </div>
             </div>
             <div class="booking-from-container">
               <div class="booking-form">
                 <form action="/client-appointment-details" method="post">
-                  <div class="input-fields">
-                    <div class="input-field if-field">
-                      <input type="text" name="name" id="client-name" placeholder="Your Name" />
-                    </div>
-                    <div class="input-field if-field">
-                      <input type="tel" name="phone" id="client-phone" placeholder="Contact number" required />
-                    </div>
-                    <div class="input-field if-field">
-                      <input type="email" name="email" id="client-email" placeholder="Your Email" required />
-                    </div>
-                    <div class="input-field if-field">
-                      <input type="date" name="date" id="client-date" placeholder="Select prefferd date" required />
-                    </div>
-                    <div class="input-field if-field">
-                      <div class="custom-select-g">
-                        <div class="select-button-g" role="combobox" aria-labelledby="select button"
-                          aria-haspopup="listbox" aria-expanded="false" aria-controls="select-dropdown-2">
-                          <span class="selected-value-g" name="city">Select city</span>
-                          <span class="arrow-g"></span>
-                        </div>
-                        <ul class="select-dropdown-g" role="listbox" id="select-dropdown-2"></ul>
-                      </div>
-                    </div>
-                    <div class="input-field if-field">
-                      <div class="custom-select-n" style="width: 200px">
-                        <select name="areaofpractice">
-                          <option value="" class="select-aop">Select Area of Practice</option>
-                          <option value="Divorce">Divorce</option>
-                          <option value="Family Dispute">Family Dispute</option>
-                          <option value="Child Custody">Child Custody</option>
-                          <option value="Medical Negligence">
-                            Medical Negligence
-                          </option>
-                          <option value="Criminal">Criminal</option>
-                          <option value="Property">Property</option>
-                          <option value="Cyber Crime">Cyber Crime</option>
-                          <option value="Labour & Services">
-                            Labour & Services
-                          </option>
-                          <option value="Landlord">Landlord</option>
-                          <option value="Real Estate">Real Estate</option>
-                          <option value="Trademark & copyright">
-                            Trademark & Copyright
-                          </option>
-                          <option value="Startup">Startup</option>
-                          <option value="Custom & Central Excises">
-                            Custom & Central Excises
-                          </option>
-                          <option value="Banking & Finance">
-                            Banking & Finance
-                          </option>
-                          <option value="Corporate">Corporate</option>
-                          <option value="Gst & Tax">Gst & Tax</option>
-                          <option value="Documentation">Documentation</option>
-                          <option value="Consumer Court">Consumer Court</option>
-                          <option value="Civil">Civil</option>
-                          <option value="Check Bounce">Check Bounce</option>
-                          <option value="RERA">RERA</option>
-                          <option value="Litigation and Dispute Resolution">
-                            Litigation and Dispute Resolution
-                          </option>
-                          <option value="Insurance">Insurance</option>
-                          <option value="Immigration">Immigration</option>
-                          <option value="international law">
-                            International Law
-                          </option>
-                          <option value="Central Administrative Tribunal">
-                            Central Administrative Tribunal
-                          </option>
-                          <option value="Maharashtra Administrative Tribunal">
-                            Maharashtra Administrative Tribunal
-                          </option>
-                          <option value="Debts Recovery Tribunal">
-                            Debts Recovery Tribunal
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="input-field if-field bio">
-                      <textarea
-                        name="legalIssue"
-                        id="legal-issue"
-                        cols="30"
-                        rows="10"
-                        placeholder="Describe your legal issue in simple words"
-                        required
-                      ></textarea>
-                    </div>
+                  <% if(userId){ %>
+                    <input type="hidden" id="loginCheck" name="userId" value="<%=userId%>" />
+                    <% }else { %>
+                      <input type="hidden" id="loginCheck" name="userId" value="" />
+                           <% } %>
+                        <div class="input-fields">
+                          <div class="input-field if-field">
+                            <input type="text" name="name" id="client-name" placeholder="Your Name" />
+                          </div>
+                          <div class="input-field if-field">
+                            <input type="tel" name="phone" id="client-phone" placeholder="Contact number" required />
+                          </div>
+                          <div class="input-field if-field">
+                            <input type="email" name="email" id="client-email" placeholder="Your Email" required />
+                          </div>
+                          <div class="input-field if-field">
+                            <input type="date" name="date" id="client-date" placeholder="Select prefferd date"
+                              required />
+                          </div>
+                          <div class="input-field if-field">
+                            <div class="custom-select-g">
+                              <div class="select-button-g" role="combobox" aria-labelledby="select button"
+                                aria-haspopup="listbox" aria-expanded="false" aria-controls="select-dropdown-2">
+                                <span class="selected-value-g" name="city">Select city</span>
+                                <span class="arrow-g"></span>
+                              </div>
+                              <ul class="select-dropdown-g" role="listbox" id="select-dropdown-2"></ul>
+                            </div>
+                          </div>
+                          <div class="input-field if-field">
+                            <div class="custom-select-n" style="width: 200px">
+                              <select name="areaofpractice">
+                                <option value="" class="select-aop">Select Area of Practice</option>
+                                <option value="Divorce">Divorce</option>
+                                <option value="Family Dispute">Family Dispute</option>
+                                <option value="Child Custody">Child Custody</option>
+                                <option value="Medical Negligence">
+                                  Medical Negligence
+                                </option>
+                                <option value="Criminal">Criminal</option>
+                                <option value="Property">Property</option>
+                                <option value="Cyber Crime">Cyber Crime</option>
+                                <option value="Labour & Services">
+                                  Labour & Services
+                                </option>
+                                <option value="Landlord">Landlord</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Trademark & copyright">
+                                  Trademark & Copyright
+                                </option>
+                                <option value="Startup">Startup</option>
+                                <option value="Custom & Central Excises">
+                                  Custom & Central Excises
+                                </option>
+                                <option value="Banking & Finance">
+                                  Banking & Finance
+                                </option>
+                                <option value="Corporate">Corporate</option>
+                                <option value="Gst & Tax">Gst & Tax</option>
+                                <option value="Documentation">Documentation</option>
+                                <option value="Consumer Court">Consumer Court</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Check Bounce">Check Bounce</option>
+                                <option value="RERA">RERA</option>
+                                <option value="Litigation and Dispute Resolution">
+                                  Litigation and Dispute Resolution
+                                </option>
+                                <option value="Insurance">Insurance</option>
+                                <option value="Immigration">Immigration</option>
+                                <option value="international law">
+                                  International Law
+                                </option>
+                                <option value="Central Administrative Tribunal">
+                                  Central Administrative Tribunal
+                                </option>
+                                <option value="Maharashtra Administrative Tribunal">
+                                  Maharashtra Administrative Tribunal
+                                </option>
+                                <option value="Debts Recovery Tribunal">
+                                  Debts Recovery Tribunal
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="input-field if-field bio">
+                            <textarea name="legalIssue" id="legal-issue" cols="30" rows="10"
+                              placeholder="Describe your legal issue in simple words" required></textarea>
+                          </div>
 
-                  </div>
-                  <div class="btn-container">
-                    <div class="btn-layer"></div>
-                    <input type="submit" class="submit-btn" id="lawyer-signup-btn" />
-                  </div>
+                        </div>
+                        <div class="btn-container">
+                          <div class="btn-layer"></div>
+                          <input type="submit" class="submit-btn" id="lawyer-signup-btn" />
+                        </div>
                 </form>
               </div>
             </div>
           </div>
         </div>
-        <% if(previousBookings.length != 0){ %>
-        <div class="previous-booking-container-0">
-          <div class="previous-booking-container">
-            <% if(userId) { %>
-            <div class="previous-booking-heading">
-              <h2>Previous Bookings</h2>
+        <% if(previousBookings.length !=0){ %>
+          <div class="previous-booking-container-0">
+            <div class="previous-booking-container">
+              <% if(userId) { %>
+                <div class="previous-booking-heading">
+                  <h2>Previous Bookings</h2>
+                </div>
+                <div class="previous-booking-table">
+                  <table class="booking-table">
+                    <colgroup>
+                      <col id="col-1" />
+                      <col id="col-2" />
+                      <col id="col-3" />
+                      <col id="col-4" />
+                      <col id="col-5" />
+                    </colgroup>
+
+                    <tr>
+                      <th>No</th>
+                      <th>Applied Date</th>
+                      <th>Appointment Date</th>
+                      <th>Lawyer Appointed</th>
+                      <th>Appointment Status</th>
+                    </tr>
+
+                    <% previousBookings.forEach((booking, index)=> { %>
+                      <tr>
+                        <td>
+                          <%= index + 1 %>
+                        </td>
+                        <td>
+                          <%= booking.appliedDate %>
+                        </td>
+                        <td>
+                          <%= booking.appointmentDate %>
+                        </td>
+                        <td>
+                          <div class="lawyer-profile">
+                            <div class="lawyer-profile-img-container">
+                              <div class="lawyer-profile-img">
+                                <% if(booking.lawyerImage !=" " ){ %>
+                                  <img src="<%= booking.lawyerImage %>" alt="" />
+                                  <% } %>
+                              </div>
+                            </div>
+                            <div class="lawyer-name">
+                              <a href="/lawyersprofile?lawyerId=<%=booking.lawyer_id%>">
+                                <%=booking.lawyerName %>
+                              </a>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <%= booking.lawyerAppointedStatus ? "Appointed" : "Pending..." %>
+                        </td>
+                      </tr>
+
+                      <% }) %>
+                  </table>
+                </div>
+                <% } %>
             </div>
-            <div class="previous-booking-table">
-              <table class="booking-table">
-                <colgroup>
-                  <col id="col-1" />
-                  <col id="col-2" />
-                  <col id="col-3" />
-                  <col id="col-4" />
-                  <col id="col-5" />
-                </colgroup>
-
-                <tr>
-                  <th>No</th>
-                  <th>Applied Date</th>
-                  <th>Appointment Date</th>
-                  <th>Lawyer Appointed</th>
-                  <th>Appointment Status</th>
-                </tr>
-
-                <% previousBookings.forEach((booking, index)=> { %>
-                <tr>
-                  <td><%= index + 1 %></td>
-                  <td><%= booking.appliedDate %></td>
-                  <td><%= booking.appointmentDate %></td>
-                  <td>
-                    <div class="lawyer-profile">
-                      <div class="lawyer-profile-img-container">
-                        <div class="lawyer-profile-img">
-                          <% if(booking.lawyerImage != " "){ %>
-                          <img src="<%= booking.lawyerImage %>" alt="" />
-                          <% } %>
-                        </div>
-                      </div>
-                      <div class="lawyer-name">
-                        <a href="/lawyersprofile?lawyerId=<%=booking.lawyer_id%>"><%=booking.lawyerName %></a>
-                      </div>
-                    </div>
-                  </td>
-                  <td><%= booking.lawyerAppointedStatus ? "Appointed" : "Pending..." %></td>
-                </tr>
-
-                <% }) %>
-              </table>
-            </div>
-            <% } %>
           </div>
-        </div>
-        <% } %>
+          <% } %>
       </div>
 
       <%- include('partials/footer') %>
     </div>
 
     <script>
+      const checkUserIsLogin = () => {
+        const loginCheck = document.getElementById("loginCheck");
+
+        if (loginCheck === null || loginCheck.value.trim() === "") {
+          Toastify({
+            text: "Please Login to book an appointment",
+            duration: 3000, 
+            gravity: "top", 
+            position: "center", 
+            backgroundColor: "red", 
+            stopOnFocus: true, 
+          }).showToast();
+        }
+      };
+      window.onload = checkUserIsLogin;
+
       const showmenu = (toggleId, navId) => {
         const toggle = document.getElementById(toggleId),
           nav = document.getElementById(navId);
@@ -532,9 +545,9 @@ then close all select boxes: */
         });
       });
     </script>
-  </body>
-<<<<<<< Updated upstream
-</html>
-=======
+</body>
+<<<<<<< Updated upstream </html>
+  =======
+
 </html>
 >>>>>>> Stashed changes
