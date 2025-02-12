@@ -713,6 +713,9 @@ transform: scaleY(1);
 overflow: auto;
 border-radius: 3px;
 color: #000!important;
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border: 1px solid #caced1;
 }
 .select-items div{
     color: #000!important;
@@ -799,9 +802,7 @@ background-color: rgba(0, 0, 0, 0.1);
     width: 7px;
 }
 
-.select-dropdown-g:focus-within {
-    box-shadow: 0 10px 25px rgba(94, 108, 233, 0.6);
-}
+
 
 .select-dropdown-g::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -819,7 +820,7 @@ background-color: rgba(0, 0, 0, 0.1);
     display: flex;
     padding: 7px 16px;
     align-items: center;
-    font-size: 20px;
+    font-size: 17px;
 }
 
 .select-dropdown-g li label {
@@ -1055,12 +1056,15 @@ width: 28%;
     padding-top: 5px;
     outline: none;
     padding-left: 15px;
+    padding-right: 10px;
     border-radius: 6px;
     border: 1px solid lightgrey;
     border-bottom-width: 2px;
     font-size: 15px;
     transition: all 0.3s ease;
     resize: none;
+    font-family: 'Poppins', sans-serif;
+    
 }
 .input-field textarea::placeholder{
     color: #999;
@@ -1580,7 +1584,7 @@ color:#232121;
         padding: 6px 16px;
     }
     .select-dropdown-g li {
-        padding: 6px 16px;
+        padding: 3px 16px;
     }
 }
 @media screen and (max-width:992px) {
@@ -1747,6 +1751,13 @@ color:#232121;
         font-size: 15px;
         line-height: 31px;
     }
+    .select-dropdown-g li {
+        font-size: 13px;
+    }
+    .select-dropdown-g li {
+        font-size: 13px;
+        padding: 4px 16px;
+    }
 }
 @media screen and (max-width:490px) {
     .input-fields {
@@ -1780,7 +1791,7 @@ color:#232121;
     }
     .btn-layer{
         width: 90%;
-        border-radius: 15px;
+        border-radius: 13px;
     }
     .submit-btn{
         font-size: 21px;
@@ -1798,7 +1809,17 @@ color:#232121;
         font-size: 28px;
     }
 }
-
+@media screen and (max-width:440px) {
+    .btn-container {
+        height: 40px;
+    }
+    .btn-layer {
+        border-radius: 11px;
+    }
+    .submit-btn {
+        font-size: 20px;
+    }
+}
 @media screen and (max-width: 400px) {
     .booking-heading h2 {
         font-size: 26px;

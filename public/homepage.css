@@ -869,6 +869,7 @@ color: white!important;
   height: 138px;
   width: 121px;
   border-radius: 7px;
+  font-size: 0;
 }
 .info-box {
   display: flex;
@@ -1808,6 +1809,15 @@ footer {
   .stickers {
     width: 70%;
   }
+  .gradient-booking .find-lawyer-heading {
+    width: 115%;
+}
+.gradient-booking .find-lawyer-heading h2 {
+  font-size: 28px!important;
+}
+.feature-box {
+  width: 350px;
+}
 }
 @media screen and (max-width: 550px) {
   .img-box img {
@@ -1844,6 +1854,9 @@ footer {
   .find-lawyer-buttons form {
     width: 60%;
   }
+  .feature-box {
+    width: 300px;
+}
   /* .gradient-community .find-lawyer-heading {
            font-size: 15px;
            line-height: 28px;
@@ -1857,6 +1870,13 @@ footer {
   .community-sticker-no p {
     font-size: 13px;
   }
+  .gradient-booking .find-lawyer-heading {
+    width: 100%;
+}
+  .gradient-booking .find-lawyer-heading h2{
+    line-height: 28px;
+}
+
 }
 @media screen and (max-width: 470px) {
   .img-box img {
@@ -1907,6 +1927,9 @@ footer {
   .profile-container {
     min-width: 72%;
   }
+  .feature-box {
+    width: 280px;
+}
 }
 @media screen and (max-width: 410px) {
   .stickers {
@@ -1927,6 +1950,11 @@ footer {
   .gradient-community .ilegal-service-heading p {
     font-size: 13px;
   }
+}
+@media screen and (max-width:390px) {
+  .feature-box {
+    width: 270px;
+}
 }
 
 .card__container {
@@ -2181,6 +2209,9 @@ footer {
   .gradient-booking{
     row-gap: 1.5rem;
   }
+  .gradient-booking .find-lawyer-heading h2 {
+    font-size: 30px;
+}
 }
 .dropdown-list {
   padding-left: 0 !important;
@@ -2345,6 +2376,7 @@ footer {
   .strip-header h2 {
     font-size: 1.7rem;
   }
+
 }
 @media screen and (max-width: 490px) {
   .step-box {
