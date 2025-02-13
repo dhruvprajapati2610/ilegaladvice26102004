@@ -450,7 +450,7 @@ a {
     width: 100%;
     outline: none;
     padding-left: 15px;
-    border-radius: 15px;
+    border-radius: 6px;
     border: 1px solid lightgrey;
     border-bottom-width: 2px;
     font-size: 17px;
@@ -1884,3 +1884,4 @@ color:#232121;
     cursor: not-allowed;
     background-color: goldenrod;
 }
+
