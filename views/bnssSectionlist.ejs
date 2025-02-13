@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>iLegal Home</title>
+    <meta name="description" content="Explore the complete list of BNSS Sections with details on legal provisions, offences, and punishments. Search and navigate through sections easily.">
+    <meta name="keywords" content="BNSS, BNSS Sections, Legal Provisions, Indian Law, Criminal Code">
+    <title>BNSS Sections - Complete List of Legal Provisions | iLegal</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -194,5 +196,22 @@ async function performSearch() {
 }
 
     </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "BNSS Sections List",
+        "itemListElement": [
+          <% data.forEach((section, index) => { %>
+            {
+              "@type": "ListItem",
+              "position": <%= index + 1 %>,
+              "name": "BNSS Section <%= section.section_number %> - <%= section.section_name %>",
+              "url": "https://ilegaladvice.com/bnss/section-<%= section.section_number %>-<%= section.section_name.replace(/\s+/g, '-').toLowerCase() %>"
+            }<% if (index !== data.length - 1) { %>,<% } %>
+          <% }); %>
+        ]
+      }
+      </script>
   </body>
 </html>
