@@ -44,14 +44,16 @@
                     First to book an appointment with a lawyer.
                   </p>
                   <% } %> -->
-                  <% if(role === "client"){ %>
+                  <% if(role === "lawyer"){ %>
                     <p>
+
                       Easily book an appointment with a lawyer through our seamless
-                      booking feature. Simply fill out a short form with your
-                      details, and our team will promptly contact you for
-                      confirmation. No hassle, no long wait times—just a quick and
-                      efficient way to connect with the right legal expert. Get the
-                      guidance you need, when you need it!
+                        booking feature. Simply fill out a short form with your
+                        details, and our team will promptly contact you for
+                        confirmation. No hassle, no long wait times—just a quick and
+                        efficient way to connect with the right legal expert. Get the
+                        guidance you need, when you need it!
+                        <p class="lawyer-warning">Only clients are allowed to book an appointment.</p> 
                     </p>
                     <% }else { %>
                       <p>
@@ -60,7 +62,7 @@
                         details, and our team will promptly contact you for
                         confirmation. No hassle, no long wait times—just a quick and
                         efficient way to connect with the right legal expert. Get the
-                        guidance you need, when you need it! (Only clients are allowed to book an appointment.)
+                        guidance you need, when you need it!
                       </p>
                       <% } %>
               </div>
@@ -84,22 +86,23 @@
                             <input type="email" name="email" id="client-email" placeholder="Your Email" required <%= role === "client" ? "" : "disabled" %> />
                           </div>
                           <div class="input-field if-field">
+                            
                             <input type="date" name="date" id="client-date" placeholder="Select prefferd date"
                               required <%= role === "client" ? "" : "disabled" %> />
                           </div>
                           <div class="input-field if-field">
-                            <div class="custom-select-g">
-                              <div class="select-button-g" role="combobox" aria-labelledby="select button"
+                            <div class="custom-select-g ">
+                              <div class="select-button-g <%= role === "client" ? "" : "disabledCustom"%>" role="combobox" aria-labelledby="select button"
                                 aria-haspopup="listbox" aria-expanded="false" aria-controls="select-dropdown-2">
                                 <span class="selected-value-g" name="city">Select city</span>
-                                <span class="arrow-g"></span>
+                                <span class="arrow-g <%= role === "client" ? "" : "disabledToggle"%>"> </span>
                               </div>
-                              <ul class="select-dropdown-g" role="listbox" id="select-dropdown-2"></ul>
+                              <ul class="select-dropdown-g <%= role === "client" ? "" : "disabledDropdown"%> " role="listbox" id="select-dropdown-2" ></ul>
                             </div>
                           </div>
                           <div class="input-field if-field">
-                            <div class="custom-select-n" style="width: 200px">
-                              <select name="areaofpractice" <%= role === "client" ? "" : "disabled" %>>
+                            <div class="custom-select-n <%= role === "client" ? "" : "disabled" %>" style="width: 200px">
+                              <select name="areaofpractice" >
                                 <option value="" class="select-aop">Select Area of Practice</option>
                                 <option value="Divorce">Divorce</option>
                                 <option value="Family Dispute">Family Dispute</option>
@@ -240,7 +243,11 @@
           </div>
           <% } %>
       </div>
-
+      <div class="appointment-popup-container">
+          <div class="appointment-popup">
+            
+          </div>
+      </div>
       <%- include('partials/footer') %>
     </div>
 
@@ -251,11 +258,11 @@
         if (loginCheck === null || loginCheck.value.trim() === "") {
           Toastify({
             text: "Please Login to book an appointment",
-            duration: 3000, 
-            gravity: "top", 
-            position: "center", 
-            backgroundColor: "red", 
-            stopOnFocus: true, 
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            backgroundColor: "red",
+            stopOnFocus: true,
           }).showToast();
         }
       };
@@ -456,62 +463,62 @@ then close all select boxes: */
       const selectedValuesG = document.querySelectorAll(".selected-value-g");
       const optionsListsG = document.querySelectorAll(".select-dropdown-g");
 
-      const maharashtraCities =[
-  "Airoli",
-  "Ambernath",
-  "Andheri",
-  "Badlapur",
-  "Bandra",
-  "Belapur",
-  "Bhandup",
-  "Bhayandar",
-  "Bhiwandi",
-  "Borivali",
-  "Chembur",
-  "Colaba",
-  "Dadar",
-  "Dahisar",
-  "Diva",
-  "Dombivli",
-  "Ghatkopar",
-  "Goregaon",
-  "Jogeshwari",
-  "Juhu",
-  "Kalwa",
-  "Kalyan",
-  "Kandivali",
-  "Kanjurmarg",
-  "Karjat",
-  "Khar",
-  "Khopoli",
-  "Kurla",
-  "Mahalaxmi",
-  "Mahim",
-  "Malad",
-  "Mankhurd",
-  "Mira Road",
-  "Mulund",
-  "Mumbra",
-  "Mumbai",
-  "Navi Mumbai",
-  "Nerul",
-  "Panvel",
-  "Parel",
-  "Powai",
-  "Sanpada",
-  "Santacruz",
-  "Seawoods",
-  "Sion",
-  "Thane",
-  "Turbhe",
-  "Ulhasnagar",
-  "Vashi",
-  "Vikhroli",
-  "Vile Parle",
-  "Virar",
-  "Wadala",
-  "Worli"
-];
+      const maharashtraCities = [
+        "Airoli",
+        "Ambernath",
+        "Andheri",
+        "Badlapur",
+        "Bandra",
+        "Belapur",
+        "Bhandup",
+        "Bhayandar",
+        "Bhiwandi",
+        "Borivali",
+        "Chembur",
+        "Colaba",
+        "Dadar",
+        "Dahisar",
+        "Diva",
+        "Dombivli",
+        "Ghatkopar",
+        "Goregaon",
+        "Jogeshwari",
+        "Juhu",
+        "Kalwa",
+        "Kalyan",
+        "Kandivali",
+        "Kanjurmarg",
+        "Karjat",
+        "Khar",
+        "Khopoli",
+        "Kurla",
+        "Mahalaxmi",
+        "Mahim",
+        "Malad",
+        "Mankhurd",
+        "Mira Road",
+        "Mulund",
+        "Mumbra",
+        "Mumbai",
+        "Navi Mumbai",
+        "Nerul",
+        "Panvel",
+        "Parel",
+        "Powai",
+        "Sanpada",
+        "Santacruz",
+        "Seawoods",
+        "Sion",
+        "Thane",
+        "Turbhe",
+        "Ulhasnagar",
+        "Vashi",
+        "Vikhroli",
+        "Vile Parle",
+        "Virar",
+        "Wadala",
+        "Worli"
+      ];
 
       function updateCityDropdown() {
         const cityDropdown = document.querySelector("#select-dropdown-2");
@@ -593,10 +600,14 @@ then close all select boxes: */
           option.addEventListener("click", handler);
         });
       });
+
+
+     
+
     </script>
 </body>
-<<<<<<< Updated upstream </html>
-  =======
 
 </html>
->>>>>>> Stashed changes
+
+
+</html>

@@ -461,7 +461,7 @@ a {
     color:#a5a5a5!important;
     
 }
-.if-field{
+.booking-container-0 .if-field{
     margin-top: 15px;
 }
 
@@ -509,6 +509,26 @@ a {
     /* box-shadow: inset 0 0 3px #fb6aae; */
 }
 
+
+
+/* #client-date {
+    position: relative;
+  }
+  
+  #client-date::before {
+    content: "Select preferred date";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    pointer-events: none;
+  }
+  
+  input[type="date"]:focus + .input-field::before,
+  input[type="date"]:valid + .input-field::before {
+    display: none;
+  } */
 
 
 
@@ -640,7 +660,19 @@ a {
     overflow: auto;
     font-size: 1.1rem;
 }
-
+.disabledDropdown{
+    display: none;
+}
+.disabledToggle{
+    transform: none!important;
+}
+:disabled{
+    cursor: not-allowed;
+    background-color: white;
+}
+.disabledCustom{
+    cursor: not-allowed!important;
+}
 .custom-select-n {
     position: relative;
     font-family: Arial;
@@ -688,7 +720,12 @@ overflow: hidden;
 text-overflow: ellipsis;
 white-space: nowrap;
 }
-
+.disabled .select-selected{
+    cursor: not-allowed!important;
+}
+.disabled .select-items{
+    display: none!important;
+}
 .select-aop{
     color: #a5a5a5!important;
     
@@ -912,6 +949,14 @@ background-color: rgba(0, 0, 0, 0.1);
 }
 .booking-heading h2{
     font-size: 40px;
+}
+.booking-para{
+    display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+}
+.lawyer-warning{
+    color: red;
 }
 .booking-para p{
     font-size: 18px;
@@ -1174,11 +1219,11 @@ footer{
     background: rgb(238, 176, 19);
     border-color:  rgb(238, 176, 19);
 }
-.input-field{
+.news-email .input-field{
     height: 50px;
     width: 100%;
 }
-.input-field input{
+.news-email .input-field input{
     height: 100%;
     width: 100%;
     outline: none;
@@ -1190,17 +1235,17 @@ footer{
     font-size: 17px;
     transition: all 0.3s ease;
 }
-.if-field{
-    width: 465px;
+.news-email .if-field{
+    width: 300px;
 }
-.input-field input::placeholder{
+.news-email .input-field input::placeholder{
     color: #999;
     transition: all 0.3s ease;
   }
-.input-field input:focus::placeholder{
+  .news-email .input-field input:focus::placeholder{
     color: #19191a;
 }
-.input-field input:focus{
+.news-email .input-field input:focus{
     border-color: #838383;
     /* box-shadow: inset 0 0 3px #fb6aae; */
 }
@@ -1622,6 +1667,9 @@ color:#232121;
     .input-fields .input-field {
         width: 100%;
     }
+    .booking-para{
+        row-gap: 0.5rem;
+    }
     .select-items{
         width: 100%;
     }
@@ -1701,7 +1749,7 @@ color:#232121;
     }
 }
 @media screen and (max-width:575px) {
-    .if-field {
+    .bookking-form-container .if-field {
         margin-top: 10px;
     }
     .select-items {
@@ -1833,6 +1881,6 @@ color:#232121;
 }
 
 .disabledButton {
-    background-color: gray;
     cursor: not-allowed;
+    background-color: goldenrod;
 }
