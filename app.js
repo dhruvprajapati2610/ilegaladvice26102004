@@ -27,6 +27,7 @@ const { type, userInfo } = require("os");
 const { fileLoader } = require("ejs");
 const { language } = require("googleapis/build/src/apis/language");
 const { cloudidentity } = require("googleapis/build/src/apis/cloudidentity");
+const { v4: uuidv4 } = require('uuid');
 
 //ROUTE IMPORTS
 const ipcRoutes = require("./routes/ipcRoutes.js");
@@ -281,22 +282,18 @@ app.get("/contact-us", (req, res) => {
 });
 
 app.get("/booking-page", async (req, res) => {
-  
   if (!req.user) {
     res.render("booking-page", { previousBookings: [] });
     return;
   }
 
- 
-
   const userId = req.user.id;
 
   try {
-
     const result = await pool.query(
       `
-      SELECT cad.bookingdate, cad.preferreddate, cad.lawyer_id, cad.lawyer_appointed, l.id AS lawyer_id,
-             l.name AS lawyer_name, l.image AS lawyer_image
+      SELECT cad.bookingdate, cad.preferreddate, cad.lawyer_id, cad.lawyer_appointed, l.id AS lawyer_id, 
+             l.name AS lawyer_name, l.image AS lawyer_image, l.unique_token AS unique_token
       FROM client_appointment_details cad
       LEFT JOIN lawyers l ON cad.lawyer_id = l.id
       WHERE cad.user_id = $1
@@ -319,15 +316,15 @@ app.get("/booking-page", async (req, res) => {
       lawyerImage: row.lawyer_image || " ",
       lawyerAppointedStatus: row.lawyer_appointed,
       lawyer_id: row.lawyer_id,
+      unique_token : row.unique_token,
     }));
-
+    console.log(previousBookings);
     res.render("booking-page", { previousBookings });
   } catch (err) {
     console.error("Error fetching bookings:", err.message);
     res.render("booking-page", { previousBookings: [] });
   }
 });
-
 
 app.get("/", async (req, res) => {
   try {
@@ -355,6 +352,7 @@ app.get("/", async (req, res) => {
       client_count: row.client_count || 0,
       city: row.city,
       state: row.states,
+      unique_token: row.unique_token
     }));
     res.render("homepage.ejs", {
       lawyers,
@@ -681,13 +679,12 @@ app.get("/userAccount", isuAuthenticated, async (req, res) => {
 
 app.get("/lawyersprofile", async (req, res) => {
   const client = await pool.connect();
-  const lawyerId = req.query.lawyerId;
-  console.log(lawyerId);
+  const uniqueToken = req.query.lawyer;
   const currentUser = req.user || null;
   try {
     await client.query("BEGIN");
-    const query = await client.query("SELECT * FROM lawyers WHERE id=$1", [
-      lawyerId,
+    const query = await client.query("SELECT * FROM lawyers WHERE unique_token=$1", [
+      uniqueToken,
     ]);
     const lawyers = query.rows.map((row) => {
       let image = row.image;
@@ -720,7 +717,7 @@ app.get("/lawyersprofile", async (req, res) => {
    avg(rating) as average_rating,
    count(client_id) as client_count
    from reviews
-   where lawyer_id=$1
+   where lawyer_id= (SELECT id FROM lawyers WHERE unique_token = $1)
    group by lawyer_id
   )
    select r.*,c.name,
@@ -730,11 +727,11 @@ app.get("/lawyersprofile", async (req, res) => {
    join clientsignup c on r.client_id = c.id
    join lawyers l on r.lawyer_id= l.id
    left join review_aggregates ra on ra.lawyer_id=r.lawyer_id
-   where r.lawyer_id = $1
+   where r.lawyer_id = (SELECT id FROM lawyers WHERE unique_token = $1)
    group by r.id, c.name, ra.average_rating, ra.client_count
    order by r.created_at desc
   `,
-      [lawyerId]
+      [uniqueToken]
     );
 
     let reviews = [];
@@ -746,8 +743,15 @@ app.get("/lawyersprofile", async (req, res) => {
       averageRating = reviewsResult.rows[0].average_rating;
       clientCount = reviewsResult.rows[0].client_count;
     }
+
+    const getLawyerId = await client.query(
+      "SELECT id FROM lawyers WHERE unique_token = $1",
+      [uniqueToken]
+    );
+    const lawyerId = getLawyerId.rows[0].id;
     await client.query("COMMIT");
     res.render("lawyerprofile", {
+      uniqueToken,
       lawyerId,
       lawyers,
       currentUser,
@@ -845,9 +849,10 @@ order by distance ASC;
           city: row.city,
           state: row.states,
           distance: parseFloat(row.distance).toFixed(2),
+          unique_token: row.unique_token
         };
       });
-      console.log(lawyers);
+    
       // lawyers.sort((a, b) => a.distance - b.distance);
       res.render("lawyerspage.ejs", {
         roundToOneDecimalPlace: roundToOneDecimalPlace,
@@ -916,6 +921,7 @@ LIMIT $1 OFFSET $2;
           client_count: row.client_count || 0,
           city: row.city,
           state: row.states,
+          unique_token: row.unqiue_token
         };
       });
 
@@ -978,7 +984,7 @@ app.get("/filter-lawyers", async (req, res) => {
   let countQuery = `SELECT count(DISTINCT l.id) as total_count FROM lawyers l LEFT JOIN reviews r ON l.id = r.lawyer_id WHERE 1=1 AND  l.admin_verified = TRUE AND l.lead_community = TRUE`;
 
   let query = `
-    SELECT l.id, l.name, l.yrs_exp, l.image, l.city, l.states, l.gender, l.language,
+    SELECT l.id, l.name, l.yrs_exp, l.image, l.city, l.states, l.gender, l.language, l.unique_token,
            l.area_of_prac, AVG(r.rating) AS average_rating, COUNT(r.client_id) AS client_count
     FROM lawyers l
     LEFT JOIN reviews r ON l.id = r.lawyer_id
@@ -1062,8 +1068,9 @@ app.get("/filter-lawyers", async (req, res) => {
     if (ratingFilter.includes("-")) {
       const [minRating, maxRating] = ratingFilter.split("-").map(Number);
       if (!isNaN(minRating) && !isNaN(maxRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${queryParams.length + 1
-          } AND $${queryParams.length + 2}`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${
+          queryParams.length + 1
+        } AND $${queryParams.length + 2}`;
         queryParams.push(minRating, maxRating);
       } else {
         console.error(
@@ -1074,8 +1081,9 @@ app.get("/filter-lawyers", async (req, res) => {
     } else {
       const exactRating = Number(ratingFilter);
       if (!isNaN(exactRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${queryParams.length + 1
-          }`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${
+          queryParams.length + 1
+        }`;
         queryParams.push(exactRating);
       } else {
         console.error("Invalid rating value in ratingFilter:", ratingFilter);
@@ -1083,8 +1091,9 @@ app.get("/filter-lawyers", async (req, res) => {
     }
   }
 
-  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2
-    }`;
+  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${
+    queryParams.length + 2
+  }`;
   queryParams.push(limit, offset);
 
   console.log("Query Params:", queryParams);
@@ -1095,6 +1104,7 @@ app.get("/filter-lawyers", async (req, res) => {
     const totalPages = Math.ceil(totalRecords / limit);
 
     const result = await pool.query(query, queryParams);
+    console.log(result.rows);
 
     const lawyers = result.rows.map((row) => {
       let image = row.image;
@@ -1114,11 +1124,12 @@ app.get("/filter-lawyers", async (req, res) => {
         client_count: row.client_count || 0,
         city: row.city,
         state: row.states,
+        unique_token: row.unique_token
       };
     });
-
+   
     const noResults = lawyers.length === 0;
-
+  
     res.render("lawyerspage", {
       roundToOneDecimalPlace: roundToOneDecimalPlace,
       lawyers,
@@ -1258,6 +1269,7 @@ app.get("/search-lawyers", async (req, res) => {
         client_count: row.client_count || 0,
         state: row.states,
         city: row.city,
+        unique_token: row.unique_token
       };
     });
 
@@ -1342,8 +1354,8 @@ app.get("/search-homepage-lawyers", async (req, res) => {
   const whereClauseString =
     whereClause.length > 0
       ? `WHERE ${whereClause.join(
-        " AND "
-      )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
+          " AND "
+        )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
       : `WHERE l.admin_verified = TRUE AND l.lead_community = TRUE`;
 
   try {
@@ -1402,6 +1414,7 @@ app.get("/search-homepage-lawyers", async (req, res) => {
         client_count: row.client_count || 0,
         city: row.city,
         state: row.states,
+        unique_token: row.unique_token
       };
     });
 
@@ -3615,9 +3628,10 @@ app.post("/signup", upload.single("image"), async (req, res) => {
             });
 
             await transporter.sendMail(mailOptions);
-
+            const uniqueToken = uuidv4();
+            console.log(uniqueToken);
             const sql1 =
-              "INSERT INTO lawyers (name, email, passw, cpassw, c_no, area_of_prac, states, city, yrs_exp, bio, image, gender, language, courts, verification_token, is_verified, latitude, longitude, address, lic_no, lead_community) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)";
+              "INSERT INTO lawyers (name, email, passw, cpassw, c_no, area_of_prac, states, city, yrs_exp, bio, image, gender, language, courts, verification_token, is_verified, latitude, longitude, address, lic_no, lead_community, unique_token) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)";
             await pool.query(sql1, [
               name,
               email,
@@ -3640,6 +3654,7 @@ app.post("/signup", upload.single("image"), async (req, res) => {
               address,
               lic_no,
               lead_community,
+              uniqueToken
             ]);
 
             responseMessage = {
@@ -4029,7 +4044,6 @@ app.post("/lawyersprofile", async (req, res) => {
 <p><strong>Email id:</strong> ${lawyer.email}</p>
 <p><strong>Office address:</strong> ${lawyer.address}</p>
 
-<p>If you open this email, we will track it.</p>
 
 
 <img src="https://www.ilegaladvice.com/track-pixel?lawyerEmail=${lawyer.email}&clientEmail=${email}&name=${name}&phone=${phone}" alt="" />
@@ -4427,7 +4441,6 @@ app.get("/appointment-admin", isuAuthenticated, async (req, res) => {
   }
 });
 
-
 app.get("/search-lawyer-admin", async (req, res) => {
   try {
     const searchTerm = req.query.search;
@@ -4449,33 +4462,41 @@ app.post("/appoint-lawyer", async (req, res) => {
   if (lawyer_appointment) {
     try {
       if (!appointment_id || !lawyer_id) {
-        return res.status(400).json({ error: "Appointment ID and Lawyer ID are required" });
+        return res
+          .status(400)
+          .json({ error: "Appointment ID and Lawyer ID are required" });
       }
-      const query = "UPDATE client_appointment_details SET lawyer_id = $1 WHERE id = $2;";
+      const query =
+        "UPDATE client_appointment_details SET lawyer_id = $1 WHERE id = $2;";
       const result = await pool.query(query, [lawyer_id, appointment_id]);
-      const lawyerApptQuery = "UPDATE client_appointment_details SET lawyer_appointed = true WHERE id = $1"
-      const lawyerApptResult = await pool.query(lawyerApptQuery, [appointment_id]);
+      const lawyerApptQuery =
+        "UPDATE client_appointment_details SET lawyer_appointed = true WHERE id = $1";
+      const lawyerApptResult = await pool.query(lawyerApptQuery, [
+        appointment_id,
+      ]);
 
       if (result.rowCount === 0) {
         return res.status(404).json({ error: "Appointment not found" });
       }
       res.redirect("/appointment-admin");
-
     } catch (error) {
       console.error("Error appointing lawyer: ", error);
 
-      res.status(500).json({ error: "Internal Server Error. Please try again later." });
+      res
+        .status(500)
+        .json({ error: "Internal Server Error. Please try again later." });
     }
   }
 });
 
 app.get("/appointment-success", async (req, res) => {
   res.render("successAppointment");
-})
+});
 
 app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
   const userId = req.user.id;
-  const { name, phone, date, city, areaofpractice, email, legalIssue } = req.body;
+  const { name, phone, date, city, areaofpractice, email, legalIssue } =
+    req.body;
 
   if (!name || !phone || !date || !city || !areaofpractice) {
     return res.status(400).send({ error: "All fields are required" });
@@ -4519,7 +4540,7 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
       areaofpractice,
       userId,
       email,
-      legalIssue
+      legalIssue,
     ]);
 
     res.redirect("/appointment-success");

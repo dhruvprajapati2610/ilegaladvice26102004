@@ -885,6 +885,7 @@
               data-lawyer-id="<%=lawyer.id%>"
               data-name="<%=lawyer.name%>"
               data-area="<%=lawyer.area_of_prac%>"
+              data-token-id="<%=lawyer.unique_token%>"
             >
               <div class="lawyer-img">
                 <div class="image-container">
@@ -899,6 +900,7 @@
                   <button
                     class="contact-btn"
                     data-lawyer-id="<%=lawyer.id%>"
+                    data-token-id="<%=lawyer.unique_token%>"
                     value="contact"
                   >
                     Contact
@@ -955,6 +957,7 @@
                     <button
                       class="contact-btn"
                       data-lawyer-id="<%=lawyer.id%>"
+                      data-token-id="<%=lawyer.unique_token%>"
                       value="contact"
                     >
                       Contact
@@ -1187,9 +1190,11 @@
             button.addEventListener("click", async (event) => {
               console.log(event);
               const lawyerId = button.dataset.lawyerId;
+              const tokenId = button.dataset.tokenId;
+              console.log('Token id', tokenId);
               try {
                 const response = await fetch(
-                  `/lawyersprofile?lawyerId=${lawyerId}`,
+                  `/lawyersprofile?lawyer=${tokenId}`,
                   {
                     method: "GET",
                     headers: {
@@ -1199,7 +1204,7 @@
                   }
                 );
                 if (response.ok) {
-                  window.location.href = `/lawyersprofile?lawyerId=${lawyerId}`;
+                  window.location.href = `/lawyersprofile?lawyer=${tokenId}`;
                 } else {
                   const errorData = await response.json();
                   console.error("Error fetching lawyer profile:", errorData);
@@ -1216,9 +1221,11 @@
           viewLawyerButtons.forEach((button) => {
             button.addEventListener("click", async (event) => {
               const lawyerId = event.target.dataset.lawyerId;
+              const tokenId = event.target.dataset.tokenId;
+              console.log("Token id is", tokenId)
               try {
                 const response = await fetch(
-                  `/lawyersprofile?lawyerId=${lawyerId}`,
+                  `/lawyersprofile?lawyer=${tokenId}`,
                   {
                     method: "GET",
                     headers: {
@@ -1228,7 +1235,7 @@
                   }
                 );
                 if (response.ok) {
-                  window.location.href = `/lawyersprofile?lawyerId=${lawyerId}`;
+                  window.location.href = `/lawyersprofile?lawyer=${tokenId}`;
                 } else {
                   const errorData = await response.json();
                   console.error("Error fetching lawyer profile:", errorData);
