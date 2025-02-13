@@ -1831,3 +1831,8 @@ color:#232121;
         font-size: 14px;
     }
 }
+
+.disabledButton {
+    background-color: gray;
+    cursor: not-allowed;
+}

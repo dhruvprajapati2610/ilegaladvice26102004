@@ -44,6 +44,7 @@
                     First to book an appointment with a lawyer.
                   </p>
                   <% } %> -->
+                  <% if(role === "client"){ %>
                     <p>
                       Easily book an appointment with a lawyer through our seamless
                       booking feature. Simply fill out a short form with your
@@ -52,6 +53,16 @@
                       efficient way to connect with the right legal expert. Get the
                       guidance you need, when you need it!
                     </p>
+                    <% }else { %>
+                      <p>
+                        Easily book an appointment with a lawyer through our seamless
+                        booking feature. Simply fill out a short form with your
+                        details, and our team will promptly contact you for
+                        confirmation. No hassle, no long wait times—just a quick and
+                        efficient way to connect with the right legal expert. Get the
+                        guidance you need, when you need it! (Only clients are allowed to book an appointment.)
+                      </p>
+                      <% } %>
               </div>
             </div>
             <div class="booking-from-container">
@@ -64,17 +75,17 @@
                            <% } %>
                         <div class="input-fields">
                           <div class="input-field if-field">
-                            <input type="text" name="name" id="client-name" placeholder="Your Name" />
+                            <input type="text" name="name" id="client-name" placeholder="Your Name" <%= role === "client" ? "" : "disabled" %> />
                           </div>
                           <div class="input-field if-field">
-                            <input type="tel" name="phone" id="client-phone" placeholder="Contact number" required />
+                            <input type="tel" name="phone" id="client-phone" placeholder="Contact number" required <%= role === "client" ? "" : "disabled" %> />
                           </div>
                           <div class="input-field if-field">
-                            <input type="email" name="email" id="client-email" placeholder="Your Email" required />
+                            <input type="email" name="email" id="client-email" placeholder="Your Email" required <%= role === "client" ? "" : "disabled" %> />
                           </div>
                           <div class="input-field if-field">
                             <input type="date" name="date" id="client-date" placeholder="Select prefferd date"
-                              required />
+                              required <%= role === "client" ? "" : "disabled" %> />
                           </div>
                           <div class="input-field if-field">
                             <div class="custom-select-g">
@@ -88,7 +99,7 @@
                           </div>
                           <div class="input-field if-field">
                             <div class="custom-select-n" style="width: 200px">
-                              <select name="areaofpractice">
+                              <select name="areaofpractice" <%= role === "client" ? "" : "disabled" %>>
                                 <option value="" class="select-aop">Select Area of Practice</option>
                                 <option value="Divorce">Divorce</option>
                                 <option value="Family Dispute">Family Dispute</option>
@@ -143,14 +154,22 @@
                           </div>
                           <div class="input-field if-field bio">
                             <textarea name="legalIssue" id="legal-issue" cols="30" rows="10"
-                              placeholder="Describe your legal issue in simple words" required></textarea>
+                              placeholder="Describe your legal issue in simple words" required <%= role === "client" ? "" : "disabled" %>></textarea>
                           </div>
 
                         </div>
+                   
                         <div class="btn-container">
                           <div class="btn-layer"></div>
-                          <input type="submit" class="submit-btn" id="lawyer-signup-btn" />
+                          <input 
+                          type="submit" 
+                          class="submit-btn <%= role === "client" ? "" : "disabledButton"%>"
+                          id="lawyer-signup-btn" 
+                          <%= role === "client" ? '' : 'disabled' %> 
+                        />
+                        
                         </div>
+                      
                 </form>
               </div>
             </div>
@@ -240,7 +259,20 @@
           }).showToast();
         }
       };
+
+      const lawyerToast = () => {
+        Toastify({
+            text: "Only Clients can book an appointment",
+            duration: 3000, 
+            gravity: "top", 
+            position: "center", 
+            backgroundColor: "red", 
+            stopOnFocus: true, 
+          }).showToast();
+      }
+      
       window.onload = checkUserIsLogin;
+      
 
       const showmenu = (toggleId, navId) => {
         const toggle = document.getElementById(toggleId),

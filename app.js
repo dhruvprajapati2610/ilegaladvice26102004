@@ -281,11 +281,13 @@ app.get("/contact-us", (req, res) => {
 });
 
 app.get("/booking-page", async (req, res) => {
-
+  
   if (!req.user) {
     res.render("booking-page", { previousBookings: [] });
     return;
   }
+
+ 
 
   const userId = req.user.id;
 
