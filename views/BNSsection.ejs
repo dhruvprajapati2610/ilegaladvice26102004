@@ -3,8 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iLegal Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BNS Section <%=data.section_number%> - <%=data.section_name%> | iLegalAdvice</title>
+    <meta name="description" content="Comprehensive details on BNS Section <%=data.section_number%> - <%=data.section_name%>. Learn about its description, punishment, cognizance, bail, and trial details.">
+    <meta name="keywords" content="BNS Section <%=data.section_number%>, <%=data.section_name%>, Indian Penal Code, Law, Crime Punishment">
+    <meta name="author" content="iLegal">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="BNS Section <%=data.section_number%> - <%=data.section_name%> | iLegal">
+    <meta property="og:description" content="Complete information about BNS Section <%=data.section_number%> - <%=data.section_name%>, including punishment, bail, and legal details.">
+    <meta property="og:image" content="/BNS.png">
+    <meta property="og:url" content="https://www.ilegaladvice.com/bns/section-<%=data.section_number%>">
+    <meta property="og:type" content="article">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -243,6 +252,28 @@
             }
           </script>
           <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+          <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "LegalArticle",
+                "headline": "BNS Section <%=data.section_number%> - <%=data.section_name%>",
+                "description": "<%=data.description%>",
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://www.ilegaladvice.com/bns/section-<%=data.section_number%>"
+                },
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "iLegal",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://www.ilegaladvice.com/uploads/logo.png"
+                    }
+                },
+                "datePublished": "2024-01-01",
+                "dateModified": "2024-02-12"
+            }
+            </script>
 </body>
 
 </html>

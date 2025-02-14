@@ -3,7 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>iLegal Home</title>
+    <meta
+      name="description"
+      content="Explore BNSS Chapters under the Bharatiya Nagarik Suraksha Sanhita (2023), replacing CrPC. Learn about courts, arrests, police powers, trials, and legal procedures."
+    />
+    <meta
+      name="keywords"
+      content="BNSS Chapters, Bharatiya Nagarik Suraksha Sanhita, CrPC 2023, Indian Criminal Law, BNSS legal reforms"
+    />
+    <meta name="author" content="ilegaladvice" />
+    <title>
+      BNSS Chapters (2023) - Bharatiya Nagarik Suraksha Sanhita | iLegalAdvice
+    </title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -41,13 +52,19 @@
           <div class="search-box-container">
             <div class="search-box">
               <form action="#">
-                <input type="search" name="search" placeholder="Search for BNSS Sections" id="search" oninput="performSearch()">
+                <input
+                  type="search"
+                  name="search"
+                  placeholder="Search for BNSS Sections"
+                  id="search"
+                  oninput="performSearch()"
+                />
                 <i class="fa-solid fa-magnifying-glass"></i>
               </form>
             </div>
           </div>
           <div class="ipc-heading">
-            <h1>BNSS Chapters</h1>
+            <h1>BNSS Chapter</h1>
           </div>
           <div class="ipc-box">
             <ul class="ipc-list">
@@ -525,14 +542,13 @@
       };
 
       //SEARCH BNSS SECTIONS
-async function performSearch() {
-    
-    const searchInput = document.getElementById('search');
-    const resultsContainer = document.querySelector('.ipc-list');
-    const searchTerm = searchInput.value.trim();
+      async function performSearch() {
+        const searchInput = document.getElementById("search");
+        const resultsContainer = document.querySelector(".ipc-list");
+        const searchTerm = searchInput.value.trim();
 
-    if (!searchTerm) {
-        resultsContainer.innerHTML = `
+        if (!searchTerm) {
+          resultsContainer.innerHTML = `
                <li>
                 <span class="arrow">➤</span>
                 <span class="crpc-link">
@@ -937,18 +953,23 @@ async function performSearch() {
                 </span>
               </li>
         `;
-        return;
-    }
+          return;
+        }
 
-    try {
-        const response = await fetch(`/bnss/bnss_sections/search?search=${encodeURIComponent(searchTerm)}`);
-        const data = await response.json();
-        console.log(data);
+        try {
+          const response = await fetch(
+            `/bnss/bnss_sections/search?search=${encodeURIComponent(
+              searchTerm
+            )}`
+          );
+          const data = await response.json();
+          console.log(data);
 
-        if (data.success) {
+          if (data.success) {
             if (data.data.length > 0) {
-                resultsContainer.innerHTML = data.data
-                    .map(section => `
+              resultsContainer.innerHTML = data.data
+                .map(
+                  (section) => `
                         <li>
             <span class="arrow">➤</span>
             <span class="crpc-link">
@@ -957,20 +978,45 @@ async function performSearch() {
                 </a>
             </span>
         </li>
-                    `)
-                    .join('');
+                    `
+                )
+                .join("");
             } else {
-                resultsContainer.innerHTML = '<p>No results found.</p>';
+              resultsContainer.innerHTML = "<p>No results found.</p>";
             }
-        } else {
+          } else {
             resultsContainer.innerHTML = `<p>${data.message}</p>`;
+          }
+        } catch (error) {
+          console.error("Error performing search:", error);
+          resultsContainer.innerHTML =
+            "<p>An error occurred while fetching results.</p>";
         }
-    } catch (error) {
-        console.error('Error performing search:', error);
-        resultsContainer.innerHTML = '<p>An error occurred while fetching results.</p>';
-    }
-}
-
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is BNSS 2023?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "BNSS 2023, or Bharatiya Nagarik Suraksha Sanhita, is the new Indian criminal law replacing CrPC 1973."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How many chapters are in BNSS?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "BNSS consists of multiple chapters covering criminal courts, police powers, arrests, trials, and legal procedures."
+            }
+          }
+        ]
+      }
     </script>
   </body>
 </html>

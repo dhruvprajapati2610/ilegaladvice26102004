@@ -108,7 +108,7 @@
                   <h2>Please enter your mail id to send you lawyer details.</h2>
                   </div>
                   <div class="wrapper">
-                   <form id="email-send" action="/lawyersprofile?lawyerId=<%=lawyerId%>" method="post">
+                   <form id="email-send" action="/lawyersprofile?lawyer=<%=uniqueToken%>" method="post">
                      <div class="input-fields">
                       <input type="hidden" id="lawyerId" value="<%= lawyerId %>">
                       <div class="input-field if-field">
@@ -255,6 +255,8 @@
 
 
 <script>
+const urlParams = new URLSearchParams(window.location.search);
+const lawyer = urlParams.get('lawyer'); 
 
 document.addEventListener('DOMContentLoaded',()=>{
     const form = document.getElementById('email-send');
@@ -292,7 +294,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         if(data.success){
          
             setTimeout(()=>{
-                window.location.href=`/lawyersprofile?lawyerId=${lawyerId}`;
+                window.location.href=`/lawyersprofile?lawyer=${lawyer}`;
             },1000); 
         } 
 
@@ -346,7 +348,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
         if(data.success){
             setTimeout(()=>{
-                window.location.href=`lawyersprofile?lawyerId=${lawyerId}`;
+                window.location.href=`lawyersprofile?lawyer=${lawyer}`;
             },1000);
         }
         } catch(error){
@@ -384,7 +386,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
         if(data.success){
             setTimeout(()=>{
-                window.location.href=`/lawyersprofile?lawyerId=${lawyerId}`;
+                window.location.href=`/lawyersprofile?lawyer=${lawyer}`;
             },1000);
         }
         } catch(error){
