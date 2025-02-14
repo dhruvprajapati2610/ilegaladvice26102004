@@ -10,7 +10,7 @@ const {
 
 const router = express.Router();
 
-router.get("/bsa", (req, res) => {
+router.get("/", (req, res) => {
   res.render("bsaChapters.ejs");
 });
 router.get("/bsa_sections", getBsaSectionsByChapter);

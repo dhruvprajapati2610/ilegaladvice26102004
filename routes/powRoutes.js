@@ -9,7 +9,7 @@ const {
 
 const router = express.Router();
 
-router.get("/pow", (req, res) => {
+router.get("/", (req, res) => {
   res.render("powChapters.ejs");
 });
 router.get("/pow_sections", getPowSectionsByChapter);
