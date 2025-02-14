@@ -9,7 +9,7 @@ const {
 
 const router = express.Router();
 
-router.get("/bns", (req, res) => {
+router.get("/", (req, res) => {
   res.render("bnschapters.ejs");
 });
 router.get("/bns_sections", getBnsSectionsByChapter);

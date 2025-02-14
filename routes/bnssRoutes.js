@@ -3,7 +3,7 @@ const { getBnssSectionsByChapter, getBnssSection, searchBnssSections, searchBnss
 
 const router = express.Router();
 
-router.get("/bnss", (req, res) => {
+router.get("/", (req, res) => {
   res.render("bnsschapters.ejs");
 });
 router.get("/bnss_sections", getBnssSectionsByChapter);

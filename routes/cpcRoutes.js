@@ -10,7 +10,7 @@ const {
 
 const router = express.Router();
 
-router.get("/cpc", (req, res) => {
+router.get("/", (req, res) => {
   res.render("cpcChapters.ejs");
 });
 router.get("/cpc_sections", getCpcSectionsByChapter);
