@@ -4,7 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iLegal Home</title>
+    <title>CPC Section <%=data.section_number%> - <%=data.section_name%> | iLegalAdvice</title>
+    <meta name="description" content="Detailed explanation of CPC Section <%=data.section_number%> - <%=data.section_name%>. Learn about its legal provisions, scope, and interpretations under the Indian Civil Procedure Code." />
+    <meta name="keywords" content="CPC Section <%=data.section_number%>, <%=data.section_name%>, Code of Civil Procedure, CPC Law India, Civil Law, Legal Provisions, Indian Judiciary, Civil Court Rules" />
+    <meta name="author" content="iLegal Advice">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="CPC Section <%=data.section_number%> - <%=data.section_name%> | iLegalAdvice" />
+    <meta property="og:description" content="Learn about CPC Section <%=data.section_number%> - <%=data.section_name%> with detailed explanations, legal interpretations, and case references." />
+    <meta property="og:image" content="https://www.ilegaladvice.com/uploads/cpc-section-<%=data.section_number%>.png" />
+    <meta property="og:url" content="https://www.ilegaladvice.com/cpc/cpc_section_id?id=<%=data.id%>" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="CPC Section <%=data.section_number%> - <%=data.section_name%> | iLegalAdvice" />
+    <meta name="twitter:description" content="Explore the legal provisions and explanations of CPC Section <%=data.section_number%> in India." />
+    <meta name="twitter:image" content="https://www.ilegaladvice.com/uploads/cpc-section-<%=data.section_number%>.png" />
+    <link rel="canonical" href="https://www.ilegaladvice.com/cpc/cpc_section_id?id=<%=data.id%>" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -224,6 +238,34 @@
               );
             }
           </script>
+              <script type="application/ld+json">
+                {
+                  "@context": "https://schema.org",
+                  "@type": "Article",
+                  "headline": "CPC Section <%=data.section_number%> - <%=data.section_name%>",
+                  "description": "Detailed explanation of CPC Section <%=data.section_number%> under the Code of Civil Procedure in India.",
+                  "image": "https://www.ilegaladvice.com/uploads/cpc-section-<%=data.section_number%>.png",
+                  "author": {
+                    "@type": "Organization",
+                    "name": "iLegal Advice",
+                    "url": "https://www.ilegaladvice.com"
+                  },
+                  "publisher": {
+                    "@type": "Organization",
+                    "name": "iLegal Advice",
+                    "logo": {
+                      "@type": "ImageObject",
+                      "url": "https://www.ilegaladvice.com/uploads/logo.png"
+                    }
+                  },
+                  "datePublished": "<%=data.datePublished%>",
+                  "dateModified": "<%=data.dateModified%>",
+                  "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://www.ilegaladvice.com/cpc/cpc_section_id?id=<%=data.id%>"
+                  }
+                }
+                </script>
           <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
