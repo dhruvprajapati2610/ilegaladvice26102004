@@ -280,6 +280,9 @@ app.get("/terms-of-use", (req, res) => {
 app.get("/contact-us", (req, res) => {
   res.render("contact-us");
 });
+app.get("/case-law-subscription", (req, res) => {
+  res.render("case-law-subscription");
+});
 
 app.get("/booking-page", async (req, res) => {
   if (!req.user) {
