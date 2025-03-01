@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="case-law-subscription.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="swiper-bundle.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto+Slab&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 
@@ -94,51 +95,82 @@
             </div>
         </div>
         <div class="lock-form-container-0">
-        <div class="lock-form-container">
-            <div class="lock-form-p1">
-                <div class="subscription-heading"><h2>Buy subscription plan to read all the caselaws...</h2></div>
-                <div class="lock-content">
-                    <div class="content-heading">
-                      <span>What you will get in this Subscription ?</span>
+            <div class="lock-form-container">
+                <div class="lock-form-p1">
+                    <div class="subscription-heading"><h2>Buy subscription plan to read all the caselaws...</h2></div>
+                    <div class="lock-content">
+                        <div class="content-heading">
+                          <span>What you will get in this Subscription ?</span>
+                        </div>
+                        <div class="content-main">
+                             <ul class="content-list">
+                             
+                                  <li> <span class="sub-arrow"><i class="fa-regular fa-circle-check"></i></span><span class="sub-benefit">Get access to a wide collection of case laws.</span></li>
+                                  <li> <span class="sub-arrow"><i class="fa-regular fa-circle-check"></i></span><span class="sub-benefit">Designed especially for law students at an unbeatable price of ₹199 per month.</span></li>
+                                  <li> <span class="sub-arrow"><i class="fa-regular fa-circle-check"></i></span><span class="sub-benefit">Stay updated with the latest judgments and case law summaries.</span></li>
+                                  <li> <span class="sub-arrow"><i class="fa-regular fa-circle-check"></i></span><span class="sub-benefit">Simplified case law summaries to help you understand judgments faster.</span></li>
+                               
+                             </ul> 
+                        </div>
+                  </div>
+                </div>
+               
+                  <div class="subscription-card-container-0">
+                    <div class="slider-container-0">
+                    <div class="slider-container">
+                        <input type="radio" name="slide" id="monthly" class="slider-radio"  />
+                        <input type="radio" name="slide" id="quarterly" class="slider-radio" checked/>
+                        <input type="radio" name="slide" id="annually"class="slider-radio"/>
+                        <label for="monthly" class="monthly-slider slider-box">Monthly</label>
+                        <label for="quarterly" class="Quarterly-slider slider-box">Quarterly</label>
+                        <label for="annually" class="slider-box annually-slider">Annually</label>
+                        <div class="slider"></div>
+                      </div>
+                      </div>
+                    <div class="inner-case-law-subscription">
+                   <div class="subscription-card-container">
+                    <div class="subscription-box-container">
+                    <div class="subscription-card">
+                           <div class="plan-title">Monthly</div>
+                           <div class="plan-info">Save ₹100 with Monthly subscription  plan </div>
+                           <div class="plan-pricing"><span class="ds-price">₹199</span><span class="og-price">₹299</span></div>
+                           <div class="plan-btn"><button id="monthly-sub-btn">Get Started</button> </div>
                     </div>
-                    <div class="content-main">
-                         <ul class="content-list">
-                         
-                              <li> <span class="sub-arrow"><i class="fa-regular fa-circle-check"></i></span><span class="sub-benefit">Get access to a wide collection of case laws.</span></li>
-                              <li> <span class="sub-arrow"><i class="fa-regular fa-circle-check"></i></span><span class="sub-benefit">Designed especially for law students at an unbeatable price of ₹199 per month.</span></li>
-                              <li> <span class="sub-arrow"><i class="fa-regular fa-circle-check"></i></span><span class="sub-benefit">Stay updated with the latest judgments and case law summaries.</span></li>
-                              <li> <span class="sub-arrow"><i class="fa-regular fa-circle-check"></i></span><span class="sub-benefit">Simplified case law summaries to help you understand judgments faster.</span></li>
-                           
-                         </ul> 
                     </div>
-              </div>
-            </div>
-            <div class="subscription-card-container">
-                <div class="subscription-card">
-                       <div class="plan-title">Monthly</div>
-                       <div class="plan-info">Save ₹100 with Monthly subscription  plan </div>
-                       <div class="plan-pricing"><span class="ds-price">₹199</span><span class="og-price">₹299</span></div>
-                       <div class="plan-btn"><button id="monthly-sub-btn">Get Started</button> </div>
+                    <div class="subscription-box-container">
+                    <div class="subscription-card" id="subscription-card-2">
+                           <div class="plan-title" id="plan-title-2">Quarterly</div>
+                           <div class="plan-info" id="plan-info-2">Save ₹1000 with Monthly subscription  plan </div>
+                           <div class="plan-pricing" id="plan-pricing-2"><span class="ds-price">₹499</span><span class="og-price">₹1499</span></div>
+                           <div class="plan-btn plan-btn-2" id="quarterly-sub-btn"><button>Get Started</button></div>
+                           <div class="popular-plan"><span>Most Popular</span></div>
+                    </div>
+                    </div>
+                    <div class="subscription-box-container">
+                    <div class="subscription-card">
+                           <div class="plan-title">Annually</div>
+                           <div class="plan-info">Save ₹3000 with Monthly subscription  plan </div>
+                           <div class="plan-pricing"><span class="ds-price">₹1999</span><span class="og-price">₹4999</span></div>
+                           <div class="plan-btn" id="annually-sub-btn"><button>Get Started</button></div>
+                    </div>
+                    </div>
+                   </div>
+                    </div>
+                    <div class="swiper-button-next hide">
+                        <i class="ri-arrow-right-s-line"></i>
+                    </div>
+    
+                    <div class="swiper-button-prev hide">
+                        <i class="ri-arrow-left-s-line"></i>
+                    </div>
+    
+                    <div class="swiper-pagination lawyers-swiper-pagination hide"></div>
                 </div>
-                <div class="subscription-card" id="subscription-card-2">
-                       <div class="plan-title" id="plan-title-2">Quarterly</div>
-                       <div class="plan-info" id="plan-info-2">Save ₹1000 with Monthly subscription  plan </div>
-                       <div class="plan-pricing" id="plan-pricing-2"><span class="ds-price">₹499</span><span class="og-price">₹1499</span></div>
-                       <div class="plan-btn plan-btn-2" id="quarterly-sub-btn"><button>Get Started</button></div>
-                       <div class="popular-plan"><span>Most Popular</span></div>
+                <div class="cancel-sub-container">
+                    <i class="fa-solid fa-circle-xmark"></i>
                 </div>
-                <div class="subscription-card">
-                       <div class="plan-title">Annually</div>
-                       <div class="plan-info">Save ₹3000 with Monthly subscription  plan </div>
-                       <div class="plan-pricing"><span class="ds-price">₹1999</span><span class="og-price">₹4999</span></div>
-                       <div class="plan-btn" id="annually-sub-btn"><button>Get Started</button></div>
-                </div>
-            </div>
-            <div class="cancel-sub-container">
-                <i class="fa-solid fa-circle-xmark"></i>
-            </div>
-         </div>
-         </div>
+             </div>
+        </div>
        
          <%-include('partials/footer') %>
 
@@ -276,9 +308,134 @@ customSelects.forEach((customSelect, index) => {
   });
 });
 
-            
+     
+
+document.addEventListener("DOMContentLoaded", function () {
+    let swiperInstance = null;
+
+    function updateClass() {
+        let cardContainer = document.querySelector(".subscription-card-container-0");
+        let cardContent = document.querySelector(".inner-case-law-subscription");
+        let swiperWrapper = document.querySelector(".subscription-card-container");
+        let swiperSlides = document.querySelectorAll(".subscription-box-container");
+
+        if (!cardContainer || !cardContent || !swiperWrapper || swiperSlides.length === 0) {
+            return;
+        }
+
+        if (window.innerWidth < 768) {
+            if (!cardContainer.classList.contains("swiper")) {
+                cardContainer.classList.add("card__container", "swiper");
+                cardContent.classList.add("card__content");
+                swiperWrapper.classList.add("swiper-wrapper");
+                swiperSlides.forEach(slide => slide.classList.add("swiper-slide"));
+
+                if (!swiperInstance) {
+                    swiperInstance = new Swiper(".inner-case-law-subscription", {
+                        initialSlide: 1, // Quarterly as default
+                        loop: false,
+                        spaceBetween: 32,
+                        grabCursor: true,
+                        slidesPerView: 1,
+                        speed: 600, // Consistent transition speed
+                        pagination: {
+                            el: ".swiper-pagination",
+                            clickable: true,
+                        },
+                        navigation: {
+                            nextEl: ".swiper-button-next",
+                            prevEl: ".swiper-button-prev",
+                        },
+                        observer: true,
+                        observeParents: true,
+                        on: {
+                            slideChangeTransitionStart: syncSliderWithSwiper,
+                        },
+                    });
+                }
+            }
+        } else {
+            if (cardContainer.classList.contains("swiper")) {
+                if (swiperInstance) {
+                    swiperInstance.destroy(true, true);
+                    swiperInstance = null;
+                }
+                cardContainer.classList.remove("card__container", "swiper");
+                cardContent.classList.remove("card__content");
+                swiperWrapper.classList.remove("swiper-wrapper");
+                swiperSlides.forEach(slide => slide.classList.remove("swiper-slide"));
+            }
+        }
+    }
+
+    updateClass();
+    window.addEventListener("resize", updateClass);
+
+    function syncSliderWithSwiper() {
+        if (!swiperInstance) return;
+        
+        let slider = document.querySelector(".slider");
+        let monthlyRadio = document.getElementById("monthly");
+        let quarterlyRadio = document.getElementById("quarterly");
+        let annuallyRadio = document.getElementById("annually");
+
+        if (!slider || !monthlyRadio || !quarterlyRadio || !annuallyRadio) return;
+
+        let activeIndex = swiperInstance.realIndex;
+        let positions = ["0%", "33.33%", "66.66%"];
+        
+        // Apply smooth transition based on distance
+        let currentLeft = parseFloat(slider.style.left || "33.33%");
+        let targetLeft = parseFloat(positions[activeIndex]);
+        let distance = Math.abs(currentLeft - targetLeft);
+        let duration = distance > 33.33 ? "0.8s" : "0.6s"; // Longer duration for bigger jumps
+
+        slider.style.transition = `left ${duration} cubic-bezier(0.68,-0.55,0.265,1.55)`;
+        slider.style.left = positions[activeIndex];
+
+        // Update radio button selection
+        if (activeIndex === 0) {
+            monthlyRadio.checked = true;
+        } else if (activeIndex === 1) {
+            quarterlyRadio.checked = true;
+        } else {
+            annuallyRadio.checked = true;
+        }
+    }
+
+    function syncSwiperWithSlider() {
+        const monthlyRadio = document.getElementById("monthly");
+        const quarterlyRadio = document.getElementById("quarterly");
+        const annuallyRadio = document.getElementById("annually");
+
+        if (!monthlyRadio || !quarterlyRadio || !annuallyRadio || !swiperInstance) return;
+
+        monthlyRadio.addEventListener("change", function () {
+            if (this.checked) swiperInstance.slideTo(0);
+        });
+
+        quarterlyRadio.addEventListener("change", function () {
+            if (this.checked) swiperInstance.slideTo(1);
+        });
+
+        annuallyRadio.addEventListener("change", function () {
+            if (this.checked) swiperInstance.slideTo(2);
+        });
+    }
+
+    setTimeout(() => {
+        // Set Quarterly as default selection
+        document.getElementById("quarterly").checked = true;
+        document.querySelector(".slider").style.left = "33.33%";
+        syncSwiperWithSlider();
+    }, 1000);
+});
+
+       
+
             
         </script>
+         <script src="swiper-bundle.min.js" defer></script>
 </body>
 
 </html>
