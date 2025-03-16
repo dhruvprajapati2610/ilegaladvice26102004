@@ -319,7 +319,7 @@ app.get("/booking-page", async (req, res) => {
       lawyerImage: row.lawyer_image || " ",
       lawyerAppointedStatus: row.lawyer_appointed,
       lawyer_id: row.lawyer_id,
-      unique_token : row.unique_token,
+      unique_token: row.unique_token,
     }));
     console.log(previousBookings);
     res.render("booking-page", { previousBookings });
@@ -855,7 +855,7 @@ order by distance ASC;
           unique_token: row.unique_token
         };
       });
-    
+
       // lawyers.sort((a, b) => a.distance - b.distance);
       res.render("lawyerspage.ejs", {
         roundToOneDecimalPlace: roundToOneDecimalPlace,
@@ -1071,9 +1071,8 @@ app.get("/filter-lawyers", async (req, res) => {
     if (ratingFilter.includes("-")) {
       const [minRating, maxRating] = ratingFilter.split("-").map(Number);
       if (!isNaN(minRating) && !isNaN(maxRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${
-          queryParams.length + 1
-        } AND $${queryParams.length + 2}`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${queryParams.length + 1
+          } AND $${queryParams.length + 2}`;
         queryParams.push(minRating, maxRating);
       } else {
         console.error(
@@ -1084,9 +1083,8 @@ app.get("/filter-lawyers", async (req, res) => {
     } else {
       const exactRating = Number(ratingFilter);
       if (!isNaN(exactRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${
-          queryParams.length + 1
-        }`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${queryParams.length + 1
+          }`;
         queryParams.push(exactRating);
       } else {
         console.error("Invalid rating value in ratingFilter:", ratingFilter);
@@ -1094,9 +1092,8 @@ app.get("/filter-lawyers", async (req, res) => {
     }
   }
 
-  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${
-    queryParams.length + 2
-  }`;
+  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2
+    }`;
   queryParams.push(limit, offset);
 
   console.log("Query Params:", queryParams);
@@ -1130,9 +1127,9 @@ app.get("/filter-lawyers", async (req, res) => {
         unique_token: row.unique_token
       };
     });
-   
+
     const noResults = lawyers.length === 0;
-  
+
     res.render("lawyerspage", {
       roundToOneDecimalPlace: roundToOneDecimalPlace,
       lawyers,
@@ -1357,8 +1354,8 @@ app.get("/search-homepage-lawyers", async (req, res) => {
   const whereClauseString =
     whereClause.length > 0
       ? `WHERE ${whereClause.join(
-          " AND "
-        )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
+        " AND "
+      )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
       : `WHERE l.admin_verified = TRUE AND l.lead_community = TRUE`;
 
   try {
@@ -3522,7 +3519,7 @@ app.post("/signup", upload.single("image"), async (req, res) => {
           };
 
           const transporter = nodemailer.createTransport({
-            service: "gmail",
+            service: process.env.EMAIL_SERVICE,
             port: 465,
             auth: {
               user: process.env.EMAIL,
@@ -3621,7 +3618,7 @@ app.post("/signup", upload.single("image"), async (req, res) => {
             };
 
             const transporter = nodemailer.createTransport({
-              service: "gmail",
+              service: process.env.EMAIL_SERVICE,
               port: 465,
               auth: {
                 user: process.env.EMAIL,
@@ -3961,7 +3958,7 @@ app.get("/track-pixel", async (req, res) => {
   const { lawyerEmail, clientEmail, name, phone } = req.query;
 
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    service: process.env.EMAIL_SERVICE,
     port: 465,
     auth: {
       user: process.env.EMAIL,
@@ -4028,7 +4025,7 @@ app.post("/lawyersprofile", async (req, res) => {
     }
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: process.env.EMAIL_SERVICE,
       port: 465,
       auth: {
         user: process.env.EMAIL,
@@ -4521,7 +4518,7 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
     };
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: process.env.EMAIL_SERVICE,
       port: 465,
       auth: {
         user: process.env.EMAIL,
