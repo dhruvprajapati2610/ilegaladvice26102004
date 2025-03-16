@@ -9,6 +9,7 @@ const saltRounds = 10;
 const crypto = require("crypto");
 const util = require("util");
 const uuid = require("uuid");
+const rateLimit = require('express-rate-limit');
 const nodemailer = require("nodemailer");
 const randomstring = require("randomstring");
 const flash = require("connect-flash");
@@ -45,6 +46,12 @@ const {
   isuAuthenticated,
   communityAuthenticated,
 } = require("./middleware/authMiddleware.js");
+
+const limiter = rateLimit({
+  windowMs: 30 * 60 * 1000, // 30 minutes
+  max: 5, // Max 5 requests per IP
+  message: "Too many requests from this IP, please try again later."
+});
 
 require("dotenv").config();
 app.use(methodOverride("_method"));
@@ -3466,7 +3473,7 @@ app.delete("/community/comment/:commentId", async (req, res) => {
   }
 });
 
-app.post("/signup", upload.single("image"), async (req, res) => {
+app.post("/signup", limiter, upload.single("image"), async (req, res) => {
   if (emailSendInProgress) {
     return res.render("home3", {
       message: "Kindly check your email to verify your account",
