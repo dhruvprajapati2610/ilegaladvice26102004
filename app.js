@@ -375,16 +375,24 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/signup", async (req, res) => {
-  // Check if req.user exists and has an id
   if (req.user && req.user.id) {
-    res.render("home3.ejs", {
+    return res.render("home3.ejs", {
       userId: req.user.id,
       message: "",
       success: false,
     });
-  } else {
-    res.render("home3.ejs", { userId: false, message: "", success: false });
   }
+
+  const token = crypto.randomBytes(32).toString("hex");
+  req.session.signupToken = token;
+  console.log("Frontend to jaaraha mai", token);
+
+  res.render("home3.ejs", {
+    userId: false,
+    message: "",
+    success: false,
+    token: token,
+  });
 });
 
 // app.get('/api',(req,res)=>{
@@ -3491,9 +3499,23 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
     message: "An error occurred. Please try again.",
     success: false,
   };
-  const formType = req.query.formType;
-  const saltRounds = 10;
   try {
+    // token validation
+    const userToken = req.body.token;
+    
+    if (!userToken || userToken !== req.session.signupToken) {
+      
+      return res.status(403).render("home3", {
+        message: "Invalid form submission. Please refresh and try again.",
+        success: false,
+      });
+    }
+    // Token validated, clearing it to prevent reuse
+    req.session.signupToken = null;
+
+    const formType = req.query.formType;
+    const saltRounds = 10;
+
     if (formType === "form1") {
       const { passw, cpassw, name, email, phone: c_no } = req.body;
 
@@ -3633,7 +3655,7 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
             const transporter = nodemailer.createTransport({
               host: "smtp.gmail.com",
               port: 465,
-              secure: true, 
+              secure: true,
               auth: {
                 user: process.env.EMAIL,
                 pass: process.env.NODEMAILER_PASSWORD,

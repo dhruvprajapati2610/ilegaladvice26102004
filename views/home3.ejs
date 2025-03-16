@@ -123,6 +123,10 @@
                         id="client-signup-form"
                       >
                         <div class="input-field">
+                          <% if (typeof token !== "undefined" && token) { %>
+                            <input type="hidden" name="token" value="<%= token %>">
+                          <% } %>
+                          
                           <input
                             type="text"
                             name="name"
@@ -213,6 +217,10 @@
                           </div>
                         </div>
                         <div class="input-field">
+                          <% if (typeof token !== "undefined" && token) { %>
+                            <input type="hidden" name="token" value="<%= token %>">
+                          <% } %>
+                          
                           <input
                             type="text"
                             name="l_name"
