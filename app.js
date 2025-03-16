@@ -3515,7 +3515,7 @@ app.post("/signup", upload.single("image"), async (req, res) => {
           const verificationLink = `https://www.ilegaladvice.com/verify-email?token=${token}`;
 
           const mailOptions = {
-            from: "ilegaladvice26@gmail.com",
+            from: process.env.EMAIL,
             to: email,
             subject: "Email Verification",
             text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
@@ -3525,8 +3525,8 @@ app.post("/signup", upload.single("image"), async (req, res) => {
             service: "gmail",
             port: 465,
             auth: {
-              user: "ilegaladvice26@gmail.com",
-              pass: "csfa hkqe dfbx jyxw",
+              user: process.env.EMAIL,
+              pass: process.env.NODEMAILER_PASSWORD,
             },
             pool: true,
           });
@@ -3614,7 +3614,7 @@ app.post("/signup", upload.single("image"), async (req, res) => {
             const verificationLink = `https://www.ilegaladvice.com/verify-email?token=${token}`;
 
             const mailOptions = {
-              from: "ilegaladvice26@gmail.com",
+              from: process.env.EMAIL,
               to: email,
               subject: "Email Verification",
               text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
@@ -3624,8 +3624,8 @@ app.post("/signup", upload.single("image"), async (req, res) => {
               service: "gmail",
               port: 465,
               auth: {
-                user: "ilegaladvice26@gmail.com",
-                pass: "csfa hkqe dfbx jyxw",
+                user: process.env.EMAIL,
+                pass: process.env.NODEMAILER_PASSWORD,
               },
               pool: true,
             });
@@ -3964,14 +3964,14 @@ app.get("/track-pixel", async (req, res) => {
     service: "gmail",
     port: 465,
     auth: {
-      user: "ilegaladvice26@gmail.com",
-      pass: "csfa hkqe dfbx jyxw",
+      user: process.env.EMAIL,
+      pass: process.env.NODEMAILER_PASSWORD,
     },
     pool: true,
   });
 
   const lawyerMailOptions = {
-    from: "ilegaladvice26@gmail.com",
+    from: process.env.EMAIL,
     to: lawyerEmail,
     subject: "Client Details",
     html: `<p>Greetings from iLegalAdvice. Following User has been trying to contact you:</p>
@@ -4031,14 +4031,14 @@ app.post("/lawyersprofile", async (req, res) => {
       service: "gmail",
       port: 465,
       auth: {
-        user: "ilegaladvice26@gmail.com",
-        pass: "csfa hkqe dfbx jyxw",
+        user: process.env.EMAIL,
+        pass: process.env.NODEMAILER_PASSWORD,
       },
       pool: true,
     });
 
     const clientMailOptions = {
-      from: "ilegaladvice26@gmail.com",
+      from: process.env.EMAIL,
       to: email,
       subject: "Lawyer Details",
       html: `<p>Greetings from iLegalAdvice. Details of your requested lawyer:</p>
@@ -4141,15 +4141,15 @@ function sendPasswordResetEmail(email, token) {
       service: "gmail",
       port: 465,
       auth: {
-        user: "ilegaladvice26@gmail.com",
-        pass: "csfa hkqe dfbx jyxw",
+        user: process.env.EMAIL,
+        pass: process.env.NODEMAILER_PASSWORD,
       },
       pool: true,
     });
 
     const resetLink = `https://www.ilegaladvice.com/reset-password?token=${token}`;
     const mailOptions = {
-      from: "ilegaladvice26@gmail.com",
+      from: process.env.EMAIL,
       to: email,
       subject: "Password Reset",
       text: `Click the following link to reset your password: https://www.ilegaladvice.com/reset-password?token=${token}`,
@@ -4507,8 +4507,8 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
 
   try {
     const mailOptions = {
-      from: "ilegaladvice26@gmail.com",
-      to: "ilegaladvice26@gmail.com",
+      from: process.env.EMAIL,
+      to: process.env.EMAIL,
       subject: "Client appointment details",
       text: `Appointment details are as follows:
           Name: ${name},
@@ -4524,8 +4524,8 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
       service: "gmail",
       port: 465,
       auth: {
-        user: "ilegaladvice26@gmail.com",
-        pass: "csfa hkqe dfbx jyxw",
+        user: process.env.EMAIL,
+        pass: process.env.NODEMAILER_PASSWORD,
       },
 
       pool: true,
