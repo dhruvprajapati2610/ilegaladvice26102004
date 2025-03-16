@@ -1169,7 +1169,7 @@ app.get("/filter-lawyers", async (req, res) => {
   }
 });
 
-app.get("/verify-email", async (req, res) => {
+app.get("/verifyy-email", async (req, res) => {
   const token = req.query.token;
   console.log(token);
   try {
@@ -3521,7 +3521,7 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
           };
         } else {
           const token = crypto.randomBytes(32).toString("hex");
-          const verificationLink = `https://www.ilegaladvice.com/verify-email?token=${token}`;
+          const verificationLink = `https://www.ilegaladvice.com/verifyy-email?token=${token}`;
 
           const mailOptions = {
             from: process.env.EMAIL,
@@ -3621,7 +3621,7 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
             const longitude = location ? location.lng : null;
 
             const token = crypto.randomBytes(32).toString("hex");
-            const verificationLink = `https://www.ilegaladvice.com/verify-email?token=${token}`;
+            const verificationLink = `https://www.ilegaladvice.com/verifyy-email?token=${token}`;
 
             const mailOptions = {
               from: process.env.EMAIL,
