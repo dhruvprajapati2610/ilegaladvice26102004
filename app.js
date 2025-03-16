@@ -9,7 +9,7 @@ const saltRounds = 10;
 const crypto = require("crypto");
 const util = require("util");
 const uuid = require("uuid");
-const rateLimit = require('express-rate-limit');
+const rateLimit = require("express-rate-limit");
 const nodemailer = require("nodemailer");
 const randomstring = require("randomstring");
 const flash = require("connect-flash");
@@ -28,7 +28,7 @@ const { type, userInfo } = require("os");
 const { fileLoader } = require("ejs");
 const { language } = require("googleapis/build/src/apis/language");
 const { cloudidentity } = require("googleapis/build/src/apis/cloudidentity");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 //ROUTE IMPORTS
 const ipcRoutes = require("./routes/ipcRoutes.js");
@@ -50,10 +50,11 @@ const {
 const limiter = rateLimit({
   windowMs: 30 * 60 * 1000, // 30 minutes
   max: 5, // Max 5 requests per IP
-  message: "Too many requests from this IP, please try again later."
+  message: "Too many requests from this IP, please try again later.",
 });
 
 require("dotenv").config();
+app.set("trust proxy", 1);
 app.use(methodOverride("_method"));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -362,7 +363,7 @@ app.get("/", async (req, res) => {
       client_count: row.client_count || 0,
       city: row.city,
       state: row.states,
-      unique_token: row.unique_token
+      unique_token: row.unique_token,
     }));
     res.render("homepage.ejs", {
       lawyers,
@@ -693,9 +694,10 @@ app.get("/lawyersprofile", async (req, res) => {
   const currentUser = req.user || null;
   try {
     await client.query("BEGIN");
-    const query = await client.query("SELECT * FROM lawyers WHERE unique_token=$1", [
-      uniqueToken,
-    ]);
+    const query = await client.query(
+      "SELECT * FROM lawyers WHERE unique_token=$1",
+      [uniqueToken]
+    );
     const lawyers = query.rows.map((row) => {
       let image = row.image;
       if (image) {
@@ -859,7 +861,7 @@ order by distance ASC;
           city: row.city,
           state: row.states,
           distance: parseFloat(row.distance).toFixed(2),
-          unique_token: row.unique_token
+          unique_token: row.unique_token,
         };
       });
 
@@ -931,7 +933,7 @@ LIMIT $1 OFFSET $2;
           client_count: row.client_count || 0,
           city: row.city,
           state: row.states,
-          unique_token: row.unqiue_token
+          unique_token: row.unqiue_token,
         };
       });
 
@@ -1078,8 +1080,9 @@ app.get("/filter-lawyers", async (req, res) => {
     if (ratingFilter.includes("-")) {
       const [minRating, maxRating] = ratingFilter.split("-").map(Number);
       if (!isNaN(minRating) && !isNaN(maxRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${queryParams.length + 1
-          } AND $${queryParams.length + 2}`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) BETWEEN $${
+          queryParams.length + 1
+        } AND $${queryParams.length + 2}`;
         queryParams.push(minRating, maxRating);
       } else {
         console.error(
@@ -1090,8 +1093,9 @@ app.get("/filter-lawyers", async (req, res) => {
     } else {
       const exactRating = Number(ratingFilter);
       if (!isNaN(exactRating)) {
-        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${queryParams.length + 1
-          }`;
+        query += ` HAVING AVG(COALESCE(r.rating, 0)) = $${
+          queryParams.length + 1
+        }`;
         queryParams.push(exactRating);
       } else {
         console.error("Invalid rating value in ratingFilter:", ratingFilter);
@@ -1099,8 +1103,9 @@ app.get("/filter-lawyers", async (req, res) => {
     }
   }
 
-  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2
-    }`;
+  query += ` ORDER BY l.id ASC LIMIT $${queryParams.length + 1} OFFSET $${
+    queryParams.length + 2
+  }`;
   queryParams.push(limit, offset);
 
   console.log("Query Params:", queryParams);
@@ -1131,7 +1136,7 @@ app.get("/filter-lawyers", async (req, res) => {
         client_count: row.client_count || 0,
         city: row.city,
         state: row.states,
-        unique_token: row.unique_token
+        unique_token: row.unique_token,
       };
     });
 
@@ -1276,7 +1281,7 @@ app.get("/search-lawyers", async (req, res) => {
         client_count: row.client_count || 0,
         state: row.states,
         city: row.city,
-        unique_token: row.unique_token
+        unique_token: row.unique_token,
       };
     });
 
@@ -1361,8 +1366,8 @@ app.get("/search-homepage-lawyers", async (req, res) => {
   const whereClauseString =
     whereClause.length > 0
       ? `WHERE ${whereClause.join(
-        " AND "
-      )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
+          " AND "
+        )} AND l.admin_verified = TRUE AND l.lead_community = TRUE`
       : `WHERE l.admin_verified = TRUE AND l.lead_community = TRUE`;
 
   try {
@@ -1421,7 +1426,7 @@ app.get("/search-homepage-lawyers", async (req, res) => {
         client_count: row.client_count || 0,
         city: row.city,
         state: row.states,
-        unique_token: row.unique_token
+        unique_token: row.unique_token,
       };
     });
 
@@ -3527,7 +3532,8 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
 
           const transporter = nodemailer.createTransport({
             service: process.env.EMAIL_SERVICE,
-            port: 465,
+            port: 587,
+            secure: false,
             auth: {
               user: process.env.EMAIL,
               pass: process.env.NODEMAILER_PASSWORD,
@@ -3626,7 +3632,8 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
 
             const transporter = nodemailer.createTransport({
               service: process.env.EMAIL_SERVICE,
-              port: 465,
+              port: 587,
+              secure: false,
               auth: {
                 user: process.env.EMAIL,
                 pass: process.env.NODEMAILER_PASSWORD,
@@ -3661,7 +3668,7 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
               address,
               lic_no,
               lead_community,
-              uniqueToken
+              uniqueToken,
             ]);
 
             responseMessage = {
@@ -3966,7 +3973,8 @@ app.get("/track-pixel", async (req, res) => {
 
   const transporter = nodemailer.createTransport({
     service: process.env.EMAIL_SERVICE,
-    port: 465,
+    port: 587,
+    secure: false,
     auth: {
       user: process.env.EMAIL,
       pass: process.env.NODEMAILER_PASSWORD,
@@ -4033,7 +4041,8 @@ app.post("/lawyersprofile", async (req, res) => {
 
     const transporter = nodemailer.createTransport({
       service: process.env.EMAIL_SERVICE,
-      port: 465,
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
@@ -4143,7 +4152,8 @@ function sendPasswordResetEmail(email, token) {
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
-      port: 465,
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
@@ -4526,7 +4536,8 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
 
     const transporter = nodemailer.createTransport({
       service: process.env.EMAIL_SERVICE,
-      port: 465,
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
