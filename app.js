@@ -3531,8 +3531,9 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
           };
 
           const transporter = nodemailer.createTransport({
-            service: process.env.EMAIL_SERVICE,
+            host: "smtp.gmail.com",
             port: 465,
+            secure: true,
             auth: {
               user: process.env.EMAIL,
               pass: process.env.NODEMAILER_PASSWORD,
@@ -3630,8 +3631,9 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
             };
 
             const transporter = nodemailer.createTransport({
-              service: process.env.EMAIL_SERVICE,
+              host: "smtp.gmail.com",
               port: 465,
+              secure: true, 
               auth: {
                 user: process.env.EMAIL,
                 pass: process.env.NODEMAILER_PASSWORD,
@@ -3970,8 +3972,9 @@ app.get("/track-pixel", async (req, res) => {
   const { lawyerEmail, clientEmail, name, phone } = req.query;
 
   const transporter = nodemailer.createTransport({
-    service: process.env.EMAIL_SERVICE,
+    host: "smtp.gmail.com",
     port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL,
       pass: process.env.NODEMAILER_PASSWORD,
@@ -4037,8 +4040,9 @@ app.post("/lawyersprofile", async (req, res) => {
     }
 
     const transporter = nodemailer.createTransport({
-      service: process.env.EMAIL_SERVICE,
+      host: "smtp.gmail.com",
       port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
@@ -4147,8 +4151,9 @@ app.post("/forgetpassword", async (req, res) => {
 function sendPasswordResetEmail(email, token) {
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
       port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
@@ -4530,8 +4535,9 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
     };
 
     const transporter = nodemailer.createTransport({
-      service: process.env.EMAIL_SERVICE,
+      host: "smtp.gmail.com",
       port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
