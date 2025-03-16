@@ -3532,8 +3532,7 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
 
           const transporter = nodemailer.createTransport({
             service: process.env.EMAIL_SERVICE,
-            port: 587,
-            secure: false,
+            port: 465,
             auth: {
               user: process.env.EMAIL,
               pass: process.env.NODEMAILER_PASSWORD,
@@ -3632,8 +3631,7 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
 
             const transporter = nodemailer.createTransport({
               service: process.env.EMAIL_SERVICE,
-              port: 587,
-              secure: false,
+              port: 465,
               auth: {
                 user: process.env.EMAIL,
                 pass: process.env.NODEMAILER_PASSWORD,
@@ -3973,8 +3971,7 @@ app.get("/track-pixel", async (req, res) => {
 
   const transporter = nodemailer.createTransport({
     service: process.env.EMAIL_SERVICE,
-    port: 587,
-    secure: false,
+    port: 465,
     auth: {
       user: process.env.EMAIL,
       pass: process.env.NODEMAILER_PASSWORD,
@@ -4041,8 +4038,7 @@ app.post("/lawyersprofile", async (req, res) => {
 
     const transporter = nodemailer.createTransport({
       service: process.env.EMAIL_SERVICE,
-      port: 587,
-      secure: false,
+      port: 465,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
@@ -4152,8 +4148,7 @@ function sendPasswordResetEmail(email, token) {
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
-      port: 587,
-      secure: false,
+      port: 465,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
@@ -4536,8 +4531,7 @@ app.post("/client-appointment-details", isuAuthenticated, async (req, res) => {
 
     const transporter = nodemailer.createTransport({
       service: process.env.EMAIL_SERVICE,
-      port: 587,
-      secure: false,
+      port: 465,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
