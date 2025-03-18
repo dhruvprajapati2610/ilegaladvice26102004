@@ -384,15 +384,18 @@ app.get("/signup", async (req, res) => {
   }
 
   const token = crypto.randomBytes(32).toString("hex");
-  req.session.signupToken = token;
+  const saltRounds = 10;
+  const hashedToken = await bcrypt.hash(token, saltRounds);
+  req.session.signupToken = hashedToken;
 
   res.render("home3.ejs", {
     userId: false,
     message: "",
     success: false,
-    token: token,
+    token: token, // Send the unhashed token to the frontend
   });
 });
+
 
 // app.get('/api',(req,res)=>{
 //   res.render('api.ejs');
@@ -3501,13 +3504,15 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
   try {
     // token validation
     const userToken = req.body.token;
-    if (!userToken || userToken !== req.session.signupToken) {
-      
+    const hashedTokenFromSession = req.session.signupToken;
+
+    if (!userToken || !hashedTokenFromSession || !(await bcrypt.compare(userToken, hashedTokenFromSession))) {
       return res.status(403).render("home3", {
         message: "Invalid form submission. Please refresh and try again.",
         success: false,
       });
     }
+
     // Token validated, clearing it to prevent reuse
     req.session.signupToken = null;
 
