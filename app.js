@@ -385,7 +385,6 @@ app.get("/signup", async (req, res) => {
 
   const token = crypto.randomBytes(32).toString("hex");
   req.session.signupToken = token;
-  console.log("Frontend to jaaraha mai", token);
 
   res.render("home3.ejs", {
     userId: false,
@@ -3502,7 +3501,6 @@ app.post("/signup", limiter, upload.single("image"), async (req, res) => {
   try {
     // token validation
     const userToken = req.body.token;
-    
     if (!userToken || userToken !== req.session.signupToken) {
       
       return res.status(403).render("home3", {
