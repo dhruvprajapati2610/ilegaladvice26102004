@@ -1,14 +1,14 @@
 const { Pool } = require("pg");
 
-const pool = new Pool({
+const pool= new Pool({ 
   user: "postgres",
-  host: "144.24.124.135",
-  database: "ilegaladvice",
-  password: "Pranav@2003",
+  host: "ilegalrds.cv2o4u0uqobp.ap-south-1.rds.amazonaws.com",
+  database: "ilegalrds",
+  password: "ilegal2025",
   port: 5432,
-  max: 30, 
+  max: 30,
   idleTimeoutMillis: 60000,
-  connectionTimeoutMillis: 3000, 
+  connectionTimeoutMillis: 50000,
 });
 
 
