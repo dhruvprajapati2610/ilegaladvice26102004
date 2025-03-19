@@ -9,6 +9,9 @@ const pool= new Pool({
   max: 30,
   idleTimeoutMillis: 60000,
   connectionTimeoutMillis: 50000,
+  ssl: {
+    rejectUnauthorized: false,  // For RDS SSL connection
+  },
 });
 
 
