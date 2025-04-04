@@ -74,6 +74,10 @@ exports.approveClient = async (req, res) => {
       "UPDATE clientsignup SET admin_verified = true WHERE id = $1",
       [clientId]
     );
+    await pool.query(
+      "UPDATE clientsignup SET is_verified = true WHERE id = $1",
+      [clientId]
+    );
     res.json({ success: true, message: "Client approved successfully." });
   } catch (error) {
     console.error("Error approving client:", error);
