@@ -53,6 +53,20 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again later.",
 });
 
+const strictLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10, // 3 signups per IP per hour
+  message: 'Too many signup attempts',
+  handler: (req, res) => {
+    // Log the IP and timestamp
+    console.log(`Rate limit exceeded by ${req.ip} at ${new Date()}`);
+    res.status(429).render("home3", {
+      message: "Too many attempts. Please try again later.",
+      success: false
+    });
+  }
+});
+
 require("dotenv").config();
 app.set("trust proxy", 1);
 app.use(methodOverride("_method"));
@@ -375,6 +389,7 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/signup", async (req, res) => {
+
   if (req.user && req.user.id) {
     return res.render("home3.ejs", {
       userId: req.user.id,
@@ -384,18 +399,20 @@ app.get("/signup", async (req, res) => {
   }
 
   const token = crypto.randomBytes(32).toString("hex");
-  const saltRounds = 10;
-  const hashedToken = await bcrypt.hash(token, saltRounds);
-  req.session.signupToken = hashedToken;
-
+  console.log(token);
+  // Store in session with metadata
+  req.session.signupToken = {
+    value: token,
+    createdAt: Date.now(),
+    used: false,
+  };
   res.render("home3.ejs", {
     userId: false,
     message: "",
     success: false,
-    token: token, // Send the unhashed token to the frontend
+    token: token,
   });
 });
-
 
 // app.get('/api',(req,res)=>{
 //   res.render('api.ejs');
@@ -3488,7 +3505,7 @@ app.delete("/community/comment/:commentId", async (req, res) => {
   }
 });
 
-app.post("/signup", upload.single("image"), async (req, res) => {
+app.post("/signup", strictLimiter, upload.single("image"), async (req, res) => {
   if (emailSendInProgress) {
     return res.render("home3", {
       message: "Kindly check your email to verify your account",
@@ -3502,11 +3519,13 @@ app.post("/signup", upload.single("image"), async (req, res) => {
     success: false,
   };
   try {
-    // token validation
-    const userToken = req.body.token;
-    const hashedTokenFromSession = req.session.signupToken;
-
-    if (!userToken || !hashedTokenFromSession || !(await bcrypt.compare(userToken, hashedTokenFromSession))) {
+    const clientToken = req.body.token; 
+    console.log(clientToken);
+    const serverToken = req.session.signupToken;
+    console.log(serverToken);
+    // Validate token presence and structure
+    if (!clientToken || typeof clientToken !== 'string' || 
+        !serverToken || !serverToken.value) {
       emailSendInProgress = false;
       return res.status(403).render("home3", {
         message: "Invalid form submission. Please refresh and try again.",
@@ -3514,8 +3533,35 @@ app.post("/signup", upload.single("image"), async (req, res) => {
       });
     }
 
-    // Token validated, clearing it to prevent reuse
-    req.session.signupToken = null;
+    // Check if token was already used
+    if (serverToken.used) {
+      emailSendInProgress = false;
+      return res.status(403).render("home3", {
+        message: "Form already submitted. Try Logging in!",
+        success: false,
+      });
+    }
+
+    // Check token expiration (15 minutes)
+    const tokenAge = Date.now() - serverToken.createdAt;
+    if (tokenAge > 15 * 60 * 1000) { // 15 minutes in milliseconds
+      emailSendInProgress = false;
+      return res.status(403).render("home3", {
+        message: "Form session expired. Please refresh and try again.",
+        success: false,
+      });
+    }
+
+    // Verify token value matches
+    if (clientToken !== serverToken.value) {
+      emailSendInProgress = false;
+      return res.status(403).render("home3", {
+        message: "Invalid form submission. Please refresh and try again.",
+        success: false,
+      });
+    }
+
+    req.session.signupToken.used = true;
 
     const formType = req.query.formType;
     const saltRounds = 10;
@@ -3526,7 +3572,8 @@ app.post("/signup", upload.single("image"), async (req, res) => {
       if (passw !== cpassw) {
         emailSendInProgress = false;
         return res.render("home3", {
-          message: "Password and confirm password do not match, please try again.",
+          message:
+            "Password and confirm password do not match, please try again.",
           success: false,
         });
       }
@@ -3577,11 +3624,11 @@ app.post("/signup", upload.single("image"), async (req, res) => {
 
       emailSendInProgress = false;
       return res.render("home3", {
-        message: "User registered! Please verify your email to complete registration.",
+        message:
+          "User registered! Please verify your email to complete registration.",
         success: true,
       });
-    } 
-    else if (formType === "form2") {
+    } else if (formType === "form2") {
       if (!req.file) {
         emailSendInProgress = false;
         return res.render("home3", {
@@ -3614,7 +3661,8 @@ app.post("/signup", upload.single("image"), async (req, res) => {
       if (l_password !== l_c_password) {
         emailSendInProgress = false;
         return res.render("home3", {
-          message: "Password and confirm password do not match, please try again.",
+          message:
+            "Password and confirm password do not match, please try again.",
           success: false,
         });
       }
@@ -3706,14 +3754,15 @@ app.post("/signup", upload.single("image"), async (req, res) => {
 
       emailSendInProgress = false;
       return res.render("home3", {
-        message: "User registered! Please verify your email to complete registration.",
+        message:
+          "User registered! Please verify your email to complete registration.",
         success: true,
       });
     } else {
       emailSendInProgress = false;
-      return res.render("home3", { 
-        message: "Invalid form type", 
-        success: false 
+      return res.render("home3", {
+        message: "Invalid form type",
+        success: false,
       });
     }
   } catch (error) {
@@ -3724,7 +3773,7 @@ app.post("/signup", upload.single("image"), async (req, res) => {
       success: false,
     });
   }
-}); 
+});
 
 // app.post('/login',passport.authenticate('client-login',{
 //   successRedirect: '/lawyerspage',
