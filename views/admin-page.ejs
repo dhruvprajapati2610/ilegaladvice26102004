@@ -26,6 +26,13 @@
             color: #333;
         }
 
+        .section-title {
+            margin-top: 30px;
+            color: #333;
+            border-bottom: 2px solid #4caf50;
+            padding-bottom: 5px;
+        }
+
         .user-list {
             margin-top: 20px;
         }
@@ -84,95 +91,181 @@
         .decline:hover {
             background-color: #e53935;
         }
+
+        .fetch-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .fetch-btn:hover {
+            background-color: #0b7dda;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-         <div style="display:flex; justify-content:space-between">
-           <h1>Admin Panel</h1>
-           <button onclick="renderUsers()" class="fetchuser">Fetch Users</button>
-         </div>
-        
-        <div class="user-list" id="userList">
+        <div style="display:flex; justify-content:space-between; align-items:center">
+            <h1>Admin Panel</h1>
         </div>
+        
+        <!-- Lawyers Section -->
+        <h2 class="section-title">Lawyers Verification</h2>
+        <button onclick="renderLawyers()" class="fetch-btn">Fetch Unverified Lawyers</button>
+        <div class="user-list" id="lawyerList"></div>
+        
+        <!-- Clients Section -->
+        <h2 class="section-title">Clients Verification</h2>
+        <button onclick="renderClients()" class="fetch-btn">Fetch Unverified Clients</button>
+        <div class="user-list" id="clientList"></div>
     </div>
 
     <script>
-        async function renderUsers() {
+        // Lawyer functions
+        async function renderLawyers() {
             const response = await fetch('/admin/notVerifiedLawyers');
             const result = await response.json(); 
         
-            const userList = document.getElementById('userList');
+            const userList = document.getElementById('lawyerList');
             userList.innerHTML = '';
 
             if(result.success){
                 const users = result.notVerifiedLawyers;
 
-            users.forEach(user => {
-                const userDiv = document.createElement('div');
-                userDiv.className = 'user';
-                userDiv.id = `user-${user.id}`;
-                userDiv.innerHTML = `
-                <div class="user-info"> 
-                     <span>Name: ${user.name}</span>
-                       <span>Email: ${user.email}</span>
-                          <span>Enrollment no: ${user.lic_no}</span>
-                             <span>Contact number: ${user.c_no}</span>
-                             <span>User address: ${user.address}</span>
-                </div>
+                users.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'user';
+                    userDiv.id = `lawyer-${user.id}`;
+                    userDiv.innerHTML = `
+                    <div class="user-info"> 
+                        <span>Name: ${user.name}</span>
+                        <span>Email: ${user.email}</span>
+                        <span>Enrollment no: ${user.lic_no}</span>
+                        <span>Contact number: ${user.c_no}</span>
+                        <span>User address: ${user.address}</span>
+                    </div>
                     
                     <div class="actions">
-                        <button class="approve" onclick="approveUser(${user.id})">✔ Approve</button>
-                        <button class="decline" onclick="declineUser(${user.id})">❌ Decline</button>
+                        <button class="approve" onclick="approveLawyer(${user.id})">✔ Approve</button>
+                        <button class="decline" onclick="declineLawyer(${user.id})">❌ Decline</button>
                     </div>
-                `;
-                userList.appendChild(userDiv);
-            });
-            }else{
+                    `;
+                    userList.appendChild(userDiv);
+                });
+            } else {
                 userList.innerHTML = `<p>${result.message}</p>`;
             }
-
         }
 
-        async function approveUser(id) {
-    try {
-        const response = await fetch(`/admin/approveLawyer/${id}`, { method: 'POST' });
-        const result = await response.json();
+        async function approveLawyer(id) {
+            try {
+                const response = await fetch(`/admin/approveLawyer/${id}`, { method: 'POST' });
+                const result = await response.json();
 
-        if (result.success) {
-            alert('Lawyer approved successfully.');
-            const userDiv = document.getElementById(`user-${id}`);
-            if (userDiv) userDiv.remove();
-        } else {
-            alert('Failed to approve lawyer.');
+                if (result.success) {
+                    alert('Lawyer approved successfully.');
+                    const userDiv = document.getElementById(`lawyer-${id}`);
+                    if (userDiv) userDiv.remove();
+                } else {
+                    alert('Failed to approve lawyer.');
+                }
+            } catch (error) {
+                console.error('Error approving lawyer:', error);
+                alert('An error occurred while approving the lawyer.');
+            }
         }
-    } catch (error) {
-        console.error('Error approving lawyer:', error);
-        alert('An error occurred while approving the lawyer.');
-    }
-}
 
-async function declineUser(id) {
-    try {
-        console.log("declineUSER CALLED");
-        const response = await fetch(`/admin/declineLawyer/${id}`, { method: 'POST' });
-        const result = await response.json();
+        async function declineLawyer(id) {
+            try {
+                const response = await fetch(`/admin/declineLawyer/${id}`, { method: 'POST' });
+                const result = await response.json();
 
-        if (result.success) {
-            alert('Lawyer declined successfully.');
-            const userDiv = document.getElementById(`user-${id}`);
-            if (userDiv) userDiv.remove();
-        } else {
-            alert('Failed to decline lawyer.');
+                if (result.success) {
+                    alert('Lawyer declined successfully.');
+                    const userDiv = document.getElementById(`lawyer-${id}`);
+                    if (userDiv) userDiv.remove();
+                } else {
+                    alert('Failed to decline lawyer.');
+                }
+            } catch (error) {
+                console.error('Error declining lawyer:', error);
+                alert('An error occurred while declining the lawyer.');
+            }
         }
-    } catch (error) {
-        console.error('Error declining lawyer:', error);
-        alert('An error occurred while declining the lawyer.');
-    }
-}
 
-
+        // Client functions
+        async function renderClients() {
+            const response = await fetch('/admin/notVerifiedClients');
+            const result = await response.json(); 
         
-        </script>
+            const userList = document.getElementById('clientList');
+            userList.innerHTML = '';
+
+            if(result.success){
+                const users = result.notVerifiedClients;
+
+                users.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'user';
+                    userDiv.id = `client-${user.id}`;
+                    userDiv.innerHTML = `
+                    <div class="user-info"> 
+                        <span>Name: ${user.name}</span>
+                        <span>Email: ${user.email}</span>
+                        <span>Contact number: ${user.phone}</span>
+                    </div>
+                    
+                    <div class="actions">
+                        <button class="approve" onclick="approveClient(${user.id})">✔ Approve</button>
+                        <button class="decline" onclick="declineClient(${user.id})">❌ Decline</button>
+                    </div>
+                    `;
+                    userList.appendChild(userDiv);
+                });
+            } else {
+                userList.innerHTML = `<p>${result.message}</p>`;
+            }
+        }
+
+        async function approveClient(id) {
+            try {
+                const response = await fetch(`/admin/approveClient/${id}`, { method: 'POST' });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Client approved successfully.');
+                    const userDiv = document.getElementById(`client-${id}`);
+                    if (userDiv) userDiv.remove();
+                } else {
+                    alert('Failed to approve client.');
+                }
+            } catch (error) {
+                console.error('Error approving client:', error);
+                alert('An error occurred while approving the client.');
+            }
+        }
+
+        async function declineClient(id) {
+            try {
+                const response = await fetch(`/admin/declineClient/${id}`, { method: 'POST' });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Client declined successfully.');
+                    const userDiv = document.getElementById(`client-${id}`);
+                    if (userDiv) userDiv.remove();
+                } else {
+                    alert('Failed to decline client.');
+                }
+            } catch (error) {
+                console.error('Error declining client:', error);
+                alert('An error occurred while declining the client.');
+            }
+        }
+    </script>
 </body>
 </html>

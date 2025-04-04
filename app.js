@@ -389,7 +389,6 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/signup", async (req, res) => {
-
   if (req.user && req.user.id) {
     return res.render("home3.ejs", {
       userId: req.user.id,
@@ -397,7 +396,6 @@ app.get("/signup", async (req, res) => {
       success: false,
     });
   }
-
   const token = crypto.randomBytes(32).toString("hex");
   console.log(token);
   // Store in session with metadata
@@ -3599,25 +3597,27 @@ app.post("/signup", strictLimiter, upload.single("image"), async (req, res) => {
       const token = crypto.randomBytes(32).toString("hex");
       const verificationLink = `https://www.ilegaladvice.com/verifyy-email?token=${token}`;
 
-      const mailOptions = {
-        from: process.env.EMAIL,
-        to: email,
-        subject: "Email Verification",
-        text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
-      };
 
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.EMAIL,
-          pass: process.env.NODEMAILER_PASSWORD,
-        },
-        pool: true,
-      });
+      //STOPPING MAIL FOR NOW BECAUSE OF SECURITY ATTACK
+      // const mailOptions = {
+      //   from: process.env.EMAIL,
+      //   to: email,
+      //   subject: "Email Verification",
+      //   text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
+      // };
 
-      await transporter.sendMail(mailOptions);
+      // const transporter = nodemailer.createTransport({
+      //   host: "smtp.gmail.com",
+      //   port: 465,
+      //   secure: true,
+      //   auth: {
+      //     user: process.env.EMAIL,
+      //     pass: process.env.NODEMAILER_PASSWORD,
+      //   },
+      //   pool: true,
+      // });
+
+      // await transporter.sendMail(mailOptions);
       const sql =
         "INSERT INTO clientsignup (name, email, passw, cpassw, c_no, verification_token, is_verified) VALUES($1, $2, $3, $4, $5, $6, $7)";
       await pool.query(sql, [name, email, hash, hash, c_no, token, false]);
@@ -3704,25 +3704,26 @@ app.post("/signup", strictLimiter, upload.single("image"), async (req, res) => {
       const token = crypto.randomBytes(32).toString("hex");
       const verificationLink = `https://www.ilegaladvice.com/verifyy-email?token=${token}`;
 
-      const mailOptions = {
-        from: process.env.EMAIL,
-        to: email,
-        subject: "Email Verification",
-        text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
-      };
+      //MAIL STOPPING FOR SECURITY ATTACK
+      // const mailOptions = {
+      //   from: process.env.EMAIL,
+      //   to: email,
+      //   subject: "Email Verification",
+      //   text: `Hello ${name}, please verify your email by clicking the following link: ${verificationLink}`,
+      // };
 
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.EMAIL,
-          pass: process.env.NODEMAILER_PASSWORD,
-        },
-        pool: true,
-      });
+      // const transporter = nodemailer.createTransport({
+      //   host: "smtp.gmail.com",
+      //   port: 465,
+      //   secure: true,
+      //   auth: {
+      //     user: process.env.EMAIL,
+      //     pass: process.env.NODEMAILER_PASSWORD,
+      //   },
+      //   pool: true,
+      // });
 
-      await transporter.sendMail(mailOptions);
+      // await transporter.sendMail(mailOptions);
       const uniqueToken = uuidv4();
       console.log(uniqueToken);
       const sql1 =
@@ -3990,6 +3991,12 @@ app.post("/login", (req, res, next) => {
           return res.json({
             success: false,
             message: "Please verify your email before logging in(client).",
+          });
+        }
+        if (!userData.admin_verified) {
+          return res.json({
+            success: false,
+            message: "Please wait while we verify you (client).",
           });
         }
       } else {

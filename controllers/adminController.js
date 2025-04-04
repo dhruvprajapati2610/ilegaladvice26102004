@@ -54,3 +54,44 @@ exports.declineLawyer = async (req, res) => {
       .json({ success: false, message: "Failed to decline lawyer." });
   }
 };
+
+exports.getNotVerifiedClients = async (req, res) => {
+  const notVerifiedClientsQuery = await pool.query(
+    "select * from clientsignup where admin_verified = false AND is_admin = false"
+  );
+  const notVerifiedClients = notVerifiedClientsQuery.rows;
+  if (notVerifiedClients.length > 0) {
+    res.json({ success: true, notVerifiedClients });
+  } else {
+    res.json({ success: false, message: "No unverified clients available." });
+  }
+};
+
+exports.approveClient = async (req, res) => {
+  const clientId = req.params.id;
+  try {
+    await pool.query(
+      "UPDATE clientsignup SET admin_verified = true WHERE id = $1",
+      [clientId]
+    );
+    res.json({ success: true, message: "Client approved successfully." });
+  } catch (error) {
+    console.error("Error approving client:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to approve client." });
+  }
+};
+
+exports.declineClient = async (req, res) => {
+  const clientId = req.params.id;
+  try {
+    await pool.query("DELETE FROM clientsignup WHERE id = $1", [clientId]);
+    res.json({ success: true, message: "Client declined successfully." });
+  } catch (error) {
+    console.error("Error declining client:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to decline client." });
+  }
+};
