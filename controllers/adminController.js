@@ -33,6 +33,10 @@ exports.approveLawyer = async (req, res) => {
     await pool.query("UPDATE lawyers SET admin_verified = true WHERE id = $1", [
       lawyerId,
     ]);
+    await pool.query(
+      "UPDATE lawyers SET is_verified = true WHERE id = $1",
+      [clientId]
+    );
     res.json({ success: true, message: "Lawyer approved successfully." });
   } catch (error) {
     console.error("Error approving lawyer:", error);
